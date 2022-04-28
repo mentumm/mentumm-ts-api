@@ -3,12 +3,12 @@ import { users } from "../controllers/users.controller";
 import cors from "cors";
 import { publicCorsConfig } from "../util/corsOptions";
 
-const rulingsRouter = express.Router();
+const usersRouter = express.Router();
 
-rulingsRouter.get(
+usersRouter.get(
   "/users",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await users(req, res)
 );
 
-export default rulingsRouter;
+export default usersRouter;
