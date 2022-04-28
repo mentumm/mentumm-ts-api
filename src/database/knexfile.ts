@@ -3,7 +3,8 @@ import { Knex } from "knex";
 
 const NODE_ENV = process.env.NODE_ENV;
 // const DB = process.env.DATABASE_URL;
-const DB = "postgres://denvermullets:postgres@localhost:5432/growth10";
+// const DB = "postgres://denvermullets:postgres@localhost:5432/growth10";
+const DB = process.env.DATABASE_URL;
 
 interface IKnexConfig {
   [key: string]: Knex.Config;

@@ -8,7 +8,29 @@ Install with yarn
 
 ```bash
   yarn install
-  yarn start
+  yarn dev
+```
+
+## Setting up a local database
+
+If you're running this locally for the first time and want a fresh database, make sure you create your database manually.
+
+login to postgres
+
+```
+  sudo -u postgres psql
+```
+
+once logged in to psql
+
+```
+  CREATE DATABASE growth10;
+```
+
+Once database is created, exit psql and run the migrations to create the tables
+
+```
+  yarn db:migrate
 ```
 
 ## Migrations

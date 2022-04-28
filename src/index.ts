@@ -15,5 +15,5 @@ app.get("/health", (req: Request, res: Response) => {
 app.use("/v1", rulingsRouter);
 
 app.listen(port, () => {
-  console.log(`99-Staples API listening on ${port}`);
+  console.log(`Growth 10 API listening on ${port}`);
 });
