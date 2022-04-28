@@ -5,6 +5,7 @@ import {
   deactivateEmployer,
   employers,
   newEmployer,
+  updateEmployerInfo,
 } from "../controllers/employers.controller";
 
 const employersRouter = express.Router();
@@ -25,6 +26,12 @@ employersRouter.delete(
   "/employer",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await deactivateEmployer(req, res)
+);
+
+employersRouter.put(
+  "/employer",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await updateEmployerInfo(req, res)
 );
 
 export default employersRouter;

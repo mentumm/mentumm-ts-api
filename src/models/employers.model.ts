@@ -13,3 +13,10 @@ export interface CreateEmployer {
   max_employees: number;
   invitation_code: string;
 }
+
+export interface UpdateEmployer {
+  id: string | number;
+  name: string;
+  max_employees: number;
+  invitation_code: string;
+}

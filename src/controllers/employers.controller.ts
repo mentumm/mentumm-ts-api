@@ -4,6 +4,7 @@ import {
   createEmployer,
   deleteEmployer,
   getEmployers,
+  updateEmployer,
 } from "../services/employers.service";
 
 export const employers = async (req: Request, res: Response) => {
@@ -57,6 +58,20 @@ export const deactivateEmployer = async (req: Request, res: Response) => {
     const employer = await deleteEmployer(Number(id));
 
     return res.json(employer);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const updateEmployerInfo = async (req: Request, res: Response) => {
+  if (!req.body.id) {
+    return res.status(400).send("Missing Employer ID");
+  }
+
+  try {
+    const updatedEmployer = await updateEmployer(req.body);
+
+    return res.json(updatedEmployer);
   } catch (error) {
     return res.status(500).send(error);
   }

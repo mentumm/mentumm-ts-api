@@ -1,7 +1,11 @@
 import { Knex } from "knex";
 import moment from "moment";
 import db from "../database/db";
-import { CreateEmployer, Employer } from "../models/employers.model";
+import {
+  CreateEmployer,
+  Employer,
+  UpdateEmployer,
+} from "../models/employers.model";
 import { KnexError } from "../types";
 
 export const getEmployers = async (
@@ -53,6 +57,37 @@ export const createEmployer = async (
     return newEmployer;
   } catch (error) {
     throw new Error("Unable to create new Employer");
+  }
+};
+
+export const updateEmployer = async (
+  body: UpdateEmployer
+): Promise<Employer[] | KnexError> => {
+  try {
+    const { id, name, max_employees, invitation_code } = body;
+
+    const update: Employer[] | { message: string } = await db("employers")
+      .where({ id })
+      .update({
+        name,
+        max_employees,
+        invitation_code,
+        updated_at: moment().toISOString(),
+      })
+      .returning("*")
+      .catch((err: Error) => {
+        if (err) {
+          return {
+            message: "Employer name or invitation code is already being used",
+          };
+        } else {
+          throw new Error("Unable to edit Employer");
+        }
+      });
+
+    return update;
+  } catch (error) {
+    throw new Error("Unable to edit Employer");
   }
 };
 
