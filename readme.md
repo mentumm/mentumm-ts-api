@@ -1,4 +1,4 @@
-# 99 Staples API
+# Growth 10 API
 
 API that powers that good good
 
