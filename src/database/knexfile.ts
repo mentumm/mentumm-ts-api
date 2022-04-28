@@ -1,9 +1,10 @@
-require("dotenv").config();
+// was unable to read .env since this was nested ?_?, unsure why that is
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
+
 import { Knex } from "knex";
 
 const NODE_ENV = process.env.NODE_ENV;
-// const DB = process.env.DATABASE_URL;
-// const DB = "postgres://denvermullets:postgres@localhost:5432/growth10";
 const DB = process.env.DATABASE_URL;
 
 interface IKnexConfig {
@@ -20,37 +21,22 @@ const configs: IKnexConfig = {
     },
   },
 
-  // staging: {
-  //   client: "postgresql",
-  //   connection: {
-  //     database: "my_db",
-  //     user: "username",
-  //     password: "password",
-  //   },
-  //   pool: {
-  //     min: 2,
-  //     max: 10,
-  //   },
-  //   migrations: {
-  //     tableName: "knex_migrations",
-  //   },
-  // },
+  // will need to update this for production
+  // since the typing doesn't have ssl in it
+  // we could try appending '?ssl=true' to the connection string
+  //  ssl: {
+  //    sslmode: 'require',
+  //    rejectUnauthorized: false,
+  //  },
 
-  // production: {
-  //   client: "postgresql",
-  //   connection: {
-  //     database: "my_db",
-  //     user: "username",
-  //     password: "password",
-  //   },
-  //   pool: {
-  //     min: 2,
-  //     max: 10,
-  //   },
-  //   migrations: {
-  //     tableName: "knex_migrations",
-  //   },
-  // },
+  production: {
+    client: "pg",
+    connection: DB,
+    migrations: {
+      directory: "./migrations",
+      tableName: "knex_migrations",
+    },
+  },
 };
 
 export default configs;
