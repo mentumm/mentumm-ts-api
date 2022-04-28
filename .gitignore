@@ -1,0 +1,11 @@
+node_modules
+.DS_Store
+error_log
+*.log
+.cache
+dist
+build
+.env
+.vscode
+.idea
+dump.rdb
