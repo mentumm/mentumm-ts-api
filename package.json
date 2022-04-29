@@ -6,7 +6,7 @@
   "author": "denvermullets <devmullets@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "yarn clean && yarn install && tsc",
+    "build": "yarn install && tsc",
     "start:prod": "node build/index.js",
     "start": "nodemon ./src/index.ts",
     "knex": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts",
