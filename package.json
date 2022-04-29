@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn install && tsc",
-    "start:prod": "yarn db:migrate && node build/index.js",
+    "start:prod": "node build/index.js",
     "start": "nodemon ./src/index.ts",
     "knex": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts",
     "db:migrate": "yarn knex migrate:latest src/database/knexfile.ts",
