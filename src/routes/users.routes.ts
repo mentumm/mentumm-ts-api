@@ -1,5 +1,10 @@
 import express, { Request, Response } from "express";
-import { users } from "../controllers/users.controller";
+import {
+  deactivateUser,
+  newUser,
+  updateUserInfo,
+  users,
+} from "../controllers/users.controller";
 import cors from "cors";
 import { publicCorsConfig } from "../util/corsOptions";
 
@@ -9,6 +14,24 @@ usersRouter.get(
   "/users",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await users(req, res)
+);
+
+usersRouter.post(
+  "/user",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await newUser(req, res)
+);
+
+usersRouter.delete(
+  "/user",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await deactivateUser(req, res)
+);
+
+usersRouter.put(
+  "/user",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await updateUserInfo(req, res)
 );
 
 export default usersRouter;

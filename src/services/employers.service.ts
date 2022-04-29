@@ -6,7 +6,9 @@ import {
   Employer,
   UpdateEmployer,
 } from "../models/employers.model";
+import { User } from "../models/users.model";
 import { KnexError } from "../types";
+import { deleteUser } from "./users.service";
 
 export const getEmployers = async (
   id: number,
@@ -94,7 +96,16 @@ export const updateEmployer = async (
 export const deleteEmployer = async (
   id: number
 ): Promise<Employer[] | KnexError> => {
-  // TODO: will need to come back and cycle thru Users before deactivating Employer
+  // if an Employer is deactivated we will deactivate all the Users first
+  const users: User[] = await db("users")
+    .whereNull("deleted_at")
+    .where({ employer_id: id });
+
+  if (users.length > 0) {
+    users.map((user: User) => {
+      deleteUser(Number(user.id));
+    });
+  }
 
   const employer: Employer[] | KnexError = await db("employers")
     .update({

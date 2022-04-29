@@ -4,8 +4,8 @@ export interface Employer {
   max_employees: number;
   invitation_code: string;
   created_at: Date;
-  updated_at?: Date | null;
-  deleted_at?: Date;
+  updated_at?: Date;
+  deleted_at?: Date | null;
 }
 
 export interface CreateEmployer {
