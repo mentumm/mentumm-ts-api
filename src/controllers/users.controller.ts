@@ -66,8 +66,8 @@ export const deactivateUser = async (req: Request, res: Response) => {
 };
 
 export const updateUserInfo = async (req: Request, res: Response) => {
-  if (!req.body.id) {
-    return res.status(400).send("Missing User ID");
+  if (!req.body.id || !req.body.email) {
+    return res.status(400).send("Missing required parameters!");
   }
 
   try {
