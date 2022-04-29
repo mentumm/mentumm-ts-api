@@ -89,7 +89,6 @@ export const updateCoach = async (
 };
 
 export const deleteCoach = async (id: number): Promise<Coach[] | KnexError> => {
-  // if an Employer is deactivated we will deactivate all the Users first
   const coach: Coach[] | KnexError = await db("coaches")
     .update({
       deleted_at: moment().toISOString(),
