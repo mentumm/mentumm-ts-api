@@ -17,7 +17,6 @@ export const getCoaches = async (
       } else if (name) {
         builder.where({ name: name });
       } else {
-        console.log("limit ", limit);
         builder.select("*").limit(limit);
       }
     })
