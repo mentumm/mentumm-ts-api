@@ -8,18 +8,15 @@ import {
 } from "../services/employers.service";
 
 export const employers = async (req: Request, res: Response) => {
-  const { id, name, max_employees, invitation_code } = req.query;
-
-  if (!id && !name && !max_employees && !invitation_code) {
-    return res.status(400).send("Missing required properties");
-  }
+  const { id, name, max_employees, invitation_code, limit } = req.query;
 
   try {
     const employer = await getEmployers(
       Number(id),
       name as string,
       Number(max_employees),
-      invitation_code as string
+      invitation_code as string,
+      limit ? Number(limit) : 25
     );
 
     return res.json(employer);
