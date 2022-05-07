@@ -8,18 +8,15 @@ import {
 } from "../services/users.service";
 
 export const users = async (req: Request, res: Response) => {
-  const { id, name, email, employer_id } = req.query;
-
-  if (!id && !name && !email && !employer_id) {
-    return res.status(400).send("Missing required properties");
-  }
+  const { id, name, email, employer_id, limit } = req.query;
 
   try {
     const user = await getUsers(
       Number(id),
       name as string,
       email as string,
-      Number(employer_id)
+      Number(employer_id),
+      limit ? Number(limit) : 25
     );
 
     return res.json(user);

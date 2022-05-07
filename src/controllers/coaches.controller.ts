@@ -8,14 +8,14 @@ import {
 } from "../services/coaches.service";
 
 export const coaches = async (req: Request, res: Response) => {
-  const { id, name } = req.query;
-
-  if (!id && !name) {
-    return res.status(400).send("Missing required properties");
-  }
+  const { id, name, limit } = req.query;
 
   try {
-    const coach = await getCoaches(Number(id), name as string);
+    const coach = await getCoaches(
+      Number(id),
+      name as string,
+      limit ? Number(limit) : 25
+    );
 
     return res.json(coach);
   } catch (error) {

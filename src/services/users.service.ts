@@ -8,7 +8,8 @@ export const getUsers = async (
   id: number,
   name: string,
   email: string,
-  employer_id: number
+  employer_id: number,
+  limit: number
 ): Promise<User[] | KnexError> => {
   const user = await db("users")
     .whereNull("deleted_at")
@@ -21,6 +22,8 @@ export const getUsers = async (
         builder.where({ email: email });
       } else if (employer_id) {
         builder.where({ employer_id: employer_id });
+      } else {
+        builder.select("*").limit(limit);
       }
     })
     .returning("*");
