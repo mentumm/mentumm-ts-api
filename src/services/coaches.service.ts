@@ -6,7 +6,8 @@ import { KnexError } from "../types";
 
 export const getCoaches = async (
   id: number,
-  name: string
+  name: string,
+  limit: number
 ): Promise<Coach[] | KnexError> => {
   const coach = await db("coaches")
     .whereNull("deleted_at")
@@ -15,6 +16,9 @@ export const getCoaches = async (
         builder.where({ id: id });
       } else if (name) {
         builder.where({ name: name });
+      } else {
+        console.log("limit ", limit);
+        builder.select("*").limit(limit);
       }
     })
     .returning("*");

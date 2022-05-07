@@ -14,7 +14,8 @@ export const getEmployers = async (
   id: number,
   name: string,
   max_employees: number,
-  invitation_code: string
+  invitation_code: string,
+  limit: number
 ): Promise<Employer[] | KnexError> => {
   const employer = await db("employers")
     .whereNull("deleted_at")
@@ -27,6 +28,8 @@ export const getEmployers = async (
         builder.where({ max_employees: max_employees });
       } else if (invitation_code) {
         builder.where({ invitation_code: invitation_code });
+      } else {
+        builder.select("*").limit(limit);
       }
     })
     .returning("*");

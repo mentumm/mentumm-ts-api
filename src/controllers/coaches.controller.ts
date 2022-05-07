@@ -8,14 +8,15 @@ import {
 } from "../services/coaches.service";
 
 export const coaches = async (req: Request, res: Response) => {
-  const { id, name } = req.query;
+  const { id, name, limit } = req.query;
 
-  if (!id && !name) {
-    return res.status(400).send("Missing required properties");
-  }
-
+  console.log("limit controller", limit);
   try {
-    const coach = await getCoaches(Number(id), name as string);
+    const coach = await getCoaches(
+      Number(id),
+      name as string,
+      limit ? Number(limit) : 25
+    );
 
     return res.json(coach);
   } catch (error) {
