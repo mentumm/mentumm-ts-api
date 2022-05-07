@@ -10,7 +10,6 @@ import {
 export const coaches = async (req: Request, res: Response) => {
   const { id, name, limit } = req.query;
 
-  console.log("limit controller", limit);
   try {
     const coach = await getCoaches(
       Number(id),
