@@ -17,10 +17,11 @@ export const getCoaches = async (
       } else if (name) {
         builder.where({ name: name });
       } else {
-        builder.select("*").limit(limit);
+        builder.select("*");
       }
     })
-    .returning("*");
+    .returning("*")
+    .limit(limit);
 
   return coach;
 };
