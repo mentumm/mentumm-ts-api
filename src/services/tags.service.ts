@@ -81,9 +81,6 @@ export const getTagCoaches = async (
   limit: number
 ): Promise<CoachTag[]> => {
   try {
-    console.log("coach", coach_id);
-    console.log("tag", tag_id);
-    console.log("limit", limit);
     const tagCoaches = await db("coach_tags")
       .where((builder: Knex.QueryBuilder) => {
         if (coach_id) {
