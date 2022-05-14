@@ -29,10 +29,11 @@ export const getEmployers = async (
       } else if (invitation_code) {
         builder.where({ invitation_code: invitation_code });
       } else {
-        builder.select("*").limit(limit);
+        builder.select("*");
       }
     })
-    .returning("*");
+    .returning("*")
+    .limit(limit);
 
   return employer;
 };

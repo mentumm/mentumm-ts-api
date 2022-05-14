@@ -3,6 +3,7 @@ import cors, { CorsRequest } from "cors";
 import usersRouter from "./routes/users.routes";
 import employersRouter from "./routes/employers.routes";
 import coachesRouter from "./routes/coaches.routes";
+import tagsRouter from "./routes/tags.routes";
 
 const app: Express = express();
 
@@ -19,6 +20,7 @@ app.get("/health", (req: Request, res: Response) => {
 app.use("/v1", usersRouter);
 app.use("/v1", employersRouter);
 app.use("/v1", coachesRouter);
+app.use("/v1", tagsRouter);
 
 app.listen(port, () => {
   console.log(`Growth 10 API listening on ${port}`);
