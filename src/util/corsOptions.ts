@@ -1,7 +1,7 @@
 import { CorsOptions } from "cors";
 
 export const publicCorsConfig: CorsOptions = {
-  origin: "publicWhiteList",
+  origin: "*",
   optionsSuccessStatus: 200,
   credentials: true,
 };
