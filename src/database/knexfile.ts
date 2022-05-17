@@ -20,14 +20,6 @@ const configs: IKnexConfig = {
     },
   },
 
-  // will need to update this for production
-  // since the typing doesn't have ssl in it
-  // we could try appending '?ssl=true' to the connection string
-  //  ssl: {
-  //    sslmode: 'require',
-  //    rejectUnauthorized: false,
-  //  },
-
   production: {
     client: "pg",
     connection: DB + "?ssl=true",
