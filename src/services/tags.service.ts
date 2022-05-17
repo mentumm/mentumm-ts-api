@@ -60,8 +60,6 @@ export const getTags = async (
       .where((builder: Knex.QueryBuilder) => {
         if (id) {
           builder.where({ id: id });
-        } else if (slug) {
-          builder.where({ slug: slug });
         } else {
           builder.select("*");
         }
@@ -71,6 +69,7 @@ export const getTags = async (
 
     return tags;
   } catch (error) {
+    console.log(error);
     throw new Error("Unable to get Tags");
   }
 };

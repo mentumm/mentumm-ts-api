@@ -109,3 +109,34 @@ export const deleteCoach = async (id: number): Promise<Coach[] | KnexError> => {
 
   return coach;
 };
+
+export const getCoachByTagSlug = async (
+  slug: string,
+  limit: number
+): Promise<Coach[]> => {
+  try {
+    const coach_tags = await db("coaches")
+      .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
+      .leftJoin(
+        db("coach_tags").select("*").as("ct"),
+        "ct.coach_id",
+        "coaches.id"
+      )
+      .leftJoin(db("tags").select("*").as("tags"), "ct.tag_id", "tags.id")
+
+      .whereNull("coaches.deleted_at")
+      .whereIn(
+        "coaches.id",
+        db("coach_tags")
+          .select("coach_id")
+          .innerJoin("tags", "tags.id", "coach_tags.tag_id")
+          .where("tags.slug", slug)
+      )
+      .groupBy("coaches.id")
+      .limit(limit);
+
+    return coach_tags;
+  } catch (error) {
+    throw new Error("Unable to find Coach / Tags");
+  }
+};

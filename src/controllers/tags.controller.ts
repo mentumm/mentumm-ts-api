@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { getCoachByTagSlug } from "../services/coaches.service";
 import {
   createCoachTag,
   createTag,
@@ -42,16 +43,25 @@ export const newCoachTag = async (req: Request, res: Response) => {
 };
 
 export const tags = async (req: Request, res: Response) => {
-  const { tag_id, slug, limit } = req.query;
+  const { id, slug, limit } = req.query;
 
   try {
-    const tags = await getTags(
-      Number(tag_id),
-      slug as string,
-      limit ? Number(limit) : 25
-    );
+    if (slug) {
+      const coaches = await getCoachByTagSlug(
+        slug as string,
+        limit ? Number(limit) : 25
+      );
 
-    return res.json(tags);
+      return res.json(coaches);
+    } else {
+      const tags = await getTags(
+        Number(id),
+        slug as string,
+        limit ? Number(limit) : 25
+      );
+
+      return res.json(tags);
+    }
   } catch (error) {
     return res.status(500).send(error);
   }
