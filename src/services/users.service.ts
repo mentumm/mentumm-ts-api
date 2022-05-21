@@ -1,6 +1,7 @@
 import { Knex } from "knex";
-import moment from "moment";
 import db from "../database/db";
+import bcrypt from "bcrypt";
+import moment from "moment";
 import { CreateUser, UpdateUser, User } from "../models/users.model";
 import { KnexError } from "../types";
 
@@ -35,25 +36,50 @@ export const createUser = async (
   body: CreateUser
 ): Promise<User[] | KnexError> => {
   try {
-    const { name, email, employer_id } = body;
-    const user: CreateUser = {
-      name,
-      email,
-      employer_id,
-    };
+    const { name, email, employer_id, password } = body;
 
-    const newUser: User[] | { message: string } = await db("users")
-      .insert(user)
-      .returning("*")
-      .catch((err: Error) => {
-        if (err) {
-          return { message: "User email address is already being used" };
-        } else {
-          throw new Error("Unable to create new User");
-        }
-      });
+    if (password) {
+      const hashPassword = await bcrypt.hash(password, 10);
+      const user: CreateUser = {
+        name,
+        email,
+        employer_id,
+        password: hashPassword,
+      };
 
-    return newUser;
+      const newUser: User[] | { message: string } = await db("users")
+        .insert(user)
+        .returning("*")
+        .catch((err: Error) => {
+          if (err) {
+            return { message: "User email address is already being used" };
+          } else {
+            throw new Error("Unable to create new User");
+          }
+        });
+
+      return newUser;
+    } else {
+      // TODO: add email pw reset as this will be hit from admin/postman
+      const user: CreateUser = {
+        name,
+        email,
+        employer_id,
+      };
+
+      const newUser: User[] | { message: string } = await db("users")
+        .insert(user)
+        .returning("*")
+        .catch((err: Error) => {
+          if (err) {
+            return { message: "User email address is already being used" };
+          } else {
+            throw new Error("Unable to create new User");
+          }
+        });
+
+      return newUser;
+    }
   } catch (error) {
     throw new Error("Unable to create new User");
   }

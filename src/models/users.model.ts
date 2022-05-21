@@ -12,6 +12,7 @@ export interface CreateUser {
   name: string;
   email: string;
   employer_id: number;
+  password?: string;
 }
 
 export interface UpdateUser {
