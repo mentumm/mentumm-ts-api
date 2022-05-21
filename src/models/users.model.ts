@@ -6,6 +6,10 @@ export interface User {
   created_at: Date;
   updated_at?: Date;
   deleted_at?: Date | null;
+  password: string;
+  reset_password_token: string;
+  reset_password_expiration: Date;
+  last_sign_in: Date;
 }
 
 export interface CreateUser {

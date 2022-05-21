@@ -133,3 +133,29 @@ export const deleteUser = async (id: number): Promise<User[] | KnexError> => {
 
   return user;
 };
+
+export const authenticateUser = async (email: string, password: string) => {
+  const user: User = await db("users").select().where({ email }).first();
+
+  if (!user) {
+    return { message: "Username or Password does not match" };
+  }
+
+  const passwordMatch = await bcrypt.compare(password, user.password);
+
+  if (passwordMatch) {
+    await db("users").update({ last_sign_in: db.fn.now() });
+
+    const loggedInUser: Partial<User> = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      employer_id: user.employer_id,
+      last_sign_in: user.last_sign_in,
+    };
+
+    return loggedInUser;
+  } else {
+    return { message: "Username or Password does not match" };
+  }
+};
