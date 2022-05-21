@@ -3,6 +3,7 @@ import {
   deactivateUser,
   newUser,
   updateUserInfo,
+  userLogin,
   users,
 } from "../controllers/users.controller";
 import cors from "cors";
@@ -32,6 +33,12 @@ usersRouter.put(
   "/user",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await updateUserInfo(req, res)
+);
+
+usersRouter.post(
+  "/user/login",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await userLogin(req, res)
 );
 
 export default usersRouter;

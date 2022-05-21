@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CreateUser } from "../models/users.model";
 import {
+  authenticateUser,
   createUser,
   deleteUser,
   getUsers,
@@ -71,6 +72,22 @@ export const updateUserInfo = async (req: Request, res: Response) => {
     const updatedUser = await updateUser(req.body);
 
     return res.json(updatedUser);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const userLogin = async (req: Request, res: Response) => {
+  const { password, email } = req.body;
+
+  if (!password || !email) {
+    return res.status(400).send("Missing required parameters!");
+  }
+
+  try {
+    const user = await authenticateUser(email, password);
+
+    return res.json(user);
   } catch (error) {
     return res.status(500).send(error);
   }
