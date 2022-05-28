@@ -11,10 +11,10 @@ import { KnexError } from "../types";
 import { deleteUser } from "./users.service";
 
 export const getEmployers = async (
-  id: number,
-  name: string,
-  max_employees: number,
-  invitation_code: string,
+  id: number | null,
+  name: string | null,
+  max_employees: number | null,
+  invitation_code: string | null,
   limit: number
 ): Promise<Employer[] | KnexError> => {
   const employer = await db("employers")
@@ -36,6 +36,17 @@ export const getEmployers = async (
     .limit(limit);
 
   return employer;
+};
+
+export const getEmployerByInvite = async (
+  invitation_code: string
+): Promise<Employer> => {
+  const employer = await db("employers")
+    .whereNull("deleted_at")
+    .where({ invitation_code: invitation_code })
+    .returning("*");
+
+  return employer[0];
 };
 
 export const createEmployer = async (

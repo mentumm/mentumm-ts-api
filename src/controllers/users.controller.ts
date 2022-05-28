@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import { CreateUser } from "../models/users.model";
+import { CreateUser, RegisterUser } from "../models/users.model";
 import {
   authenticateUser,
   createUser,
   deleteUser,
   getUsers,
+  registerUser,
   updateUser,
 } from "../services/users.service";
 
@@ -47,6 +48,31 @@ export const newUser = async (
   }
 };
 
+export const registerNewUser = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const body: RegisterUser = req.body;
+
+  if (
+    !body ||
+    !body.name ||
+    !body.email ||
+    !body.invite_code ||
+    !body.password
+  ) {
+    return res.status(400).send("Missing required body properties");
+  }
+
+  try {
+    const user = await registerUser(body);
+
+    return res.json(user);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
 export const deactivateUser = async (req: Request, res: Response) => {
   const id = req.query.id;
 
@@ -81,7 +107,7 @@ export const userLogin = async (req: Request, res: Response) => {
   const { password, email } = req.body;
 
   if (!password || !email) {
-    return res.status(400).send("Missing required parameters!");
+    return res.status(400).send("Missing required body elements!");
   }
 
   try {

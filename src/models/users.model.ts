@@ -19,6 +19,13 @@ export interface CreateUser {
   password?: string;
 }
 
+export interface RegisterUser {
+  name: string;
+  email: string;
+  password: string;
+  invite_code: string;
+}
+
 export interface UpdateUser {
   id: string | number;
   name: string;
