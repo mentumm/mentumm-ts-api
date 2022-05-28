@@ -2,8 +2,15 @@ import { Knex } from "knex";
 import db from "../database/db";
 import bcrypt from "bcrypt";
 import moment from "moment";
-import { CreateUser, UpdateUser, User } from "../models/users.model";
+import {
+  CreateUser,
+  RegisterUser,
+  UpdateUser,
+  User,
+} from "../models/users.model";
 import { KnexError } from "../types";
+import { getEmployerByInvite, getEmployers } from "./employers.service";
+import { Employer } from "../models/employers.model";
 
 export const getUsers = async (
   id: number,
@@ -82,6 +89,47 @@ export const createUser = async (
     }
   } catch (error) {
     throw new Error("Unable to create new User");
+  }
+};
+
+export const registerUser = async (
+  body: RegisterUser
+): Promise<User[] | KnexError> => {
+  try {
+    const { name, email, password, invite_code } = body;
+
+    const employer: Employer = await getEmployerByInvite(invite_code);
+
+    if (!employer) {
+      return { message: "Invitation Code not found!" };
+    }
+
+    if (employer.invitation_code !== invite_code) {
+      return { message: "Invalid Invite Code!" };
+    }
+
+    const hashPassword = await bcrypt.hash(password, 10);
+    const user: CreateUser = {
+      name,
+      email,
+      employer_id: Number(employer.id),
+      password: hashPassword,
+    };
+
+    const newUser: User[] | { message: string } = await db("users")
+      .insert(user)
+      .returning("*")
+      .catch((err: Error) => {
+        if (err) {
+          return { message: "User email address is already being used" };
+        } else {
+          throw new Error("Unable to create new User");
+        }
+      });
+
+    return newUser;
+  } catch (error) {
+    throw new Error("Unable to register new User");
   }
 };
 
