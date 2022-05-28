@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import {
   deactivateUser,
   newUser,
+  registerNewUser,
   updateUserInfo,
   userLogin,
   users,
@@ -21,6 +22,12 @@ usersRouter.post(
   "/user",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await newUser(req, res)
+);
+
+usersRouter.post(
+  "/user/register",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await registerNewUser(req, res)
 );
 
 usersRouter.delete(
