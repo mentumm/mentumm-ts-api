@@ -9,19 +9,55 @@ export const getCoaches = async (
   name: string,
   limit: number
 ): Promise<Coach[] | KnexError> => {
-  const coach = await db("coaches")
-    .whereNull("deleted_at")
-    .where((builder: Knex.QueryBuilder) => {
-      if (id) {
-        builder.where({ id: id });
-      } else if (name) {
-        builder.where({ name: name });
-      } else {
-        builder.select("*");
-      }
-    })
-    .returning("*")
-    .limit(limit);
+  // yes, this is verbose and repeats but i couldn't get builder to work
+  // with this query
+  if (id) {
+    const coach = await db("coaches")
+      .whereNull("deleted_at")
+      .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
+      .where("coaches.id", id)
+      .leftJoin(
+        db("coach_tags").select("*").as("ct"),
+        "ct.coach_id",
+        "coaches.id"
+      )
+      .leftJoin(db("tags").select("*").as("tags"), "ct.tag_id", "tags.id")
+      .whereNull("coaches.deleted_at")
+      .whereIn(
+        "coaches.id",
+        db("coach_tags")
+          .select("coach_id")
+          .innerJoin("tags", "tags.id", "coach_tags.tag_id")
+      )
+      .groupBy("coaches.id")
+      .limit(limit);
+
+    return coach;
+  } else if (name) {
+    const coach = await db("coaches")
+      .whereNull("deleted_at")
+      .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
+      .where("coaches.name", name)
+      .leftJoin(
+        db("coach_tags").select("*").as("ct"),
+        "ct.coach_id",
+        "coaches.id"
+      )
+      .leftJoin(db("tags").select("*").as("tags"), "ct.tag_id", "tags.id")
+      .whereNull("coaches.deleted_at")
+      .whereIn(
+        "coaches.id",
+        db("coach_tags")
+          .select("coach_id")
+          .innerJoin("tags", "tags.id", "coach_tags.tag_id")
+      )
+      .groupBy("coaches.id")
+      .limit(limit);
+
+    return coach;
+  }
+
+  const coach = await db("coaches").select("*");
 
   return coach;
 };
