@@ -18,7 +18,7 @@ export const newTag = async (req: Request, res: Response) => {
     const tag = await createTag(
       name as string,
       slug as string,
-      description as string
+      description ? description : null
     );
     return res.json(tag);
   } catch (error) {
