@@ -32,3 +32,15 @@ export interface UpdateUser {
   email: string;
   employer_id: number;
 }
+
+export interface CoachBooking {
+  user_id: number;
+  coach_id: number;
+  event_type_uuid?: string;
+  event_type_name?: string;
+  event_start_time?: string;
+  event_end_time?: string;
+  invitee_uuid?: string;
+  invitee_full_name?: string;
+  invitee_email?: string;
+}
