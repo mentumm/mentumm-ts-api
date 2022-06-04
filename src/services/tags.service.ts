@@ -6,19 +6,20 @@ import { KnexError } from "../types";
 export const createTag = async (
   name: string,
   slug: string,
-  description?: string
+  description?: string | undefined
 ): Promise<Tag[] | KnexError> => {
   try {
     const tag: CreateTag = {
       name,
       slug,
-      description: description ? description : null,
+      description,
     };
 
     const newTag: Tag[] | KnexError = await db("tags")
       .insert(tag)
       .returning("*")
       .catch((err: Error) => {
+        console.log(err);
         return { message: "Unable to create Tag?" };
       });
 
