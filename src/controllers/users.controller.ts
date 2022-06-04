@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CreateUser, RegisterUser } from "../models/users.model";
 import {
   authenticateUser,
+  createBooking,
   createUser,
   deleteUser,
   getUsers,
@@ -43,6 +44,25 @@ export const newUser = async (
     const user = await createUser(body);
 
     return res.json(user);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const bookCoach = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const body = req.body;
+
+  if (!body || !body.user_id || !body.coach_id) {
+    return res.status(400).send("Missing required body properties");
+  }
+
+  try {
+    const userCoach = await createBooking(body);
+
+    return res.json(userCoach);
   } catch (error) {
     return res.status(500).send(error);
   }

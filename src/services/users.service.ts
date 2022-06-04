@@ -3,6 +3,7 @@ import db from "../database/db";
 import bcrypt from "bcrypt";
 import moment from "moment";
 import {
+  CoachBooking,
   CreateUser,
   RegisterUser,
   UpdateUser,
@@ -87,6 +88,49 @@ export const createUser = async (
 
       return newUser;
     }
+  } catch (error) {
+    throw new Error("Unable to create new User");
+  }
+};
+
+export const createBooking = async (
+  body: CoachBooking
+): Promise<CoachBooking[] | KnexError> => {
+  try {
+    const {
+      user_id,
+      coach_id,
+      invitee_email,
+      invitee_full_name,
+      invitee_uuid,
+      event_end_time,
+      event_start_time,
+      event_type_name,
+      event_type_uuid,
+    } = body;
+
+    const coachBooking: CoachBooking = {
+      user_id,
+      coach_id,
+      invitee_email,
+      invitee_full_name,
+      invitee_uuid,
+      event_end_time,
+      event_start_time,
+      event_type_name,
+      event_type_uuid,
+    };
+
+    const booking: CoachBooking[] | { message: string } = await db(
+      "user_coaches"
+    )
+      .insert(coachBooking)
+      .returning("*")
+      .catch((err: Error) => {
+        throw new Error("Unable to create new User");
+      });
+
+    return booking;
   } catch (error) {
     throw new Error("Unable to create new User");
   }
