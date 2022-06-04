@@ -1,5 +1,4 @@
 import { Knex } from "knex";
-import moment from "moment";
 import db from "../database/db";
 import { CoachTag, CreateTag, Tag } from "../models/tags.model";
 import { KnexError } from "../types";
@@ -7,13 +6,13 @@ import { KnexError } from "../types";
 export const createTag = async (
   name: string,
   slug: string,
-  description: string
+  description?: string
 ): Promise<Tag[] | KnexError> => {
   try {
     const tag: CreateTag = {
       name,
       slug,
-      description,
+      description: description ? description : null,
     };
 
     const newTag: Tag[] | KnexError = await db("tags")

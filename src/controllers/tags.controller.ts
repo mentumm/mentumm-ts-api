@@ -10,7 +10,7 @@ import {
 export const newTag = async (req: Request, res: Response) => {
   const { name, slug, description } = req.body;
 
-  if (!name || !slug || !description) {
+  if (!name || !slug) {
     return res.status(400).send("Missing required body properties");
   }
 
