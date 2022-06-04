@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import {
+  bookCoach,
   deactivateUser,
   newUser,
   registerNewUser,
@@ -16,6 +17,12 @@ usersRouter.get(
   "/users",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await users(req, res)
+);
+
+usersRouter.post(
+  "/user/book-coach",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await bookCoach(req, res)
 );
 
 usersRouter.post(
