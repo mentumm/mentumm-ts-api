@@ -12,6 +12,8 @@ import {
 import { KnexError } from "../types";
 import { getEmployerByInvite, getEmployers } from "./employers.service";
 import { Employer } from "../models/employers.model";
+import { mixpanelEvent } from "../helpers/mixpanel";
+import { Coach } from "../models/coaches.model";
 
 export const getUsers = async (
   id: number,
@@ -121,14 +123,30 @@ export const createBooking = async (
       event_type_uuid,
     };
 
-    const booking: CoachBooking[] | { message: string } = await db(
-      "user_coaches"
-    )
+    const booking: CoachBooking[] = await db("user_coaches")
       .insert(coachBooking)
       .returning("*")
       .catch((err: Error) => {
         throw new Error("Unable to create new User");
       });
+
+    const coach: Coach[] = await db("coaches").where({
+      id: booking[0].coach_id,
+    });
+
+    mixpanelEvent("Coach Booked", {
+      distinct_id: booking[0].user_id,
+      "User ID": booking[0].user_id,
+      "Coach ID": booking[0].coach_id,
+      "Coach Name": coach[0].name,
+      "Booking Email": booking[0].invitee_email,
+      Name: booking[0].invitee_full_name,
+      "Invitee UUID": booking[0].invitee_uuid,
+      "Event End Time": booking[0].event_end_time,
+      "Event Start Time": booking[0].event_start_time,
+      "Event Type Name": booking[0].event_type_name,
+      "Event Type UUID": booking[0].event_type_uuid,
+    });
 
     return booking;
   } catch (error) {
@@ -140,6 +158,7 @@ export const registerUser = async (
   body: RegisterUser
 ): Promise<User[] | KnexError> => {
   try {
+    let errors = null;
     const { name, email, password, invite_code } = body;
 
     const employer: Employer = await getEmployerByInvite(invite_code);
@@ -160,18 +179,36 @@ export const registerUser = async (
       password: hashPassword,
     };
 
-    const newUser: User[] | { message: string } = await db("users")
+    const newUser: User[] = await db("users")
       .insert(user)
       .returning("*")
       .catch((err: Error) => {
         if (err) {
-          return { message: "User email address is already being used" };
+          console.log(err);
+          errors = { message: "User email address is already being used" };
+          return [];
         } else {
           throw new Error("Unable to create new User");
         }
       });
 
-    return newUser;
+    if (errors) {
+      return errors;
+    } else {
+      const employer: Employer = await db("employers")
+        .where({ id: newUser[0].employer_id })
+        .first();
+
+      mixpanelEvent("New User Registered", {
+        distinct_id: newUser[0].id,
+        "User ID": newUser[0].id,
+        "User Name": newUser[0].name,
+        "Employer ID": newUser[0].employer_id,
+        "Employer Name": employer.name,
+      });
+
+      return newUser;
+    }
   } catch (error) {
     throw new Error("Unable to register new User");
   }
