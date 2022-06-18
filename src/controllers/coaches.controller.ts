@@ -14,7 +14,7 @@ export const coaches = async (req: Request, res: Response) => {
     const coach = await getCoaches(
       Number(id),
       name as string,
-      limit ? Number(limit) : 25
+      limit ? Number(limit) : 100
     );
 
     return res.json(coach);
