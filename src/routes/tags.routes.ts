@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import { publicCorsConfig } from "../util/corsOptions";
 import {
+  bulkTagCoach,
   newCoachTag,
   newTag,
   tagCoaches,
@@ -32,6 +33,12 @@ tagsRouter.get(
   "/tag-coaches",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await tagCoaches(req, res)
+);
+
+tagsRouter.post(
+  "/bulk-tag-coaches",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await bulkTagCoach(req, res)
 );
 
 export default tagsRouter;

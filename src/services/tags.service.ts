@@ -1,5 +1,6 @@
 import { Knex } from "knex";
 import db from "../database/db";
+import { Coach } from "../models/coaches.model";
 import { CoachTag, CreateTag, Tag } from "../models/tags.model";
 import { KnexError } from "../types";
 
@@ -50,10 +51,35 @@ export const createCoachTag = async (
   }
 };
 
+export const createBulkCoachTag = async (
+  coachName: string,
+  tags: string[]
+): Promise<{ message: string }> => {
+  try {
+    const coach: Coach = await db("coaches").where({ name: coachName }).first();
+
+    if (!coach) {
+      throw new Error("Unable to find your Coach");
+    }
+
+    tags.forEach(async (tag: string) => {
+      const currenTag = await db("tags").where({ name: tag }).first();
+
+      if (coach && currenTag) {
+        createCoachTag(Number(coach.id), Number(currenTag.id));
+      }
+    });
+
+    return { message: "Bulk association of Tags complete!" };
+  } catch (error) {
+    throw new Error("Unable to associate Tag/Coach");
+  }
+};
+
 export const getTags = async (
   id: number,
   slug: string,
-  limit = 25
+  limit = 100
 ): Promise<Tag[]> => {
   try {
     const tags = await db("tags")
