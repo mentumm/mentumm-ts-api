@@ -46,8 +46,6 @@ export const newCoachTag = async (req: Request, res: Response) => {
 export const bulkTagCoach = async (req: Request, res: Response) => {
   const { coach_name, tags } = req.body;
 
-  console.log("array???", tags);
-
   if (!coach_name) {
     return res.status(400).send("Missing required body properties");
   }
