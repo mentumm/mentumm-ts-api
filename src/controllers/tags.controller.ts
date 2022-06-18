@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getCoachByTagSlug } from "../services/coaches.service";
 import {
+  createBulkCoachTag,
   createCoachTag,
   createTag,
   getTagCoaches,
@@ -35,6 +36,22 @@ export const newCoachTag = async (req: Request, res: Response) => {
 
   try {
     const coachTag = await createCoachTag(Number(coach_id), Number(tag_id));
+
+    return res.json(coachTag);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const bulkTagCoach = async (req: Request, res: Response) => {
+  const { coach_name, tags } = req.body;
+
+  if (!coach_name) {
+    return res.status(400).send("Missing required body properties");
+  }
+
+  try {
+    const coachTag = await createBulkCoachTag(coach_name, tags);
 
     return res.json(coachTag);
   } catch (error) {
