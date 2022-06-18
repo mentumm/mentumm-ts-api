@@ -16,7 +16,7 @@ export const employers = async (req: Request, res: Response) => {
       name as string,
       Number(max_employees),
       invitation_code as string,
-      limit ? Number(limit) : 25
+      limit ? Number(limit) : 100
     );
 
     return res.json(employer);

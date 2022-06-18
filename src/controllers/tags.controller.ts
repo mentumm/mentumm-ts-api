@@ -49,7 +49,7 @@ export const tags = async (req: Request, res: Response) => {
     if (slug) {
       const coaches = await getCoachByTagSlug(
         slug as string,
-        limit ? Number(limit) : 25
+        limit ? Number(limit) : 100
       );
 
       return res.json(coaches);
@@ -57,7 +57,7 @@ export const tags = async (req: Request, res: Response) => {
       const tags = await getTags(
         Number(id),
         slug as string,
-        limit ? Number(limit) : 25
+        limit ? Number(limit) : 100
       );
 
       return res.json(tags);
@@ -74,7 +74,7 @@ export const tagCoaches = async (req: Request, res: Response) => {
     const tagCoaches = await getTagCoaches(
       coach_id ? Number(coach_id) : null,
       tag_id ? Number(tag_id) : null,
-      limit ? Number(limit) : 25
+      limit ? Number(limit) : 100
     );
 
     return res.json(tagCoaches);
