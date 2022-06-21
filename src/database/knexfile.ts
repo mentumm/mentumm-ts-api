@@ -27,6 +27,8 @@ const configs: IKnexConfig = {
       directory: "./migrations",
       tableName: "knex_migrations",
     },
+    pool: { min: 0, max: 7 },
+    acquireConnectionTimeout: 60000,
   },
 };
 
