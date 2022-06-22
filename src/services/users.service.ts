@@ -184,7 +184,6 @@ export const registerUser = async (
       .returning("*")
       .catch((err: Error) => {
         if (err) {
-          console.log(err);
           errors = { message: "User email address is already being used" };
           return [];
         } else {
