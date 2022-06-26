@@ -13,14 +13,16 @@ export interface User {
 }
 
 export interface CreateUser {
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   employer_id: number;
   password?: string;
 }
 
 export interface RegisterUser {
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   password: string;
   invite_code: string;

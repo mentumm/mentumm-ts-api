@@ -36,7 +36,13 @@ export const newUser = async (
   // we will handle this on the front-end but good to remember if API is opened up
   const body: CreateUser = req.body;
 
-  if (!body || !body.name || !body.email || !body.employer_id) {
+  if (
+    !body ||
+    !body.first_name ||
+    !body.last_name ||
+    !body.email ||
+    !body.employer_id
+  ) {
     return res.status(400).send("Missing required body properties");
   }
 
@@ -76,7 +82,8 @@ export const registerNewUser = async (
 
   if (
     !body ||
-    !body.name ||
+    !body.first_name ||
+    !body.last_name ||
     !body.email ||
     !body.invite_code ||
     !body.password
