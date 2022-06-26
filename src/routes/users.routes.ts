@@ -25,6 +25,7 @@ usersRouter.post(
   async (req: Request, res: Response) => await bookCoach(req, res)
 );
 
+// this route is only used from ReTool
 usersRouter.post(
   "/user",
   cors(publicCorsConfig),
