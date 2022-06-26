@@ -24,5 +24,5 @@ app.use("/v1", coachesRouter);
 app.use("/v1", tagsRouter);
 
 app.listen(port, () => {
-  console.log(`Growth 10 API listening on ${port}`);
+  console.log(`Mentumm API listening on ${port}`);
 });

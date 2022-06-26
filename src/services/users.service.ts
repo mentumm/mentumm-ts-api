@@ -46,12 +46,13 @@ export const createUser = async (
   body: CreateUser
 ): Promise<User[] | KnexError> => {
   try {
-    const { name, email, employer_id, password } = body;
+    const { first_name, last_name, email, employer_id, password } = body;
 
     if (password) {
       const hashPassword = await bcrypt.hash(password, 10);
       const user: CreateUser = {
-        name,
+        first_name,
+        last_name,
         email,
         employer_id,
         password: hashPassword,
@@ -72,7 +73,8 @@ export const createUser = async (
     } else {
       // TODO: add email pw reset as this will be hit from admin/postman
       const user: CreateUser = {
-        name,
+        first_name,
+        last_name,
         email,
         employer_id,
       };
@@ -159,7 +161,7 @@ export const registerUser = async (
 ): Promise<User[] | KnexError> => {
   try {
     let errors = null;
-    const { name, email, password, invite_code } = body;
+    const { first_name, last_name, email, password, invite_code } = body;
 
     const employer: Employer = await getEmployerByInvite(invite_code);
 
@@ -173,7 +175,8 @@ export const registerUser = async (
 
     const hashPassword = await bcrypt.hash(password, 10);
     const user: CreateUser = {
-      name,
+      first_name,
+      last_name,
       email,
       employer_id: Number(employer.id),
       password: hashPassword,
@@ -201,7 +204,8 @@ export const registerUser = async (
       mixpanelEvent("New User Registered", {
         distinct_id: newUser[0].id,
         "User ID": newUser[0].id,
-        "User Name": newUser[0].name,
+        "User First Name": newUser[0].first_name,
+        "User Last Name": newUser[0].last_name,
         "Employer ID": newUser[0].employer_id,
         "Employer Name": employer.name,
       });
@@ -276,7 +280,8 @@ export const authenticateUser = async (email: string, password: string) => {
 
     const loggedInUser: Partial<User> = {
       id: user.id,
-      name: user.name,
+      first_name: user.first_name,
+      last_name: user.last_name,
       email: user.email,
       employer_id: user.employer_id,
       last_sign_in: user.last_sign_in,
