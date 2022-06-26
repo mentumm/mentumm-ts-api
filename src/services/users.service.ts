@@ -204,7 +204,8 @@ export const registerUser = async (
       mixpanelEvent("New User Registered", {
         distinct_id: newUser[0].id,
         "User ID": newUser[0].id,
-        "User Name": newUser[0].name,
+        "User First Name": newUser[0].first_name,
+        "User Last Name": newUser[0].last_name,
         "Employer ID": newUser[0].employer_id,
         "Employer Name": employer.name,
       });
@@ -279,7 +280,8 @@ export const authenticateUser = async (email: string, password: string) => {
 
     const loggedInUser: Partial<User> = {
       id: user.id,
-      name: user.name,
+      first_name: user.first_name,
+      last_name: user.last_name,
       email: user.email,
       employer_id: user.employer_id,
       last_sign_in: user.last_sign_in,
