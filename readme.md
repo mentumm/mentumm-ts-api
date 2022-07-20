@@ -42,3 +42,5 @@ Since our `knexfile.ts` is in our database folder, we need to run migrations wit
 ```
   yarn knex migrate:make migration_name
 ```
+
+demo
