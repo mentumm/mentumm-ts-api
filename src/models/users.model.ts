@@ -31,7 +31,8 @@ export interface RegisterUser {
 
 export interface UpdateUser {
   id: string | number;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   employer_id: number;
 }
