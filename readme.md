@@ -1,5 +1,7 @@
 # Growth 10 API
 
+[![wakatime](https://wakatime.com/badge/user/d757e474-7c49-44b9-9222-b7e3547c29c5/project/6bb2dbe8-3795-43be-872f-c6fe3353532d.svg)](https://wakatime.com/badge/user/d757e474-7c49-44b9-9222-b7e3547c29c5/project/6bb2dbe8-3795-43be-872f-c6fe3353532d)
+
 API that powers that good good
 
 ## Installation
@@ -40,3 +42,5 @@ Since our `knexfile.ts` is in our database folder, we need to run migrations wit
 ```
   yarn knex migrate:make migration_name
 ```
+
+demo
