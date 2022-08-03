@@ -1,10 +1,8 @@
 {
-  "name": "staples-ts-api",
+  "name": "growth-ts-api",
   "version": "0.0.1",
   "main": "index.js",
-  "repository": "git@github.com:denvermullets/staples-ts-api.git",
-  "author": "denvermullets <devmullets@gmail.com>",
-  "license": "MIT",
+  "private": true,
   "scripts": {
     "build": "yarn install && tsc",
     "start:prod": "yarn db:migrate && node build/index.js",
