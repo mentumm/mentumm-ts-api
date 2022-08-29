@@ -27,6 +27,8 @@ export const newTag = async (req: Request, res: Response) => {
   }
 };
 
+export const editTag = async (req: Request, res: Response) => {};
+
 export const newCoachTag = async (req: Request, res: Response) => {
   const { coach_id, tag_id } = req.body;
 

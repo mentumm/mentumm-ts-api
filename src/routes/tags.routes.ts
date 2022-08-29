@@ -17,6 +17,12 @@ tagsRouter.get(
   async (req: Request, res: Response) => await tags(req, res)
 );
 
+tagsRouter.put(
+  "/tag",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await bulkTagCoach(req, res)
+);
+
 tagsRouter.post(
   "/tag",
   cors(publicCorsConfig),
