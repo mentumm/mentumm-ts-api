@@ -6,6 +6,7 @@ import {
   createTag,
   getTagCoaches,
   getTags,
+  updateTag,
 } from "../services/tags.service";
 
 export const newTag = async (req: Request, res: Response) => {
@@ -17,6 +18,26 @@ export const newTag = async (req: Request, res: Response) => {
 
   try {
     const tag = await createTag(
+      name as string,
+      slug as string,
+      description ? description : null
+    );
+    return res.json(tag);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const editTag = async (req: Request, res: Response) => {
+  const { id, name, slug, description } = req.body;
+
+  if (!name || !slug || !id) {
+    return res.status(400).send("Missing required body properties");
+  }
+
+  try {
+    const tag = await updateTag(
+      id as string,
       name as string,
       slug as string,
       description ? description : null
