@@ -3,6 +3,7 @@ import cors from "cors";
 import { publicCorsConfig } from "../util/corsOptions";
 import {
   bulkTagCoach,
+  editTag,
   newCoachTag,
   newTag,
   tagCoaches,
@@ -20,7 +21,7 @@ tagsRouter.get(
 tagsRouter.put(
   "/tag",
   cors(publicCorsConfig),
-  async (req: Request, res: Response) => await bulkTagCoach(req, res)
+  async (req: Request, res: Response) => await editTag(req, res)
 );
 
 tagsRouter.post(
