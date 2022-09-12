@@ -14,6 +14,14 @@ export interface CreateTag {
   slug: string;
 }
 
+export interface UpdateTag {
+  id: string;
+  name: string;
+  description?: string | null;
+  slug: string;
+  updated_at: string;
+}
+
 export interface CoachTag {
   coach_id: number;
   tag_id: number;

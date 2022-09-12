@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/denvermullets/mentumm-ts-api/compare/v1.0.0...v1.1.0) (2022-08-30)
+
+
+### Features
+
+* **tags:** add edit tag route, men-22 ([6030612](https://github.com/denvermullets/mentumm-ts-api/commit/60306125339c4e85b0aaa19877e244bd442f73dc))
+* **tags:** add update Tag route/service, men-23 ([6f82aec](https://github.com/denvermullets/mentumm-ts-api/commit/6f82aec9e845cbe36ef735751d71128b342577c7))
+
 # 1.0.0 (2022-08-03)
 
 

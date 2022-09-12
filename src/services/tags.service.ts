@@ -1,7 +1,8 @@
 import { Knex } from "knex";
+import moment from "moment";
 import db from "../database/db";
 import { Coach } from "../models/coaches.model";
-import { CoachTag, CreateTag, Tag } from "../models/tags.model";
+import { CoachTag, CreateTag, Tag, UpdateTag } from "../models/tags.model";
 import { KnexError } from "../types";
 
 export const createTag = async (
@@ -27,6 +28,45 @@ export const createTag = async (
     return newTag;
   } catch (error) {
     throw new Error("Unable to create new Tag");
+  }
+};
+
+export const updateTag = async (
+  id: string,
+  name: string,
+  slug: string,
+  description?: string | undefined
+): Promise<Tag[] | KnexError> => {
+  try {
+    const updateTag: Tag[] | KnexError = await db("tags")
+      .where({ id })
+      .update({ name, slug, description, updated_at: moment().format() })
+      .returning("*")
+      .catch((err: Error) => {
+        console.log(err);
+        return { message: "Unable to update Tag?" };
+      });
+
+    return updateTag;
+  } catch (error) {
+    throw new Error("Unable to update Tag");
+  }
+};
+
+export const tagDelete = async (id: string): Promise<Tag[] | KnexError> => {
+  try {
+    const deletedTag: Tag[] | KnexError = await db("tags")
+      .where({ id })
+      .del()
+      .returning("*")
+      .catch((err: Error) => {
+        console.log(err);
+        return { message: "Unable to delete Tag?" };
+      });
+
+    return deletedTag;
+  } catch (error) {
+    throw new Error("Unable to delete Tag");
   }
 };
 
