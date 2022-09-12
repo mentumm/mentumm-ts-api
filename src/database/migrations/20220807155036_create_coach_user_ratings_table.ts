@@ -3,7 +3,7 @@ import { Knex } from "knex";
 export async function up(knex: Knex): Promise<void> {
   return await knex.schema.createTable("coach_user_ratings", (t) => {
     t.bigIncrements("id");
-    t.tinyint("overall_rating_exp");
+    t.tinyint("overall_rating");
     t.tinyint("listening_rating");
     t.text("additional_comments");
     t.string("primary_topic");
