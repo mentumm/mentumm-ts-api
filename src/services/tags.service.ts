@@ -53,6 +53,23 @@ export const updateTag = async (
   }
 };
 
+export const tagDelete = async (id: string): Promise<Tag[] | KnexError> => {
+  try {
+    const deletedTag: Tag[] | KnexError = await db("tags")
+      .where({ id })
+      .del()
+      .returning("*")
+      .catch((err: Error) => {
+        console.log(err);
+        return { message: "Unable to delete Tag?" };
+      });
+
+    return deletedTag;
+  } catch (error) {
+    throw new Error("Unable to delete Tag");
+  }
+};
+
 export const createCoachTag = async (
   coach_id: number,
   tag_id: number
