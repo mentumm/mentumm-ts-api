@@ -3,7 +3,9 @@ import cors from "cors";
 import { publicCorsConfig } from "../util/corsOptions";
 import {
   bulkTagCoach,
+  deleteCoachTag,
   deleteTag,
+  editCoachTag,
   editTag,
   newCoachTag,
   newTag,
@@ -41,6 +43,18 @@ tagsRouter.post(
   "/tag-coach",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await newCoachTag(req, res)
+);
+
+tagsRouter.put(
+  "/tag-coach",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await editCoachTag(req, res)
+);
+
+tagsRouter.delete(
+  "/tag-coach",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await deleteCoachTag(req, res)
 );
 
 tagsRouter.get(
