@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.2.0...v1.3.0) (2022-09-13)
+
+
+### Features
+
+* **coachTag:** add update/delete routes, men-32, men-33 ([#68](https://github.com/mentumm/mentumm-ts-api/issues/68)) ([52e7475](https://github.com/mentumm/mentumm-ts-api/commit/52e7475d5fed84abdd3dda6563f140ba97b78a71))
+
 # [1.2.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.1.0...v1.2.0) (2022-09-13)
 
 
