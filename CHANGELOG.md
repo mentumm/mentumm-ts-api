@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.1.0...v1.2.0) (2022-09-13)
+
+
+### Features
+
+* **ratings:** add ratings table, men-17 ([#63](https://github.com/mentumm/mentumm-ts-api/issues/63)) ([bc53c51](https://github.com/mentumm/mentumm-ts-api/commit/bc53c51b213b81bf251e70e1b2013f4fbadce72b))
+* **tags:** add delete tag route w/adding cascade, men-24 ([#66](https://github.com/mentumm/mentumm-ts-api/issues/66)) ([6e2e311](https://github.com/mentumm/mentumm-ts-api/commit/6e2e31123eb338871105240a55e3abaa85e6c0fb))
+
 # [1.1.0](https://github.com/denvermullets/mentumm-ts-api/compare/v1.0.0...v1.1.0) (2022-08-30)
 
 
