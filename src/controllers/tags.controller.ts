@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { getCoachByTagSlug } from "../services/coaches.service";
 import {
+  coachTagDelete,
   createBulkCoachTag,
   createCoachTag,
   createTag,
   getTagCoaches,
   getTags,
+  modifyCoachTag,
   tagDelete,
   updateTag,
 } from "../services/tags.service";
@@ -50,7 +52,7 @@ export const editTag = async (req: Request, res: Response) => {
 };
 
 export const deleteTag = async (req: Request, res: Response) => {
-  const { id, name, slug, description } = req.body;
+  const { id } = req.body;
 
   if (!id) {
     return res.status(400).send("Missing required body properties");
@@ -75,6 +77,41 @@ export const newCoachTag = async (req: Request, res: Response) => {
     const coachTag = await createCoachTag(Number(coach_id), Number(tag_id));
 
     return res.json(coachTag);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const editCoachTag = async (req: Request, res: Response) => {
+  const { id, coach_id, tag_id } = req.body;
+
+  if (!coach_id || !tag_id || !id) {
+    return res.status(400).send("Missing required body properties");
+  }
+
+  try {
+    const coachTag = await modifyCoachTag(
+      Number(id),
+      Number(coach_id),
+      Number(tag_id)
+    );
+
+    return res.json(coachTag);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const deleteCoachTag = async (req: Request, res: Response) => {
+  const { id } = req.body;
+
+  if (!id) {
+    return res.status(400).send("Missing required body properties");
+  }
+
+  try {
+    const tag = await coachTagDelete(id as string);
+    return res.json(tag);
   } catch (error) {
     return res.status(500).send(error);
   }
