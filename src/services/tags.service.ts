@@ -91,6 +91,49 @@ export const createCoachTag = async (
   }
 };
 
+export const modifyCoachTag = async (
+  id: number,
+  coach_id: number,
+  tag_id: number
+): Promise<CoachTag[] | KnexError> => {
+  try {
+    const newCoachTag: CoachTag[] | KnexError = await db("coach_tags")
+      .where({ id })
+      .update({
+        coach_id: coach_id,
+        tag_id: tag_id,
+        updated_at: moment().format(),
+      })
+      .returning("*")
+      .catch((err: Error) => {
+        return { message: "Unable to update CoachTag?" };
+      });
+
+    return newCoachTag;
+  } catch (error) {
+    throw new Error("Unable to update CoachTag");
+  }
+};
+
+export const coachTagDelete = async (
+  id: string
+): Promise<Tag[] | KnexError> => {
+  try {
+    const deletedTag: Tag[] | KnexError = await db("coach_tags")
+      .where({ id })
+      .del()
+      .returning("*")
+      .catch((err: Error) => {
+        console.log(err);
+        return { message: "Unable to delete CoachTag?" };
+      });
+
+    return deletedTag;
+  } catch (error) {
+    throw new Error("Unable to delete CoachTag");
+  }
+};
+
 export const createBulkCoachTag = async (
   coachName: string,
   tags: string[]
