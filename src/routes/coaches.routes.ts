@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import { publicCorsConfig } from "../util/corsOptions";
 import {
+  addCoachRating,
   coaches,
   deactivateCoach,
   newCoach,
@@ -32,6 +33,12 @@ coachesRouter.put(
   "/coach",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await updateCoachInfo(req, res)
+);
+
+coachesRouter.post(
+  "/coach/rating",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await addCoachRating(req, res)
 );
 
 export default coachesRouter;
