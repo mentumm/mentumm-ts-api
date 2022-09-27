@@ -1,7 +1,12 @@
 import { Knex } from "knex";
 import moment from "moment";
 import db from "../database/db";
-import { Coach, CreateCoach, UpdateCoach } from "../models/coaches.model";
+import {
+  Coach,
+  CoachRating,
+  CreateCoach,
+  UpdateCoach,
+} from "../models/coaches.model";
 import { KnexError } from "../types";
 
 export const getCoaches = async (
@@ -174,5 +179,51 @@ export const getCoachByTagSlug = async (
     return coach_tags;
   } catch (error) {
     throw new Error("Unable to find Coach / Tags");
+  }
+};
+
+export const createCoachRating = async (
+  body: CoachRating
+): Promise<CoachRating[] | KnexError> => {
+  try {
+    const {
+      user_id,
+      coach_id,
+      rating_overall,
+      rating_listening,
+      additional_comments,
+      primary_topic,
+      user_learned,
+      user_would_book_again,
+    } = body;
+
+    const coachRating: CoachRating = {
+      user_id: Number(user_id),
+      coach_id: Number(coach_id),
+      rating_overall: Number(rating_overall),
+      rating_listening: Number(rating_listening),
+      primary_topic: primary_topic,
+      user_learned: user_learned,
+      user_would_book_again: user_would_book_again,
+      additional_comments: additional_comments ? additional_comments : null,
+    };
+
+    const newCoachRating: CoachRating[] | KnexError = await db(
+      "coach_user_ratings"
+    )
+      .insert(coachRating)
+      .returning("*")
+      .catch((err: Error) => {
+        if (err) {
+          console.log(err);
+          return { message: "Unable to create Review" };
+        } else {
+          throw new Error("Unable to create Review");
+        }
+      });
+
+    return newCoachRating;
+  } catch (error) {
+    throw new Error("Unable to create new Coach");
   }
 };

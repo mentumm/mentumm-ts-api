@@ -29,3 +29,14 @@ export interface UpdateCoach {
   linkedin_url?: string;
   location?: string;
 }
+
+export interface CoachRating {
+  user_id: string | number;
+  coach_id: string | number;
+  rating_overall: number;
+  rating_listening: number;
+  additional_comments?: string | null;
+  primary_topic: string;
+  user_learned: boolean;
+  user_would_book_again: boolean;
+}
