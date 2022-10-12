@@ -2,27 +2,28 @@ import { Knex } from "knex";
 import db from "../db";
 
 
-export async function up(knex: Knex): Promise<void> {
-  await db("tags")
-    .whereIn('slug', [
-      'career-planning',
-      'communication',
-      'content-development',
-      'customer-care',
-      'linkedin-marketing',
-      'negotiation',
-      'networking',
-      'presentation-public-speaking',
-      'sales',
-      'time-management-productivity',
-    ])
-    .update({ category: 'Professional' })
-    .catch((err: Error) => {
-      console.log(err);
-      return { message: "Unable to update Tags" };
-    });
+export async function up(knex: Knex): Promise<(number | { message: string; })[]> {
+  return await Promise.all([
+    db("tags")
+      .whereIn('slug', [
+        'career-planning',
+        'communication',
+        'content-development',
+        'customer-care',
+        'linkedin-marketing',
+        'negotiation',
+        'networking',
+        'presentation-public-speaking',
+        'sales',
+        'time-management-productivity',
+      ])
+      .update({ category: 'Professional' })
+      .catch((err: Error) => {
+        console.log(err);
+        return { message: "Unable to update Tags" };
+      }),
 
-    await db("tags")
+    db("tags")
     .whereIn('slug', [
       'collaboration',
       'conflict-management',
@@ -41,9 +42,9 @@ export async function up(knex: Knex): Promise<void> {
     .catch((err: Error) => {
       console.log(err);
       return { message: "Unable to update Tags" };
-    });
+    }),
 
-    await db("tags")
+    db("tags")
     .whereIn('slug', [
       'goal-setting',
       'life-coaching',
@@ -61,12 +62,13 @@ export async function up(knex: Knex): Promise<void> {
     .catch((err: Error) => {
       console.log(err);
       return { message: "Unable to update Tags" };
-    });
+    })
+  ]);
 }
 
 
-export async function down(knex: Knex): Promise<void> {
-  await db("tags")
+export async function down(knex: Knex): Promise<number | { message: string; }> {
+ return await db("tags")
     .update({ category: null })
     .catch((err: Error) => {
       console.log(err);
