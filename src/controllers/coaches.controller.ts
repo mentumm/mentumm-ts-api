@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CreateCoach } from "../models/coaches.model";
 import {
   createCoach,
+  createCoachRating,
   deleteCoach,
   getCoaches,
   updateCoach,
@@ -67,6 +68,22 @@ export const updateCoachInfo = async (req: Request, res: Response) => {
     const updatedCoach = await updateCoach(req.body);
 
     return res.json(updatedCoach);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const addCoachRating = async (req: Request, res: Response) => {
+  const { user_id, coach_id } = req.body;
+
+  if (!user_id || !coach_id) {
+    return res.status(400).send("Missing rating elements");
+  }
+
+  try {
+    const coachRating = await createCoachRating(req.body);
+
+    return res.json(coachRating);
   } catch (error) {
     return res.status(500).send(error);
   }
