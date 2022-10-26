@@ -195,6 +195,7 @@ export const createCoachRating = async (
       primary_topic,
       user_learned,
       user_would_book_again,
+      user_coach_id,
     } = body;
 
     const coachRating: CoachRating = {
@@ -206,6 +207,7 @@ export const createCoachRating = async (
       user_learned: user_learned,
       user_would_book_again: user_would_book_again,
       additional_comments: additional_comments ? additional_comments : null,
+      user_coach_id: user_coach_id ? user_coach_id : null,
     };
 
     const newCoachRating: CoachRating[] | KnexError = await db(

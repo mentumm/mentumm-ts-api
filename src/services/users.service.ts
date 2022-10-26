@@ -293,3 +293,66 @@ export const authenticateUser = async (email: string, password: string) => {
     return { message: "Username or Password does not match" };
   }
 };
+
+export const getUpcomingBookings = async(id: number): Promise<CoachBooking[] | KnexError> => {
+  const bookings = await db("user_coaches")
+    .select(
+      "user_coaches.*",
+      db.raw("row_to_json(c) as coach"),
+    )
+    .leftJoin(
+      db("coaches")
+        .select(
+          "coaches.*",
+          db.raw("JSON_AGG(tags.*) as skills")
+        )
+        .leftJoin("coach_tags", "coach_tags.coach_id", "=", "coaches.id")
+        .leftJoin("tags", "coach_tags.tag_id", "=", "tags.id")
+        .groupBy('coaches.id')
+        .as("c")
+      , "c.id", "=", "user_coaches.coach_id")
+    .whereRaw("TO_TIMESTAMP(event_start_time, 'YYYY-MM-DDTHH24:MI:SSTZH') > TO_TIMESTAMP(?)", [Date.now()/1000.0])
+    .where({ 'user_coaches.user_id': id })
+    .returning("*")
+    .catch((err: Error) => {
+      if (err) {
+        return { message: "There was a problem getting upcoming bookings" };
+      }
+      throw new Error("Unable to get upcoming bookings");
+    });
+
+  return bookings;
+
+};
+
+export const getPastBookings = async(id: number): Promise<CoachBooking[] | KnexError> => {
+  const bookings = await db("user_coaches")
+    .select(
+      "user_coaches.*",
+      db.raw("row_to_json(coach_user_ratings) as user_review"),
+      db.raw("row_to_json(c) as coach"),
+    )
+    .leftJoin("coach_user_ratings", "coach_user_ratings.user_coach_id", "=", "user_coaches.id")
+    .leftJoin(
+      db("coaches")
+        .select(
+          "coaches.*",
+          db.raw("JSON_AGG(tags.*) as skills")
+        )
+        .leftJoin("coach_tags", "coach_tags.coach_id", "=", "coaches.id")
+        .leftJoin("tags", "coach_tags.tag_id", "=", "tags.id")
+        .groupBy('coaches.id')
+        .as("c")
+      , "c.id", "=", "user_coaches.coach_id")
+    .whereRaw("TO_TIMESTAMP(event_start_time, 'YYYY-MM-DDTHH24:MI:SSTZH') < TO_TIMESTAMP(?)", [Date.now()/1000.0])
+    .where({ 'user_coaches.user_id': id })
+    .returning("*")
+    .catch((err: Error) => {
+      if (err) {
+        return { message: "There was a problem getting past bookings" };
+      }
+      throw new Error("Unable to get past bookings");
+    });
+
+  return bookings;
+}

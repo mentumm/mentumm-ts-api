@@ -6,6 +6,8 @@ import {
   createUser,
   deleteUser,
   getUsers,
+  getUpcomingBookings,
+  getPastBookings,
   registerUser,
   updateUser,
 } from "../services/users.service";
@@ -141,6 +143,30 @@ export const userLogin = async (req: Request, res: Response) => {
     const user = await authenticateUser(email, password);
 
     return res.json(user);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const upcoming = async (req: Request, res: Response) => {
+  const { id } = req.query;
+
+  try {
+    const bookings = await getUpcomingBookings(Number(id));
+
+    return res.json(bookings);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const past = async (req: Request, res: Response) => {
+  const { id } = req.query;
+
+  try {
+    const bookings = await getPastBookings(Number(id));
+
+    return res.json(bookings);
   } catch (error) {
     return res.status(500).send(error);
   }

@@ -39,4 +39,5 @@ export interface CoachRating {
   primary_topic: string;
   user_learned: boolean;
   user_would_book_again: boolean;
+  user_coach_id?: number | null;
 }
