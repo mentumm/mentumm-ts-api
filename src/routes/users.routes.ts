@@ -7,6 +7,8 @@ import {
   updateUserInfo,
   userLogin,
   users,
+  upcoming,
+  past,
 } from "../controllers/users.controller";
 import cors from "cors";
 import { publicCorsConfig } from "../util/corsOptions";
@@ -17,6 +19,18 @@ usersRouter.get(
   "/users",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await users(req, res)
+);
+
+usersRouter.get(
+  "/user/upcoming",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await upcoming(req, res)
+);
+
+usersRouter.get(
+  "/user/past",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await past(req, res)
 );
 
 usersRouter.post(
