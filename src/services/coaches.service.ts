@@ -62,7 +62,11 @@ export const getCoaches = async (
     return coach;
   }
 
-  const coach = await db("coaches").select("*");
+  const coach = await db("coaches")
+  .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
+  .leftJoin("coach_tags", "coaches.id", "coach_tags.coach_id")
+  .leftJoin("tags", "tags.id", "coach_tags.tag_id")
+  .groupBy("coaches.id");
 
   return coach;
 };
