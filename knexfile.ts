@@ -27,7 +27,7 @@ const configs: IKnexConfig = {
     client: "pg",
     connection: DB + "?ssl=true",
     migrations: {
-      directory: ".src/database/migrations",
+      directory: "./src/database/migrations",
       tableName: "knex_migrations",
     },
     pool: {
