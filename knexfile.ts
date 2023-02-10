@@ -14,6 +14,7 @@ const configs: IKnexConfig = {
   development: {
     client: "pg",
     connection: DB,
+    debug: true,
     migrations: {
       directory: "./src/database/migrations",
       tableName: "knex_migrations",

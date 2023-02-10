@@ -9,17 +9,19 @@ import {
 } from "../services/coaches.service";
 
 export const coaches = async (req: Request, res: Response) => {
-  const { id, name, limit } = req.query;
+  const { id, name, limit, search } = req.query;
 
   try {
     const coach = await getCoaches(
       Number(id),
       name as string,
-      limit ? Number(limit) : 100
+      limit ? Number(limit) : 100,
+      search as string
     );
 
     return res.json(coach);
   } catch (error) {
+    console.log(error);
     return res.status(500).send(error);
   }
 };
