@@ -11,8 +11,6 @@ import {
 export const coaches = async (req: Request, res: Response) => {
   const { id, name, limit, search } = req.query;
 
-  console.log(search);
-
   try {
     const coach = await getCoaches(
       Number(id),
