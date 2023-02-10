@@ -12,8 +12,20 @@ import { KnexError } from "../types";
 export const getCoaches = async (
   id: number,
   name: string,
-  limit: number
+  limit: number,
+  search?: string
 ): Promise<Coach[] | KnexError> => {
+  if (search) {
+    const searchResults = await db("coaches")
+      .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
+      .whereRaw(`coaches.name ILIKE '%${search}%'`)
+      .leftJoin("coach_tags", "coaches.id", "coach_tags.coach_id")
+      .leftJoin("tags", "tags.id", "coach_tags.tag_id")
+      .groupBy("coaches.id");
+
+    return searchResults;
+  }
+
   // yes, this is verbose and repeats but i couldn't get builder to work
   // with this query
   if (id) {
@@ -63,10 +75,10 @@ export const getCoaches = async (
   }
 
   const coach = await db("coaches")
-  .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
-  .leftJoin("coach_tags", "coaches.id", "coach_tags.coach_id")
-  .leftJoin("tags", "tags.id", "coach_tags.tag_id")
-  .groupBy("coaches.id");
+    .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
+    .leftJoin("coach_tags", "coaches.id", "coach_tags.coach_id")
+    .leftJoin("tags", "tags.id", "coach_tags.tag_id")
+    .groupBy("coaches.id");
 
   return coach;
 };
