@@ -1,6 +1,6 @@
 // was unable to read .env since this was nested ?_?, unsure why that is
 const path = require("path");
-require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
+require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
 
 import { Knex } from "knex";
 
@@ -15,8 +15,11 @@ const configs: IKnexConfig = {
     client: "pg",
     connection: DB,
     migrations: {
-      directory: "./migrations",
+      directory: "./src/database/migrations",
       tableName: "knex_migrations",
+    },
+    seeds: {
+      directory: "./src/database/seeds",
     },
   },
 
@@ -24,7 +27,7 @@ const configs: IKnexConfig = {
     client: "pg",
     connection: DB + "?ssl=true",
     migrations: {
-      directory: "./migrations",
+      directory: ".src/database/migrations",
       tableName: "knex_migrations",
     },
     pool: {
