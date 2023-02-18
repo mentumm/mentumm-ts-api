@@ -4,7 +4,6 @@ import _ from "lodash";
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable("user_coaches", (t) => {
     t.dropForeign("coach_id");
-    // t.foreign("coach_id").references("id").inTable("users");
   });
 
   const user_coaches = await knex("user_coaches").select("*");
@@ -12,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
     const handleUpdate = async () => {
       const legacyId = userCoach.coach_id;
       const newId = await knex("users").where("legacy_coach_id", legacyId);
-      console.log(newId);
+
       await knex("user_coaches")
         .where("coach_id", legacyId)
         .update("coach_id", _.head(newId).id);
