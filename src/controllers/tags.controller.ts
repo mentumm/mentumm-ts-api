@@ -118,14 +118,14 @@ export const deleteCoachTag = async (req: Request, res: Response) => {
 };
 
 export const bulkTagCoach = async (req: Request, res: Response) => {
-  const { coach_name, tags } = req.body;
+  const { coach_id, tags } = req.body;
 
-  if (!coach_name) {
+  if (!coach_id) {
     return res.status(400).send("Missing required body properties");
   }
 
   try {
-    const coachTag = await createBulkCoachTag(coach_name, tags);
+    const coachTag = await createBulkCoachTag(coach_id, tags);
 
     return res.json(coachTag);
   } catch (error) {

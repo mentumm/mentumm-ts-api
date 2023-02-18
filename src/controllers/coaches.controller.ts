@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateCoach } from "../models/coaches.model";
+import { User } from "../models/users.model";
 import {
   createCoach,
   createCoachRating,
@@ -30,9 +30,9 @@ export const newCoach = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const body: CreateCoach = req.body;
+  const body: Partial<User> = req.body;
 
-  if (!body || !body.name || !body.booking_link) {
+  if (!body || !body.first_name || body.last_name || !body.booking_url) {
     return res.status(400).send("Missing required body properties");
   }
 

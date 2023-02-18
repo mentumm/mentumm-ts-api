@@ -16,7 +16,7 @@ export interface User {
   booking_url?: string;
   linkedin_url: string;
   location?: string; // deprecated
-  legacy_coach_id?: string | number; // only for this initial migration, should not really be used
+  legacy_coach_id?: string | number; // only for this initial migration, should not really be used outside of migrations
   city?: string;
   state?: string;
   role: "coach" | "user";
@@ -28,6 +28,7 @@ export interface CreateUser {
   email: string;
   employer_id: number;
   password?: string;
+  role: "coach" | "user";
 }
 
 export interface RegisterUser {

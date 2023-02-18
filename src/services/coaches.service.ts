@@ -1,4 +1,3 @@
-import { Knex } from "knex";
 import moment from "moment";
 import db from "../database/db";
 import {
@@ -7,6 +6,7 @@ import {
   CreateCoach,
   UpdateCoach,
 } from "../models/coaches.model";
+import { User } from "../models/users.model";
 import { KnexError } from "../types";
 
 export const getCoaches = async (
@@ -16,12 +16,15 @@ export const getCoaches = async (
   search?: string
 ): Promise<Coach[] | KnexError> => {
   if (search) {
-    const searchResults = await db("coaches")
-      .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
-      .whereRaw(`coaches.name ILIKE '%${search}%'`)
-      .leftJoin("coach_tags", "coaches.id", "coach_tags.coach_id")
+    const searchResults = await db("users")
+      .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
+      .whereNull("deleted_at")
+      .andWhere("role", "coach")
+      .andWhereRaw(`users.first_name ILIKE '%${search}%'`)
+      .orWhereRaw(`users.last_name ILIKE '%${search}%'`)
+      .leftJoin("coach_tags", "users.id", "coach_tags.coach_id")
       .leftJoin("tags", "tags.id", "coach_tags.tag_id")
-      .groupBy("coaches.id");
+      .groupBy("users.id");
 
     return searchResults;
   }
@@ -29,75 +32,87 @@ export const getCoaches = async (
   // yes, this is verbose and repeats but i couldn't get builder to work
   // with this query
   if (id) {
-    const coach = await db("coaches")
+    const coach = await db("users")
       .whereNull("deleted_at")
-      .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
-      .where("coaches.id", id)
+      .andWhere("role", "coach")
+      .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
+      .where("users.id", id)
       .leftJoin(
         db("coach_tags").select("*").as("ct"),
         "ct.coach_id",
-        "coaches.id"
+        "users.id"
       )
       .leftJoin(db("tags").select("*").as("tags"), "ct.tag_id", "tags.id")
-      .whereNull("coaches.deleted_at")
+      .whereNull("users.deleted_at")
       .whereIn(
-        "coaches.id",
+        "users.id",
         db("coach_tags")
           .select("coach_id")
           .innerJoin("tags", "tags.id", "coach_tags.tag_id")
       )
-      .groupBy("coaches.id")
+      .groupBy("users.id")
       .limit(limit);
 
     return coach;
   } else if (name) {
-    const coach = await db("coaches")
+    const coach = await db("users")
       .whereNull("deleted_at")
-      .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
-      .where("coaches.name", name)
+      .andWhere("role", "coach")
+      .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
+      .where("users.name", name)
       .leftJoin(
         db("coach_tags").select("*").as("ct"),
         "ct.coach_id",
-        "coaches.id"
+        "users.id"
       )
       .leftJoin(db("tags").select("*").as("tags"), "ct.tag_id", "tags.id")
-      .whereNull("coaches.deleted_at")
+      .whereNull("users.deleted_at")
       .whereIn(
-        "coaches.id",
+        "users.id",
         db("coach_tags")
           .select("coach_id")
           .innerJoin("tags", "tags.id", "coach_tags.tag_id")
       )
-      .groupBy("coaches.id")
+      .groupBy("users.id")
       .limit(limit);
 
     return coach;
   }
 
-  const coach = await db("coaches")
-    .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
-    .leftJoin("coach_tags", "coaches.id", "coach_tags.coach_id")
+  const coach = await db("users")
+    .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
+    .where("role", "coach")
+    .leftJoin("coach_tags", "users.id", "coach_tags.coach_id")
     .leftJoin("tags", "tags.id", "coach_tags.tag_id")
-    .groupBy("coaches.id");
+    .groupBy("users.id");
 
   return coach;
 };
 
 export const createCoach = async (
-  body: CreateCoach
-): Promise<Coach[] | KnexError> => {
+  body: Partial<User>
+): Promise<User[] | KnexError> => {
   try {
-    const { name, bio, photo_url, booking_link, linkedin_url, location } = body;
-    const coach: CreateCoach = {
-      name,
-      bio: bio ? bio : null,
-      photo_url: photo_url ? photo_url : null,
-      booking_link,
-      linkedin_url: linkedin_url ? linkedin_url : null,
-      location: location ? location : null,
+    const {
+      first_name,
+      last_name,
+      bio,
+      photo_url,
+      booking_url,
+      linkedin_url,
+      location,
+    } = body;
+    const coach: Partial<User> = {
+      first_name,
+      last_name,
+      bio,
+      photo_url,
+      booking_url,
+      linkedin_url,
+      location,
     };
 
-    const newCoach: Coach[] | KnexError = await db("coaches")
+    const newCoach: User[] | KnexError = await db("users")
       .insert(coach)
       .returning("*")
       .catch((err: Error) => {
@@ -115,19 +130,28 @@ export const createCoach = async (
 };
 
 export const updateCoach = async (
-  body: UpdateCoach
-): Promise<Coach[] | KnexError> => {
+  body: Partial<User>
+): Promise<User[] | KnexError> => {
   try {
-    const { id, name, bio, photo_url, booking_link, linkedin_url, location } =
-      body;
+    const {
+      id,
+      first_name,
+      last_name,
+      bio,
+      photo_url,
+      booking_url,
+      linkedin_url,
+      location,
+    } = body;
 
-    const update: Coach[] | KnexError = await db("coaches")
-      .where({ id })
+    const update: User[] | KnexError = await db("users")
+      .where({ id, role: "coach" })
       .update({
-        name,
+        first_name,
+        last_name,
         bio,
         photo_url,
-        booking_link,
+        booking_url,
         linkedin_url,
         location,
         updated_at: moment().toISOString(),
@@ -149,11 +173,12 @@ export const updateCoach = async (
   }
 };
 
-export const deleteCoach = async (id: number): Promise<Coach[] | KnexError> => {
-  const coach: Coach[] | KnexError = await db("coaches")
+export const deleteCoach = async (id: number): Promise<User[] | KnexError> => {
+  const coach: User[] | KnexError = await db("users")
     .update({
       deleted_at: moment().toISOString(),
       updated_at: moment().toISOString(),
+      role: "user",
     })
     .where({ id: id })
     .returning("*")
