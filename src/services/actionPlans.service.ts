@@ -11,3 +11,7 @@ export const createActionPlan = async (
     ...actionPlanValues,
   });
 };
+
+export const getAllActionPlansByUserId = async (user_id: string | number) => {
+  return await actionPlanDataAccess.fetchActionPlansByUserId(user_id);
+};

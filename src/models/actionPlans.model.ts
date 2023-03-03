@@ -25,6 +25,18 @@ export interface ActionPlanRecord extends ActionPlan {
 export const actionPlanDataAccess = {
   table: "action_plans",
 
+  async fetchActionPlansByUserId(
+    user_id: string | number
+  ): Promise<ActionPlanRecord[]> {
+    return await db(this.table)
+      .select()
+      .where({ user_id })
+      .whereNull("deleted_at")
+      .catch((err) => {
+        throw new Error(err);
+      });
+  },
+
   async saveNewActionPlan({
     user_id,
     personal_rank,

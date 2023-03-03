@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
-import { createActionPlan } from "../services/actionPlans.service";
+import {
+  createActionPlan,
+  getAllActionPlansByUserId,
+} from "../services/actionPlans.service";
 
 export const create = async (req: Request, res: Response) => {
   const {
@@ -36,6 +39,21 @@ export const create = async (req: Request, res: Response) => {
       return res.status(400).json("Could not create Action Plan");
     }
     return res.status(201).json(actionPlan);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err);
+  }
+};
+
+export const getActionPlans = async (req: Request, res: Response) => {
+  const { user_id } = req.params;
+
+  try {
+    const actionPlans = await getAllActionPlansByUserId(user_id);
+    if (!actionPlans) {
+      return res.status(400).json("Could not get Action Plans");
+    }
+    return res.status(200).json(actionPlans);
   } catch (err) {
     console.error(err);
     return res.status(500).json(err);
