@@ -3,7 +3,7 @@ import { Knex } from "knex";
 export async function up(knex: Knex): Promise<void> {
   return await knex.schema.createTable("action_plans", (t) => {
     t.bigIncrements("id").primary();
-    t.bigInteger("user_id").notNullable();
+    t.bigInteger("user_id").index().notNullable();
     t.integer("personal_rank").notNullable();
     t.integer("professional_rank").notNullable();
     t.integer("health_wellness_rank").notNullable();
@@ -14,9 +14,10 @@ export async function up(knex: Knex): Promise<void> {
     t.string("professional_issues_field", 2000).nullable();
     t.string("decisions_field", 2000).nullable();
     t.string("leadership_process_field", 2000).nullable();
-    t.json("key_action_items").nullable();
+    t.string("key_action_items").nullable();
     t.timestamps(true, true);
     t.timestamp("deleted_at").nullable();
+    t.foreign("user_id").references("id").inTable("users");
   });
 }
 
