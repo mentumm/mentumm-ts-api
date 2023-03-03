@@ -198,23 +198,24 @@ export const getCoachByTagSlug = async (
 ): Promise<Coach[]> => {
   try {
     const coach_tags = await db("coaches")
-      .select("coaches.*", db.raw("JSON_AGG(tags.*) as skills"))
+      .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
+      .where({ role: "coach" })
       .leftJoin(
         db("coach_tags").select("*").as("ct"),
         "ct.coach_id",
-        "coaches.id"
+        "users.id"
       )
       .leftJoin(db("tags").select("*").as("tags"), "ct.tag_id", "tags.id")
 
-      .whereNull("coaches.deleted_at")
+      .whereNull("users.deleted_at")
       .whereIn(
-        "coaches.id",
+        "users.id",
         db("coach_tags")
           .select("coach_id")
           .innerJoin("tags", "tags.id", "coach_tags.tag_id")
           .where("tags.slug", slug)
       )
-      .groupBy("coaches.id")
+      .groupBy("users.id")
       .limit(limit);
 
     return coach_tags;
