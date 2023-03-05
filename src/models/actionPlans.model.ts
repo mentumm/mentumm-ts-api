@@ -28,13 +28,21 @@ export const actionPlanDataAccess = {
   async fetchActionPlansByUserId(
     user_id: string | number
   ): Promise<ActionPlanRecord[]> {
-    return await db(this.table)
+    const actionPlans = await db(this.table)
       .select()
       .where({ user_id })
       .whereNull("deleted_at")
       .catch((err) => {
         throw new Error(err);
       });
+
+    const parsedActionPlans = actionPlans.map((actionPlan) => {
+      return {
+        ...actionPlan,
+        key_action_items: JSON.parse(actionPlan.key_action_items),
+      };
+    });
+    return parsedActionPlans;
   },
 
   async saveNewActionPlan({
@@ -51,6 +59,7 @@ export const actionPlanDataAccess = {
     leadership_process_field,
     key_action_items,
   }: ActionPlan): Promise<ActionPlanRecord> {
+    console.log({ key_action_items });
     const actionPlan = await db(this.table)
       .insert({
         user_id,
@@ -64,7 +73,7 @@ export const actionPlanDataAccess = {
         professional_issues_field,
         decisions_field,
         leadership_process_field,
-        key_action_items,
+        key_action_items: JSON.stringify(key_action_items),
       })
       .returning("*")
       .catch((err) => {
