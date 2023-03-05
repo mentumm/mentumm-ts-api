@@ -6,11 +6,20 @@ export interface User {
   employer_id: number;
   created_at: Date;
   updated_at?: Date;
-  deleted_at?: Date | null;
+  deleted_at?: Date;
   password: string;
   reset_password_token: string;
   reset_password_expiration: Date;
   last_sign_in: Date;
+  bio?: string;
+  photo_url?: string;
+  booking_url?: string;
+  linkedin_url: string;
+  location?: string; // deprecated
+  legacy_coach_id?: string | number; // only for this initial migration, should not really be used outside of migrations
+  city?: string;
+  state?: string;
+  role: "coach" | "user";
 }
 
 export interface CreateUser {
@@ -19,6 +28,7 @@ export interface CreateUser {
   email: string;
   employer_id: number;
   password?: string;
+  role: "coach" | "user";
 }
 
 export interface RegisterUser {
