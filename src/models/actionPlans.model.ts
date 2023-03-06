@@ -91,4 +91,45 @@ export const actionPlanDataAccess = {
 
     return actionPlan[0];
   },
+
+  async updateActionPlan(
+    action_plan_id: string,
+    {
+      user_id,
+      personal_rank,
+      professional_rank,
+      health_wellness_rank,
+      work_life_balance_rank,
+      motivation_rank,
+      relationships_rank,
+      personal_issues_field,
+      professional_issues_field,
+      decisions_field,
+      leadership_process_field,
+      key_action_items,
+    }: ActionPlan
+  ): Promise<ActionPlanRecord> {
+    const actionPlan = await db(this.table)
+      .update({
+        user_id,
+        personal_rank,
+        professional_rank,
+        health_wellness_rank,
+        work_life_balance_rank,
+        motivation_rank,
+        relationships_rank,
+        personal_issues_field,
+        professional_issues_field,
+        decisions_field,
+        leadership_process_field,
+        key_action_items: JSON.stringify(key_action_items),
+      })
+      .where({ id: action_plan_id })
+      .returning("*")
+      .catch((err) => {
+        throw new Error(err);
+      });
+
+    return actionPlan[0];
+  },
 };

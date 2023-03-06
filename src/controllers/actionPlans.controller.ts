@@ -3,6 +3,7 @@ import {
   createActionPlan,
   getActionPlanByUserIdAndDate,
   getAllActionPlansByUserId,
+  updateExistingActionPlan,
 } from "../services/actionPlans.service";
 
 export const create = async (req: Request, res: Response) => {
@@ -76,6 +77,48 @@ export const getMonthlyActionPlan = async (req: Request, res: Response) => {
       return res.status(404).json("No Action Plans found");
     }
     return res.status(200).json(actionPlan[0]);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err);
+  }
+};
+
+export const update = async (req: Request, res: Response) => {
+  const { action_plan_id } = req.params;
+  const {
+    user_id,
+    personal_rank,
+    professional_rank,
+    health_wellness_rank,
+    work_life_balance_rank,
+    motivation_rank,
+    relationships_rank,
+    personal_issues_field,
+    professional_issues_field,
+    decisions_field,
+    leadership_process_field,
+    key_action_items,
+  } = req.body;
+
+  try {
+    const actionPlan = await updateExistingActionPlan(action_plan_id, {
+      user_id,
+      personal_rank,
+      professional_rank,
+      health_wellness_rank,
+      work_life_balance_rank,
+      motivation_rank,
+      relationships_rank,
+      personal_issues_field,
+      professional_issues_field,
+      decisions_field,
+      leadership_process_field,
+      key_action_items,
+    });
+    if (!actionPlan) {
+      return res.status(400).json("Could not update Action Plan");
+    }
+    return res.status(200).json(actionPlan);
   } catch (err) {
     console.error(err);
     return res.status(500).json(err);
