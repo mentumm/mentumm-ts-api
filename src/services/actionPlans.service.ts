@@ -15,3 +15,10 @@ export const createActionPlan = async (
 export const getAllActionPlansByUserId = async (user_id: string | number) => {
   return await actionPlanDataAccess.fetchActionPlansByUserId(user_id);
 };
+
+export const getActionPlanByUserIdAndDate = async (
+  user_id: string | number,
+  date: string
+) => {
+  return await actionPlanDataAccess.fetchActionPlansByUserId(user_id, date);
+};

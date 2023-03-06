@@ -1,4 +1,5 @@
 import db from "../database/db";
+import { Knex } from "knex";
 
 export interface ActionPlan {
   user_id: string | number;
@@ -12,7 +13,7 @@ export interface ActionPlan {
   professional_issues_field: string;
   decisions_field: string;
   leadership_process_field: string;
-  key_action_items: string[];
+  key_action_items: string;
 }
 
 export interface ActionPlanRecord extends ActionPlan {
@@ -26,23 +27,31 @@ export const actionPlanDataAccess = {
   table: "action_plans",
 
   async fetchActionPlansByUserId(
-    user_id: string | number
+    user_id: string | number,
+    date?: string
   ): Promise<ActionPlanRecord[]> {
     const actionPlans = await db(this.table)
       .select()
       .where({ user_id })
       .whereNull("deleted_at")
+      .modify((qb: Knex.QueryBuilder) => {
+        if (date) {
+          qb.whereRaw(`created_at >= date_trunc('month', timestamp '${date}')`);
+          qb.whereRaw(
+            `created_at < date_trunc('month', timestamp '${date}') + interval '1 month'`
+          );
+        }
+      })
       .catch((err) => {
         throw new Error(err);
       });
 
-    const parsedActionPlans = actionPlans.map((actionPlan) => {
+    return actionPlans.map((actionPlan: ActionPlan) => {
       return {
         ...actionPlan,
         key_action_items: JSON.parse(actionPlan.key_action_items),
       };
     });
-    return parsedActionPlans;
   },
 
   async saveNewActionPlan({
@@ -79,6 +88,7 @@ export const actionPlanDataAccess = {
       .catch((err) => {
         throw new Error(err);
       });
+
     return actionPlan[0];
   },
 };

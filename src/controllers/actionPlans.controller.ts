@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   createActionPlan,
+  getActionPlanByUserIdAndDate,
   getAllActionPlansByUserId,
 } from "../services/actionPlans.service";
 
@@ -53,7 +54,28 @@ export const getActionPlans = async (req: Request, res: Response) => {
     if (!actionPlans) {
       return res.status(400).json("Could not get Action Plans");
     }
+    if (actionPlans && !actionPlans.length) {
+      return res.status(404).json("No Action Plans found");
+    }
     return res.status(200).json(actionPlans);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err);
+  }
+};
+
+export const getMonthlyActionPlan = async (req: Request, res: Response) => {
+  const { user_id, date } = req.params;
+
+  try {
+    const actionPlan = await getActionPlanByUserIdAndDate(user_id, date);
+    if (!actionPlan) {
+      return res.status(400).json("Could not get Action Plan");
+    }
+    if (actionPlan && !actionPlan.length) {
+      return res.status(404).json("No Action Plans found");
+    }
+    return res.status(200).json(actionPlan[0]);
   } catch (err) {
     console.error(err);
     return res.status(500).json(err);
