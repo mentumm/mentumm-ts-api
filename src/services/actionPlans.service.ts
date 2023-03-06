@@ -32,3 +32,7 @@ export const updateExistingActionPlan = async (
     actionPlanValues
   );
 };
+
+export const deleteActionPlan = async (actionPlanId: string) => {
+  return await actionPlanDataAccess.deleteActionPlan(actionPlanId);
+};

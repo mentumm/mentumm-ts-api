@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   createActionPlan,
+  deleteActionPlan,
   getActionPlanByUserIdAndDate,
   getAllActionPlansByUserId,
   updateExistingActionPlan,
@@ -119,6 +120,21 @@ export const update = async (req: Request, res: Response) => {
       return res.status(400).json("Could not update Action Plan");
     }
     return res.status(200).json(actionPlan);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json(err);
+  }
+};
+
+export const remove = async (req: Request, res: Response) => {
+  const { action_plan_id } = req.params;
+
+  try {
+    const actionPlan = await deleteActionPlan(action_plan_id);
+    if (!actionPlan) {
+      return res.status(400).json("Could not delete Action Plan");
+    }
+    return res.status(204).json(actionPlan);
   } catch (err) {
     console.error(err);
     return res.status(500).json(err);

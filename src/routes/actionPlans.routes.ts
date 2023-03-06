@@ -5,6 +5,7 @@ import {
   create,
   getActionPlans,
   getMonthlyActionPlan,
+  remove,
   update,
 } from "../controllers/actionPlans.controller";
 
@@ -32,6 +33,12 @@ actionPlansRouter.patch(
   "/action-plans/:action_plan_id",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await update(req, res)
+);
+
+actionPlansRouter.delete(
+  "/action-plans/:action_plan_id",
+  cors(publicCorsConfig),
+  async (req: Request, res: Response) => await remove(req, res)
 );
 
 export default actionPlansRouter;

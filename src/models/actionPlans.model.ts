@@ -68,7 +68,6 @@ export const actionPlanDataAccess = {
     leadership_process_field,
     key_action_items,
   }: ActionPlan): Promise<ActionPlanRecord> {
-    console.log({ key_action_items });
     const actionPlan = await db(this.table)
       .insert({
         user_id,
@@ -131,5 +130,15 @@ export const actionPlanDataAccess = {
       });
 
     return actionPlan[0];
+  },
+
+  async deleteActionPlan(action_plan_id: string): Promise<ActionPlanRecord[]> {
+    return await db(this.table)
+      .update({ deleted_at: new Date() })
+      .where({ id: action_plan_id })
+      .returning("*")
+      .catch((err) => {
+        throw new Error(err);
+      });
   },
 };
