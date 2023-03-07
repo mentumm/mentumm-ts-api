@@ -38,16 +38,6 @@ export const newUser = async (
   // we will handle this on the front-end but good to remember if API is opened up
   const body: CreateUser = req.body;
 
-  if (
-    !body ||
-    !body.first_name ||
-    !body.last_name ||
-    !body.email ||
-    !body.employer_id
-  ) {
-    return res.status(400).send("Missing required body properties");
-  }
-
   try {
     const user = await createUser(body);
 
@@ -62,10 +52,6 @@ export const bookCoach = async (
   res: Response
 ): Promise<Response> => {
   const body = req.body;
-
-  if (!body || !body.user_id || !body.coach_id) {
-    return res.status(400).send("Missing required body properties");
-  }
 
   try {
     const userCoach = await createBooking(body);
@@ -82,17 +68,6 @@ export const registerNewUser = async (
 ): Promise<Response> => {
   const body: RegisterUser = req.body;
 
-  if (
-    !body ||
-    !body.first_name ||
-    !body.last_name ||
-    !body.email ||
-    !body.invite_code ||
-    !body.password
-  ) {
-    return res.status(400).send("Missing required body properties");
-  }
-
   try {
     const user = await registerUser(body);
 
@@ -106,10 +81,6 @@ export const deactivateUser = async (req: Request, res: Response) => {
   const id = req.query.id;
 
   try {
-    if (!id) {
-      return res.status(400).send("Missing required parameters");
-    }
-
     const user = await deleteUser(Number(id));
 
     return res.json(user);
@@ -119,10 +90,6 @@ export const deactivateUser = async (req: Request, res: Response) => {
 };
 
 export const updateUserInfo = async (req: Request, res: Response) => {
-  if (!req.body.id || !req.body.email) {
-    return res.status(400).send("Missing required parameters!");
-  }
-
   try {
     const updatedUser = await updateUser(req.body);
 
@@ -134,11 +101,6 @@ export const updateUserInfo = async (req: Request, res: Response) => {
 
 export const userLogin = async (req: Request, res: Response) => {
   const { password, email } = req.body;
-
-  if (!password || !email) {
-    return res.status(400).send("Missing required body elements!");
-  }
-
   try {
     const user = await authenticateUser(email, password);
 
