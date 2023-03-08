@@ -15,12 +15,17 @@ import { publicCorsConfig } from "../util/corsOptions";
 import { routeValidation } from "../util/routeValidation";
 import * as Joi from "joi";
 import { CreateUser, RegisterUser, User } from "../models/users.model";
+import { apiTokenValidation } from "../util/apiTokenValidation";
+import passport from "passport";
 
 const usersRouter = express.Router();
 
 usersRouter.get(
   "/users",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string(),

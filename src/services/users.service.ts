@@ -13,6 +13,7 @@ import { KnexError } from "../types";
 import { getEmployerByInvite, getEmployers } from "./employers.service";
 import { Employer } from "../models/employers.model";
 import { mixpanelEvent } from "../helpers/mixpanel";
+import { omit } from "lodash";
 
 export const getUsers = async (
   id: number,
@@ -282,14 +283,7 @@ export const authenticateUser = async (email: string, password: string) => {
   if (passwordMatch) {
     await db("users").update({ last_sign_in: db.fn.now() });
 
-    const loggedInUser: Partial<User> = {
-      id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      employer_id: user.employer_id,
-      last_sign_in: user.last_sign_in,
-    };
+    const loggedInUser: Omit<User, "password"> = omit(user, "password");
 
     return loggedInUser;
   } else {
