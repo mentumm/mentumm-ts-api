@@ -11,9 +11,9 @@ export async function seed(knex: Knex): Promise<void> {
       name: "Keeping Your Team Highly Engaged",
       month: 3,
       year: 2023,
-      vimeo_id: 406046632,
+      vimeo_id: 805733679,
       workbook_url:
-        "https://drive.google.com/u/0/uc?id=11qUSltFObtud6E38zPUhpjrwEOhZN040&export=download",
+        "https://mentumm.com/wp-content/uploads/2023/03/Coaching-Conversations_Participant-Version.pdf",
       hidden: 0,
       created_at: new Date(),
       updated_at: new Date(),
