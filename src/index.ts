@@ -30,7 +30,6 @@ passport.use(
       ignoreExpiration: false,
     },
     function (jwt_payload, done) {
-      console.log("JWT PAYLOAD: ", jwt_payload);
       return done(null, {});
     }
   )
