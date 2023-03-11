@@ -11,7 +11,7 @@ import tagsRouter from "./routes/tags.routes";
 import { tokenRouter } from "./routes/tokens.routes";
 
 const app: Express = express();
-app.use(helmet());
+// app.use(helmet());
 
 const port = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || "";

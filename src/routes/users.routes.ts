@@ -168,9 +168,6 @@ usersRouter.put(
 usersRouter.post(
   "/user/login",
   cors(publicCorsConfig),
-  passport.authenticate("jwt", {
-    session: false,
-  }),
   routeValidation(
     Joi.object<User>({
       email: Joi.string().required(),

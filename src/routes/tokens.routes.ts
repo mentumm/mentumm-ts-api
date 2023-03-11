@@ -12,9 +12,6 @@ export const tokenRouter = express.Router();
 tokenRouter.post(
   "/token/generate",
   cors(privateCorsConfig),
-  passport.authenticate("jwt", {
-    session: false,
-  }),
   routeValidation(
     Joi.object({
       id: Joi.string().required(),
