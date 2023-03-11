@@ -9,6 +9,7 @@ import employersRouter from "./routes/employers.routes";
 import coachesRouter from "./routes/coaches.routes";
 import tagsRouter from "./routes/tags.routes";
 import { tokenRouter } from "./routes/tokens.routes";
+import workshopsRouter from "./routes/workshop.routes";
 
 const app: Express = express();
 // app.use(helmet());
@@ -46,6 +47,7 @@ app.use("/v1", employersRouter);
 app.use("/v1", coachesRouter);
 app.use("/v1", tagsRouter);
 app.use("/v1", tokenRouter);
+app.use("/v1", workshopsRouter);
 
 app.listen(port, () => {
   console.log(`Mentumm API listening on ${port}`);
