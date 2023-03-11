@@ -21,12 +21,21 @@ console.log(JWT_SECRET);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-console.log("anyone?");
-
 passport.use(
-  new JwtStrategy(jwtOptions, function (jwt_payload, done) {
-    return done(null, {});
-  })
+  "jwt",
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: JWT_SECRET,
+      issuer: "growth10",
+      audience: "portal.mentumm.com",
+      ignoreExpiration: false,
+    },
+    function (jwt_payload, done) {
+      console.log("JWT PAYLOAD: ", jwt_payload);
+      return done(null, {});
+    }
+  )
 );
 
 app.options("*", cors<CorsRequest>());

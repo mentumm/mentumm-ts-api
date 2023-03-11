@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import * as Joi from "joi";
+import passport from "passport";
 import { publicCorsConfig } from "../util/corsOptions";
 import {
   addCoachRating,
@@ -16,6 +17,9 @@ const coachesRouter = express.Router();
 coachesRouter.get(
   "/coaches",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string(),
@@ -31,6 +35,9 @@ coachesRouter.get(
 coachesRouter.post(
   "/coach",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       first_name: Joi.string().required(),
@@ -45,6 +52,9 @@ coachesRouter.post(
 coachesRouter.delete(
   "/coach",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string().required(),
@@ -57,6 +67,9 @@ coachesRouter.delete(
 coachesRouter.put(
   "/coach",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string().required(),
@@ -76,6 +89,9 @@ coachesRouter.put(
 coachesRouter.post(
   "/coach/rating",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       user_id: Joi.string().required(),

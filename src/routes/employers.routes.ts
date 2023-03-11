@@ -9,12 +9,16 @@ import {
 } from "../controllers/employers.controller";
 import { routeValidation } from "../util/routeValidation";
 import * as Joi from "joi";
+import passport from "passport";
 
 const employersRouter = express.Router();
 
 employersRouter.get(
   "/employers",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string(),
@@ -31,6 +35,9 @@ employersRouter.get(
 employersRouter.post(
   "/employer",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       name: Joi.string().required(),
@@ -45,6 +52,9 @@ employersRouter.post(
 employersRouter.delete(
   "/employer",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string().required(),
@@ -57,6 +67,9 @@ employersRouter.delete(
 employersRouter.put(
   "/employer",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string().required(),

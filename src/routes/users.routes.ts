@@ -42,6 +42,9 @@ usersRouter.get(
 usersRouter.get(
   "/user/upcoming",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string().required(),
@@ -54,6 +57,9 @@ usersRouter.get(
 usersRouter.get(
   "/user/past",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string().required(),
@@ -66,6 +72,9 @@ usersRouter.get(
 usersRouter.post(
   "/user/book-coach",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       user_id: Joi.string().required(),
@@ -87,6 +96,9 @@ usersRouter.post(
 usersRouter.post(
   "/user",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object<CreateUser>({
       first_name: Joi.string().required(),
@@ -103,6 +115,9 @@ usersRouter.post(
 usersRouter.post(
   "/user/register",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object<RegisterUser>({
       first_name: Joi.string().required(),
@@ -119,6 +134,9 @@ usersRouter.post(
 usersRouter.delete(
   "/user",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object<{ id: string }>({
       id: Joi.string().required(),
@@ -131,6 +149,9 @@ usersRouter.delete(
 usersRouter.put(
   "/user",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object<User>({
       id: Joi.string().required(),
@@ -147,6 +168,9 @@ usersRouter.put(
 usersRouter.post(
   "/user/login",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object<User>({
       email: Joi.string().required(),

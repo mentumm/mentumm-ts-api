@@ -14,12 +14,16 @@ import {
 } from "../controllers/tags.controller";
 import { routeValidation } from "../util/routeValidation";
 import * as Joi from "joi";
+import passport from "passport";
 
 const tagsRouter = express.Router();
 
 tagsRouter.get(
   "/tags",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string(),
@@ -42,12 +46,18 @@ tagsRouter.put(
     "body"
   ),
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   async (req: Request, res: Response) => await editTag(req, res)
 );
 
 tagsRouter.post(
   "/tag",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       name: Joi.string().required(),
@@ -62,6 +72,9 @@ tagsRouter.post(
 tagsRouter.delete(
   "/tag",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string().required(),
@@ -74,6 +87,9 @@ tagsRouter.delete(
 tagsRouter.post(
   "/tag-coach",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       coach_id: Joi.string().required(),
@@ -87,6 +103,9 @@ tagsRouter.post(
 tagsRouter.put(
   "/tag-coach",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string().required(),
@@ -101,6 +120,9 @@ tagsRouter.put(
 tagsRouter.delete(
   "/tag-coach",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string().required(),
@@ -113,6 +135,9 @@ tagsRouter.delete(
 tagsRouter.get(
   "/tag-coaches",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       coach_id: Joi.string(),
@@ -127,6 +152,9 @@ tagsRouter.get(
 tagsRouter.post(
   "/bulk-tag-coaches",
   cors(publicCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   routeValidation(
     Joi.object({
       id: Joi.string(),
