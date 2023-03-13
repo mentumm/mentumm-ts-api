@@ -15,10 +15,6 @@ import {
 export const newTag = async (req: Request, res: Response) => {
   const { name, slug, description } = req.body;
 
-  if (!name || !slug) {
-    return res.status(400).send("Missing required body properties");
-  }
-
   try {
     const tag = await createTag(
       name as string,
@@ -33,10 +29,6 @@ export const newTag = async (req: Request, res: Response) => {
 
 export const editTag = async (req: Request, res: Response) => {
   const { id, name, slug, description } = req.body;
-
-  if (!name || !slug || !id) {
-    return res.status(400).send("Missing required body properties");
-  }
 
   try {
     const tag = await updateTag(
@@ -54,10 +46,6 @@ export const editTag = async (req: Request, res: Response) => {
 export const deleteTag = async (req: Request, res: Response) => {
   const { id } = req.body;
 
-  if (!id) {
-    return res.status(400).send("Missing required body properties");
-  }
-
   try {
     const tag = await tagDelete(id as string);
     return res.json(tag);
@@ -68,10 +56,6 @@ export const deleteTag = async (req: Request, res: Response) => {
 
 export const newCoachTag = async (req: Request, res: Response) => {
   const { coach_id, tag_id } = req.body;
-
-  if (!coach_id || !tag_id) {
-    return res.status(400).send("Missing required body properties");
-  }
 
   try {
     const coachTag = await createCoachTag(Number(coach_id), Number(tag_id));
@@ -84,10 +68,6 @@ export const newCoachTag = async (req: Request, res: Response) => {
 
 export const editCoachTag = async (req: Request, res: Response) => {
   const { id, coach_id, tag_id } = req.body;
-
-  if (!coach_id || !tag_id || !id) {
-    return res.status(400).send("Missing required body properties");
-  }
 
   try {
     const coachTag = await modifyCoachTag(
@@ -104,10 +84,6 @@ export const editCoachTag = async (req: Request, res: Response) => {
 
 export const deleteCoachTag = async (req: Request, res: Response) => {
   const { id } = req.body;
-
-  if (!id) {
-    return res.status(400).send("Missing required body properties");
-  }
 
   try {
     const tag = await coachTagDelete(id as string);

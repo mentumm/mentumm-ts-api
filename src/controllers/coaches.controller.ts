@@ -32,10 +32,6 @@ export const newCoach = async (
 ): Promise<Response> => {
   const body: Partial<User> = req.body;
 
-  if (!body || !body.first_name || body.last_name || !body.booking_url) {
-    return res.status(400).send("Missing required body properties");
-  }
-
   try {
     const coach = await createCoach(body);
 
@@ -49,10 +45,6 @@ export const deactivateCoach = async (req: Request, res: Response) => {
   const id = req.query.id;
 
   try {
-    if (!id) {
-      return res.status(400).send("Missing required parameters");
-    }
-
     const coach = await deleteCoach(Number(id));
 
     return res.json(coach);
@@ -62,10 +54,6 @@ export const deactivateCoach = async (req: Request, res: Response) => {
 };
 
 export const updateCoachInfo = async (req: Request, res: Response) => {
-  if (!req.body.id) {
-    return res.status(400).send("Missing Coach ID");
-  }
-
   try {
     const updatedCoach = await updateCoach(req.body);
 
@@ -76,12 +64,6 @@ export const updateCoachInfo = async (req: Request, res: Response) => {
 };
 
 export const addCoachRating = async (req: Request, res: Response) => {
-  const { user_id, coach_id } = req.body;
-
-  if (!user_id || !coach_id) {
-    return res.status(400).send("Missing rating elements");
-  }
-
   try {
     const coachRating = await createCoachRating(req.body);
 

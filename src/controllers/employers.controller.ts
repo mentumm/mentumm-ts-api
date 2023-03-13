@@ -31,10 +31,6 @@ export const newEmployer = async (
 ): Promise<Response> => {
   const body: CreateEmployer = req.body;
 
-  if (!body || !body.name || !body.max_employees || !body.invitation_code) {
-    return res.status(400).send("Missing required body properties");
-  }
-
   try {
     const employer = await createEmployer(body);
 
@@ -48,10 +44,6 @@ export const deactivateEmployer = async (req: Request, res: Response) => {
   const id = req.query.id;
 
   try {
-    if (!id) {
-      return res.status(400).send("Missing required parameters");
-    }
-
     const employer = await deleteEmployer(Number(id));
 
     return res.json(employer);
@@ -61,10 +53,6 @@ export const deactivateEmployer = async (req: Request, res: Response) => {
 };
 
 export const updateEmployerInfo = async (req: Request, res: Response) => {
-  if (!req.body.id) {
-    return res.status(400).send("Missing Employer ID");
-  }
-
   try {
     const updatedEmployer = await updateEmployer(req.body);
 

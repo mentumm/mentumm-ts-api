@@ -8,7 +8,7 @@ Install with yarn
 
 ```bash
   yarn install
-  yarn dev
+  yarn start
 ```
 
 ## Setting up a local database
@@ -31,6 +31,12 @@ Once database is created, exit psql and run the migrations to create the tables
 
 ```
   yarn db:migrate
+```
+
+If you wish to fill your database with default data run:
+
+```
+yarn knex seed:run
 ```
 
 ## Migrations
