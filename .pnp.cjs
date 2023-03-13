@@ -4346,14 +4346,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ]],\
       ["knex", [\
         ["npm:1.0.7", {\
-          "packageLocation": "./.yarn/cache/knex-npm-1.0.7-ce896a6d5b-57608a3a68.zip/node_modules/knex/",\
+          "packageLocation": "./.yarn/unplugged/knex-virtual-202637852e/node_modules/knex/",\
           "packageDependencies": [\
             ["knex", "npm:1.0.7"]\
           ],\
           "linkType": "SOFT"\
         }],\
         ["virtual:2c2d7fa3f9fce93fb9106c8dca8c98f8ffb570348842019440f1f1adfc59969a764a2a99673a717beb2b79b9651be4a52d120650c9debae3aef2fd49c7c49f7b#npm:1.0.7", {\
-          "packageLocation": "./.yarn/__virtual__/knex-virtual-202637852e/0/cache/knex-npm-1.0.7-ce896a6d5b-57608a3a68.zip/node_modules/knex/",\
+          "packageLocation": "./.yarn/unplugged/knex-virtual-202637852e/node_modules/knex/",\
           "packageDependencies": [\
             ["knex", "virtual:2c2d7fa3f9fce93fb9106c8dca8c98f8ffb570348842019440f1f1adfc59969a764a2a99673a717beb2b79b9651be4a52d120650c9debae3aef2fd49c7c49f7b#npm:1.0.7"],\
             ["@types/better-sqlite3", null],\

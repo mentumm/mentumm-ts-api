@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "yarn tsc",
-    "start:prod": "yarn && yarn db:migrate && node build/index.js",
+    "start:prod": "yarn db:migrate && node build/index.js",
     "start": "nodemon ./src/index.ts",
     "db:migrate": "yarn run knex migrate:latest --knexfile src/database/knexfile.ts",
     "db:rollback": "yarn run knex migrate:rollback --knexfile src/database/knexfile.ts"
@@ -54,5 +54,13 @@
     "passport-jwt": "^4.0.1",
     "pg": "^8.7.3"
   },
-  "packageManager": "yarn@3.4.1"
+  "packageManager": "yarn@3.4.1",
+  "dependenciesMeta": {
+    "bcrypt@5.1.0": {
+      "unplugged": true
+    },
+    "knex@1.0.7": {
+      "unplugged": true
+    }
+  }
 }
