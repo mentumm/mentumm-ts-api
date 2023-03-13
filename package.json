@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "build": "yarn tsc",
-    "start:prod": "yarn db:migrate && node build/index.js",
+    "start:prod": "yarn && yarn db:migrate && node build/index.js",
     "start": "nodemon ./src/index.ts",
     "db:migrate": "yarn run knex migrate:latest --knexfile src/database/knexfile.ts",
     "db:rollback": "yarn run knex migrate:rollback --knexfile src/database/knexfile.ts"
