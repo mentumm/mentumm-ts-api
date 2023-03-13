@@ -8,6 +8,7 @@ import usersRouter from "./routes/users.routes";
 import employersRouter from "./routes/employers.routes";
 import coachesRouter from "./routes/coaches.routes";
 import tagsRouter from "./routes/tags.routes";
+import actionPlansRouter from "./routes/actionPlans.routes";
 import { tokenRouter } from "./routes/tokens.routes";
 import workshopsRouter from "./routes/workshop.routes";
 
@@ -46,6 +47,7 @@ app.use("/v1", usersRouter);
 app.use("/v1", employersRouter);
 app.use("/v1", coachesRouter);
 app.use("/v1", tagsRouter);
+app.use("/v1", actionPlansRouter);
 app.use("/v1", tokenRouter);
 app.use("/v1", workshopsRouter);
 
