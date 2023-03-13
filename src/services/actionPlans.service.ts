@@ -24,13 +24,9 @@ export const getActionPlanByUserIdAndDate = async (
 };
 
 export const updateExistingActionPlan = async (
-  actionPlanId: string,
   actionPlanValues: ActionPlan
 ) => {
-  return await actionPlanDataAccess.updateActionPlan(
-    actionPlanId,
-    actionPlanValues
-  );
+  return await actionPlanDataAccess.updateActionPlan(actionPlanValues);
 };
 
 export const deleteActionPlan = async (actionPlanId: string) => {

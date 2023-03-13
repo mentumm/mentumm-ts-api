@@ -85,8 +85,9 @@ export const getMonthlyActionPlan = async (req: Request, res: Response) => {
 };
 
 export const update = async (req: Request, res: Response) => {
-  const { action_plan_id } = req.params;
+  // const { action_plan_id } = req.params;
   const {
+    action_plan_id,
     user_id,
     personal_rank,
     professional_rank,
@@ -102,7 +103,8 @@ export const update = async (req: Request, res: Response) => {
   } = req.body;
 
   try {
-    const actionPlan = await updateExistingActionPlan(action_plan_id, {
+    const actionPlan = await updateExistingActionPlan({
+      action_plan_id,
       user_id,
       personal_rank,
       professional_rank,

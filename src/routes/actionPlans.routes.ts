@@ -30,7 +30,7 @@ actionPlansRouter.get(
 );
 
 actionPlansRouter.patch(
-  "/action-plans/:action_plan_id",
+  "/action-plans/",
   cors(publicCorsConfig),
   async (req: Request, res: Response) => await update(req, res)
 );
