@@ -4,12 +4,12 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "build": "yarn install && tsc",
+    "build": "yarn tsc",
     "start:prod": "yarn db:migrate && node build/index.js",
     "start": "nodemon ./src/index.ts",
-    "knex": "./node_modules/.bin/knex --knexfile src/database/knexfile.ts",
-    "db:migrate": "yarn knex migrate:latest src/database/knexfile.ts",
-    "db:rollback": "yarn knex migrate:rollback src/database/knexfile.ts"
+    "knex": "knex --knexfile src/database/knexfile.ts",
+    "db:migrate": "yarn knex migrate:latest",
+    "db:rollback": "yarn knex migrate:rollback"
   },
   "engines": {
     "node": ">=16.14.2"
