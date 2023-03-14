@@ -13,7 +13,7 @@ import { tokenRouter } from "./routes/tokens.routes";
 import workshopsRouter from "./routes/workshop.routes";
 
 const app: Express = express();
-// app.use(helmet());
+app.use(helmet());
 
 const port = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || "";
