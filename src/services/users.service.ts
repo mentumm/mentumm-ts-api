@@ -13,7 +13,7 @@ import { KnexError } from "../types";
 import { getEmployerByInvite, getEmployers } from "./employers.service";
 import { Employer } from "../models/employers.model";
 import { mixpanelEvent } from "../helpers/mixpanel";
-import { Coach } from "../models/coaches.model";
+import { omit } from "lodash";
 
 export const getUsers = async (
   id: number,
@@ -56,6 +56,7 @@ export const createUser = async (
         email,
         employer_id,
         password: hashPassword,
+        role: "user",
       };
 
       const newUser: User[] | { message: string } = await db("users")
@@ -77,6 +78,7 @@ export const createUser = async (
         last_name,
         email,
         employer_id,
+        role: "user",
       };
 
       const newUser: User[] | { message: string } = await db("users")
@@ -132,15 +134,16 @@ export const createBooking = async (
         throw new Error("Unable to create new User");
       });
 
-    const coach: Coach[] = await db("coaches").where({
+    const coach: User[] = await db("users").where({
       id: booking[0].coach_id,
+      role: "coach",
     });
 
     mixpanelEvent("Coach Booked", {
       distinct_id: booking[0].user_id,
       "User ID": booking[0].user_id,
       "Coach ID": booking[0].coach_id,
-      "Coach Name": coach[0].name,
+      "Coach Name": `${coach[0].first_name} ${coach[0].last_name}`,
       "Booking Email": booking[0].invitee_email,
       Name: booking[0].invitee_full_name,
       "Invitee UUID": booking[0].invitee_uuid,
@@ -180,6 +183,7 @@ export const registerUser = async (
       email,
       employer_id: Number(employer.id),
       password: hashPassword,
+      role: "user",
     };
 
     const newUser: User[] = await db("users")
@@ -279,14 +283,7 @@ export const authenticateUser = async (email: string, password: string) => {
   if (passwordMatch) {
     await db("users").update({ last_sign_in: db.fn.now() });
 
-    const loggedInUser: Partial<User> = {
-      id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      employer_id: user.employer_id,
-      last_sign_in: user.last_sign_in,
-    };
+    const loggedInUser: Omit<User, "password"> = omit(user, "password");
 
     return loggedInUser;
   } else {
@@ -294,25 +291,27 @@ export const authenticateUser = async (email: string, password: string) => {
   }
 };
 
-export const getUpcomingBookings = async(id: number): Promise<CoachBooking[] | KnexError> => {
+export const getUpcomingBookings = async (
+  id: number
+): Promise<CoachBooking[] | KnexError> => {
   const bookings = await db("user_coaches")
-    .select(
-      "user_coaches.*",
-      db.raw("row_to_json(c) as coach"),
-    )
+    .select("user_coaches.*", db.raw("row_to_json(c) as coach"))
     .leftJoin(
-      db("coaches")
-        .select(
-          "coaches.*",
-          db.raw("JSON_AGG(tags.*) as skills")
-        )
-        .leftJoin("coach_tags", "coach_tags.coach_id", "=", "coaches.id")
+      db("users")
+        .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
+        .leftJoin("coach_tags", "coach_tags.coach_id", "=", "users.id")
         .leftJoin("tags", "coach_tags.tag_id", "=", "tags.id")
-        .groupBy('coaches.id')
-        .as("c")
-      , "c.id", "=", "user_coaches.coach_id")
-    .whereRaw("TO_TIMESTAMP(event_start_time, 'YYYY-MM-DDTHH24:MI:SSTZH') > TO_TIMESTAMP(?)", [Date.now()/1000.0])
-    .where({ 'user_coaches.user_id': id })
+        .groupBy("users.id")
+        .as("c"),
+      "c.id",
+      "=",
+      "user_coaches.coach_id"
+    )
+    .whereRaw(
+      "TO_TIMESTAMP(event_start_time, 'YYYY-MM-DDTHH24:MI:SSTZH') > TO_TIMESTAMP(?)",
+      [Date.now() / 1000.0]
+    )
+    .where({ "user_coaches.user_id": id })
     .returning("*")
     .catch((err: Error) => {
       if (err) {
@@ -322,30 +321,39 @@ export const getUpcomingBookings = async(id: number): Promise<CoachBooking[] | K
     });
 
   return bookings;
-
 };
 
-export const getPastBookings = async(id: number): Promise<CoachBooking[] | KnexError> => {
+export const getPastBookings = async (
+  id: number
+): Promise<CoachBooking[] | KnexError> => {
   const bookings = await db("user_coaches")
     .select(
       "user_coaches.*",
       db.raw("row_to_json(coach_user_ratings) as user_review"),
-      db.raw("row_to_json(c) as coach"),
+      db.raw("row_to_json(c) as coach")
     )
-    .leftJoin("coach_user_ratings", "coach_user_ratings.user_coach_id", "=", "user_coaches.id")
     .leftJoin(
-      db("coaches")
-        .select(
-          "coaches.*",
-          db.raw("JSON_AGG(tags.*) as skills")
-        )
-        .leftJoin("coach_tags", "coach_tags.coach_id", "=", "coaches.id")
+      "coach_user_ratings",
+      "coach_user_ratings.user_coach_id",
+      "=",
+      "user_coaches.id"
+    )
+    .leftJoin(
+      db("users")
+        .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
+        .leftJoin("coach_tags", "coach_tags.coach_id", "=", "users.id")
         .leftJoin("tags", "coach_tags.tag_id", "=", "tags.id")
-        .groupBy('coaches.id')
-        .as("c")
-      , "c.id", "=", "user_coaches.coach_id")
-    .whereRaw("TO_TIMESTAMP(event_start_time, 'YYYY-MM-DDTHH24:MI:SSTZH') < TO_TIMESTAMP(?)", [Date.now()/1000.0])
-    .where({ 'user_coaches.user_id': id })
+        .groupBy("users.id")
+        .as("c"),
+      "c.id",
+      "=",
+      "user_coaches.coach_id"
+    )
+    .whereRaw(
+      "TO_TIMESTAMP(event_start_time, 'YYYY-MM-DDTHH24:MI:SSTZH') < TO_TIMESTAMP(?)",
+      [Date.now() / 1000.0]
+    )
+    .where({ "user_coaches.user_id": id })
     .returning("*")
     .catch((err: Error) => {
       if (err) {
@@ -355,4 +363,4 @@ export const getPastBookings = async(id: number): Promise<CoachBooking[] | KnexE
     });
 
   return bookings;
-}
+};

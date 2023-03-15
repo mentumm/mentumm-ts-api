@@ -5,6 +5,7 @@ require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
 import { Knex } from "knex";
 
 const DB = process.env.DATABASE_URL;
+console.log("DB", DB);
 
 interface IKnexConfig {
   [key: string]: Knex.Config;
@@ -18,6 +19,9 @@ const configs: IKnexConfig = {
     migrations: {
       directory: "./migrations",
       tableName: "knex_migrations",
+    },
+    seeds: {
+      directory: "./seeds",
     },
   },
 

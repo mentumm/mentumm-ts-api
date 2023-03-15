@@ -3,6 +3,7 @@ import moment from "moment";
 import db from "../database/db";
 import { Coach } from "../models/coaches.model";
 import { CoachTag, CreateTag, Tag, UpdateTag } from "../models/tags.model";
+import { User } from "../models/users.model";
 import { KnexError } from "../types";
 
 export const createTag = async (
@@ -135,11 +136,11 @@ export const coachTagDelete = async (
 };
 
 export const createBulkCoachTag = async (
-  coachName: string,
+  coachId: string,
   tags: string[]
 ): Promise<{ message: string }> => {
   try {
-    const coach: Coach = await db("coaches").where({ name: coachName }).first();
+    const coach: User = await db("users").where({ id: coachId }).first();
 
     if (!coach) {
       throw new Error("Unable to find your Coach");

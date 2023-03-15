@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CreateCoach } from "../models/coaches.model";
+import { User } from "../models/users.model";
 import {
   createCoach,
   createCoachRating,
@@ -30,11 +30,7 @@ export const newCoach = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const body: CreateCoach = req.body;
-
-  if (!body || !body.name || !body.booking_link) {
-    return res.status(400).send("Missing required body properties");
-  }
+  const body: Partial<User> = req.body;
 
   try {
     const coach = await createCoach(body);
@@ -49,10 +45,6 @@ export const deactivateCoach = async (req: Request, res: Response) => {
   const id = req.query.id;
 
   try {
-    if (!id) {
-      return res.status(400).send("Missing required parameters");
-    }
-
     const coach = await deleteCoach(Number(id));
 
     return res.json(coach);
@@ -62,10 +54,6 @@ export const deactivateCoach = async (req: Request, res: Response) => {
 };
 
 export const updateCoachInfo = async (req: Request, res: Response) => {
-  if (!req.body.id) {
-    return res.status(400).send("Missing Coach ID");
-  }
-
   try {
     const updatedCoach = await updateCoach(req.body);
 
@@ -76,12 +64,6 @@ export const updateCoachInfo = async (req: Request, res: Response) => {
 };
 
 export const addCoachRating = async (req: Request, res: Response) => {
-  const { user_id, coach_id } = req.body;
-
-  if (!user_id || !coach_id) {
-    return res.status(400).send("Missing rating elements");
-  }
-
   try {
     const coachRating = await createCoachRating(req.body);
 

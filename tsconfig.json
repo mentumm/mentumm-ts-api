@@ -99,5 +99,5 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "exclude": ["node_modules", "typings"],
-  "include": ["src/**/*", "migrations/"]
+  "include": ["src/**/*", "migrations/", "src/database/knexfile.ts"]
 }
