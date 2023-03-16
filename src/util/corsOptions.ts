@@ -7,8 +7,8 @@ const privateWhitelist = [
   "https://*.mentumm.com",
   "https://mentumm.com",
   "https://mentumm-portal-staging.onrender.com",
-  NODE_ENV === "staging" && RENDER_EXTERNAL_URL,
-  NODE_ENV === "development" && "http://localhost:3000",
+  NODE_ENV === "staging" ? RENDER_EXTERNAL_URL : false,
+  NODE_ENV === "development" ? "http://localhost:3000" : false,
 ];
 
 export const publicCorsConfig: CorsOptions = {
