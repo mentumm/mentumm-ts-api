@@ -1,17 +1,6 @@
 import { CorsOptions } from "cors";
 
 const NODE_ENV = process.env.NODE_ENV;
-const RENDER_EXTERNAL_URL = process.env.RENDER_EXTERNAL_URL ?? false;
-
-console.log(process.env);
-
-const privateWhitelist = [
-  "https://*.mentumm.com",
-  "https://mentumm.com",
-  "https://mentumm-portal-staging.onrender.com",
-  NODE_ENV === "staging" ? RENDER_EXTERNAL_URL : false,
-  NODE_ENV === "development" ? "http://localhost:3000" : false,
-];
 
 export const publicCorsConfig: CorsOptions = {
   origin: "*",
@@ -20,7 +9,27 @@ export const publicCorsConfig: CorsOptions = {
 };
 
 export const privateCorsConfig: CorsOptions = {
-  origin: privateWhitelist,
+  origin: (origin, callback) => {
+    switch (NODE_ENV) {
+      case "development":
+        callback(null, true);
+        break;
+      case "staging":
+        if (origin) {
+          const stagingUrl = new RegExp(
+            /https:\/\/mentumm-portal-staging.*\.onrender\.com/
+          );
+
+          callback(null, stagingUrl.test(origin));
+        } else {
+          callback(null, "https://mentumm-api-staging.onrender.com/");
+        }
+        break;
+      default:
+        callback(null, "https://mentumm.com");
+        break;
+    }
+  },
   optionsSuccessStatus: 200,
   credentials: true,
 };
