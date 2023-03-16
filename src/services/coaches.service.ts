@@ -24,6 +24,7 @@ export const getCoaches = async (
       .orWhereRaw(`users.last_name ILIKE '%${search}%'`)
       .leftJoin("coach_tags", "users.id", "coach_tags.coach_id")
       .leftJoin("tags", "tags.id", "coach_tags.tag_id")
+      .orderBy("users.first_name")
       .groupBy("users.id");
 
     return searchResults;
@@ -84,6 +85,7 @@ export const getCoaches = async (
     .where("role", "coach")
     .leftJoin("coach_tags", "users.id", "coach_tags.coach_id")
     .leftJoin("tags", "tags.id", "coach_tags.tag_id")
+    .orderBy("users.first_name")
     .groupBy("users.id");
 
   return coach;
