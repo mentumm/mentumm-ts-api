@@ -3,6 +3,8 @@ import { CorsOptions } from "cors";
 const NODE_ENV = process.env.NODE_ENV;
 const RENDER_EXTERNAL_URL = process.env.RENDER_EXTERNAL_URL ?? false;
 
+console.log(process.env);
+
 const privateWhitelist = [
   "https://*.mentumm.com",
   "https://mentumm.com",
