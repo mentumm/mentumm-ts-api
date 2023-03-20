@@ -1,3 +1,5 @@
+export type UserRoles = "user" | "coach";
+
 export interface User {
   id: string | number;
   first_name: string;
@@ -16,11 +18,32 @@ export interface User {
   booking_url?: string;
   linkedin_url: string;
   location?: string; // deprecated
-  legacy_coach_id?: string | number; // only for this initial migration, should not really be used outside of migrations
+  legacy_coach_id?: string | number; // only for initial migration, should not really be used outside of migrations, so dont use it
   city?: string;
   state?: string;
-  role: "coach" | "user";
-}
+  role: UserRoles;
+  phone_number?: string;
+  facebook_url?: string;
+  instagram_url?: string;
+  website_url?: string;
+} // hey stout this needs a migration. if anyone see this comment yell at @stout
+
+type UserPrivateFields =
+  | "password"
+  | "id"
+  | "location"
+  | "last_sign_in"
+  | "reset_password_token"
+  | "created_at"
+  | "updated_at"
+  | "deleted_at"
+  | "reset_password_expiration"
+  | "legacy_coach_id"
+  | "role"
+  | "employer_id";
+
+// eslint-disable-next-line
+export interface UserPublic extends Omit<User, UserPrivateFields> {}
 
 export interface CreateUser {
   first_name: string;
