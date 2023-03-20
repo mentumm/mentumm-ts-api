@@ -1,94 +1,45 @@
+import { Knex } from "knex";
 import moment from "moment";
 import db from "../database/db";
-import {
-  Coach,
-  CoachRating,
-  CreateCoach,
-  UpdateCoach,
-} from "../models/coaches.model";
+import { Coach, CoachRating } from "../models/coaches.model";
 import { User } from "../models/users.model";
 import { KnexError } from "../types";
 
 export const getCoaches = async (
   id: number,
-  name: string,
   limit: number,
   search?: string
 ): Promise<Coach[] | KnexError> => {
-  if (search) {
-    const searchResults = await db("users")
-      .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
-      .whereNull("deleted_at")
-      .andWhere("role", "coach")
-      .andWhereRaw(`users.first_name ILIKE '%${search}%'`)
-      .orWhereRaw(`users.last_name ILIKE '%${search}%'`)
-      .leftJoin("coach_tags", "users.id", "coach_tags.coach_id")
-      .leftJoin("tags", "tags.id", "coach_tags.tag_id")
-      .orderBy("users.first_name")
-      .groupBy("users.id");
-
-    return searchResults;
-  }
-
-  // yes, this is verbose and repeats but i couldn't get builder to work
-  // with this query
-  if (id) {
-    const coach = await db("users")
-      .whereNull("deleted_at")
-      .andWhere("role", "coach")
-      .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
-      .where("users.id", id)
-      .leftJoin(
-        db("coach_tags").select("*").as("ct"),
-        "ct.coach_id",
-        "users.id"
-      )
-      .leftJoin(db("tags").select("*").as("tags"), "ct.tag_id", "tags.id")
-      .whereNull("users.deleted_at")
-      .whereIn(
-        "users.id",
-        db("coach_tags")
-          .select("coach_id")
-          .innerJoin("tags", "tags.id", "coach_tags.tag_id")
-      )
-      .groupBy("users.id")
-      .limit(limit);
-
-    return coach;
-  } else if (name) {
-    const coach = await db("users")
-      .whereNull("deleted_at")
-      .andWhere("role", "coach")
-      .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
-      .where("users.name", name)
-      .leftJoin(
-        db("coach_tags").select("*").as("ct"),
-        "ct.coach_id",
-        "users.id"
-      )
-      .leftJoin(db("tags").select("*").as("tags"), "ct.tag_id", "tags.id")
-      .whereNull("users.deleted_at")
-      .whereIn(
-        "users.id",
-        db("coach_tags")
-          .select("coach_id")
-          .innerJoin("tags", "tags.id", "coach_tags.tag_id")
-      )
-      .groupBy("users.id")
-      .limit(limit);
-
-    return coach;
-  }
-
-  const coach = await db("users")
-    .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
-    .where("role", "coach")
+  const coaches = await db("users")
+    .select(
+      "users.*",
+      db.raw("JSON_AGG(DISTINCT tags.*) as skills"),
+      db.raw("JSON_AGG(DISTINCT style_types.*) as expertise")
+    )
+    .modify((qb: Knex.QueryBuilder) => {
+      if (id) {
+        qb.where("users.id", id);
+      }
+      if (search) {
+        qb.whereRaw(`users.first_name ILIKE '%${search}%'`);
+        qb.orWhereRaw(`users.last_name ILIKE '%${search}%'`);
+        qb.orderBy("users.first_name");
+      }
+    })
+    .where("users.role", "coach")
     .leftJoin("coach_tags", "users.id", "coach_tags.coach_id")
     .leftJoin("tags", "tags.id", "coach_tags.tag_id")
-    .orderBy("users.first_name")
-    .groupBy("users.id");
+    .leftJoin("coaches_style_types", "users.id", "coaches_style_types.coach_id")
+    .leftJoin(
+      "style_types",
+      "coaches_style_types.style_type_id",
+      "style_types.id"
+    )
+    .whereNull("users.deleted_at")
+    .groupBy("users.id")
+    .limit(limit);
 
-  return coach;
+  return coaches;
 };
 
 export const createCoach = async (
