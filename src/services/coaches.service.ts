@@ -13,8 +13,12 @@ export const getCoaches = async (
   const coaches = await db("users")
     .select(
       "users.*",
-      db.raw("JSON_AGG(DISTINCT tags.*) as skills"),
-      db.raw("JSON_AGG(DISTINCT style_types.*) as expertise")
+      db.raw(
+        "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL), '[]') as skills"
+      ),
+      db.raw(
+        "COALESCE(JSON_AGG(DISTINCT style_types.*) FILTER (WHERE style_types.id IS NOT NULL), '[]') as expertise"
+      )
     )
     .modify((qb: Knex.QueryBuilder) => {
       if (id) {
