@@ -29,12 +29,8 @@ export const getCoaches = async (
     .where("users.role", "coach")
     .leftJoin("coach_tags", "users.id", "coach_tags.coach_id")
     .leftJoin("tags", "tags.id", "coach_tags.tag_id")
-    .leftJoin("coaches_style_types", "users.id", "coaches_style_types.coach_id")
-    .leftJoin(
-      "style_types",
-      "coaches_style_types.style_type_id",
-      "style_types.id"
-    )
+    .leftJoin("user_style_type", "users.id", "user_style_type.user_id")
+    .leftJoin("style_types", "user_style_type.style_type_id", "style_types.id")
     .whereNull("users.deleted_at")
     .groupBy("users.id")
     .limit(limit);

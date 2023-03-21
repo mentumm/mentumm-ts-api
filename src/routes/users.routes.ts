@@ -10,8 +10,9 @@ import {
   upcoming,
   past,
 } from "../controllers/users.controller";
+import { createUserStyleTypes } from "../controllers/style_types.controller";
 import cors from "cors";
-import { publicCorsConfig } from "../util/corsOptions";
+import { publicCorsConfig, privateCorsConfig } from "../util/corsOptions";
 import { routeValidation } from "../util/routeValidation";
 import * as Joi from "joi";
 import { CreateUser, RegisterUser, User } from "../models/users.model";
@@ -176,6 +177,27 @@ usersRouter.post(
     "body"
   ),
   async (req: Request, res: Response) => await userLogin(req, res)
+);
+
+usersRouter.post(
+  "/user/:user_id/style_types",
+  cors(privateCorsConfig),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  routeValidation(
+    Joi.object({
+      style_types: Joi.array().items(Joi.number()).required(),
+    }),
+    "body"
+  ),
+  routeValidation(
+    Joi.object({
+      user_id: Joi.number().required(),
+    }),
+    "params"
+  ),
+  async (req: Request, res: Response) => await createUserStyleTypes(req, res)
 );
 
 export default usersRouter;

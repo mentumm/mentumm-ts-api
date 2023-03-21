@@ -8,3 +8,10 @@ export interface StyleType {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface UserStyleType {
+  user_id: number;
+  style_type_id: number;
+  created_at: Date;
+  updated_at?: Date;
+}
