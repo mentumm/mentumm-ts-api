@@ -9,12 +9,11 @@ import {
 } from "../services/coaches.service";
 
 export const coaches = async (req: Request, res: Response) => {
-  const { id, name, limit, search } = req.query;
+  const { id, limit, search } = req.query;
 
   try {
     const coach = await getCoaches(
       Number(id),
-      name as string,
       limit ? Number(limit) : 100,
       search as string
     );
