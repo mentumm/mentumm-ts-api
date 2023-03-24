@@ -37,6 +37,7 @@ export const getCoaches = async (
     )
     .whereNull("users.deleted_at")
     .groupBy("users.id")
+    .orderBy("users.first_name", "asc")
     .limit(limit);
 
   return coaches;
