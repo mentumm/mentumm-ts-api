@@ -26,7 +26,7 @@ export const privateCorsConfig: CorsOptions = {
         }
         break;
       default:
-        callback(null, "https://mentumm.com");
+        callback(null, "https://portal.mentumm.com");
         break;
     }
   },
