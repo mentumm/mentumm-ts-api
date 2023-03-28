@@ -1,3 +1,21 @@
+# [1.4.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.3.0...v1.4.0) (2023-03-28)
+
+
+### Bug Fixes
+
+* **action plans:** remove 404 to fix front end error, men-87 ([#85](https://github.com/mentumm/mentumm-ts-api/issues/85)) ([414a1c8](https://github.com/mentumm/mentumm-ts-api/commit/414a1c8410cea4d80f6e5547827fa731927842ee))
+* **ts:** adjust config to keep knexfile from erroring in db setup ([4acac86](https://github.com/mentumm/mentumm-ts-api/commit/4acac8675ac66f8d2d9f1d5130e3e8e5e416cdc7))
+
+
+### Features
+
+* **action plans:** action plan CRUD routes, men-81 ([#80](https://github.com/mentumm/mentumm-ts-api/issues/80)) ([17064db](https://github.com/mentumm/mentumm-ts-api/commit/17064db616bd1f1d6f5362100811134e6d4321c8))
+* **api:** [#MEN-63] Add Style Types API ([9675d0d](https://github.com/mentumm/mentumm-ts-api/commit/9675d0dab99adbeb083671bd6ffedd44eb1aaf1a)), closes [#MEN-63](https://github.com/mentumm/mentumm-ts-api/issues/MEN-63)
+* **coachReview:** add coach review routes, update db columns, men-40 ([#70](https://github.com/mentumm/mentumm-ts-api/issues/70)) ([c17beb5](https://github.com/mentumm/mentumm-ts-api/commit/c17beb55fbc2af04cfa7b583a587bf2df4e2ed7e))
+* **database:** [MEN-63] allow saving of style types for users ([90084ac](https://github.com/mentumm/mentumm-ts-api/commit/90084acdffc6ba4d97ca8346dc89ac6d8c79b539))
+* **styles:** new tables and seeds to create coaching styles, men-78 ([#78](https://github.com/mentumm/mentumm-ts-api/issues/78)) ([1146a6a](https://github.com/mentumm/mentumm-ts-api/commit/1146a6a5433ecb5cedcb18e96ca82799d4fec164))
+* **tags:** add category column to tag ([#71](https://github.com/mentumm/mentumm-ts-api/issues/71)) ([737f66a](https://github.com/mentumm/mentumm-ts-api/commit/737f66ab78719e995b2c5d93e782c552b776a184))
+
 # [1.3.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.2.0...v1.3.0) (2022-09-13)
 
 
