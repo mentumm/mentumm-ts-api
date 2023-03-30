@@ -1,7 +1,6 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import * as Joi from "joi";
-import passport from "passport";
 
 import { privateCorsConfig } from "../util/corsOptions";
 import { routeValidation } from "../util/routeValidation";
@@ -14,7 +13,6 @@ tokenRouter.post(
   cors(privateCorsConfig),
   routeValidation(
     Joi.object({
-      id: Joi.string().required(),
       email: Joi.string().required(),
       password: Joi.string().required(),
     }),

@@ -18,9 +18,7 @@ export const generateJWT = async (
 
     const user = (await authenticateUser(email, password)) as User;
 
-    // user.id !== id is just a little hardening, just a weak way to make this tougher to crack - it will just ensure that
-    // the user ID provided from the initial API request matches what is returned from the found user
-    if (!user.id || user.id !== id) {
+    if (!user.id) {
       throw new Error("No user found, will not generate JWT");
     }
 
