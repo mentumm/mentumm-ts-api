@@ -30,7 +30,7 @@ export const getCoaches = async (
         qb.orderBy("users.first_name");
       }
     })
-    .where("users.role", "coach")
+    .having("users.role", "=", "coach")
     .leftJoin("coach_tags", "users.id", "coach_tags.coach_id")
     .leftJoin("tags", "tags.id", "coach_tags.tag_id")
     .leftJoin("user_style_type", "users.id", "user_style_type.user_id")
