@@ -161,7 +161,7 @@ export const getCoachByTagSlug = async (
       )
       .leftJoin(db("tags").select("*").as("tags"), "ct.tag_id", "tags.id")
 
-      .whereNull("users.deleted_at")
+      .having("users.deleted_at", "is", null)
       .whereIn(
         "users.id",
         db("coach_tags")
