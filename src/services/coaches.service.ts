@@ -35,7 +35,7 @@ export const getCoaches = async (
     .leftJoin("tags", "tags.id", "coach_tags.tag_id")
     .leftJoin("user_style_type", "users.id", "user_style_type.user_id")
     .leftJoin("style_types", "user_style_type.style_type_id", "style_types.id")
-    .whereNull("users.deleted_at")
+    .havingRaw("users.deleted_at is null")
     .groupBy("users.id")
     .orderBy("users.first_name", "asc")
     .limit(limit);
