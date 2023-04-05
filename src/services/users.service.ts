@@ -281,7 +281,9 @@ export const authenticateUser = async (email: string, password: string) => {
   const passwordMatch = await bcrypt.compare(password, user.password);
 
   if (passwordMatch) {
-    await db("users").update({ last_sign_in: db.fn.now() });
+    await db("users")
+      .where("id", user.id)
+      .update({ last_sign_in: db.fn.now() });
 
     const loggedInUser: Omit<User, "password"> = omit(user, "password");
 
