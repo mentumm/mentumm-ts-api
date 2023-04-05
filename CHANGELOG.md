@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.4.0...v1.4.1) (2023-04-05)
+
+
+### Bug Fixes
+
+* **coaches:** [MEN-113] Fix Deleted Coaches Showing In Search ([bded479](https://github.com/mentumm/mentumm-ts-api/commit/bded47917f2b369ffcfc18668b464f372d1e8477))
+
 # [1.4.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.3.0...v1.4.0) (2023-03-28)
 
 
