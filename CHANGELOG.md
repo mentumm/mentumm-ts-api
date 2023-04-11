@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/mentumm/mentumm-ts-api/compare/v1.4.2...v1.4.3) (2023-04-11)
+
+
+### Bug Fixes
+
+* **users:** [MEN-117] Fix last_sign_in getting set for all users ([bba3c2f](https://github.com/mentumm/mentumm-ts-api/commit/bba3c2ffc0fc75ed1a3d375dea504f1d059971c7))
+
 ## [1.4.2](https://github.com/mentumm/mentumm-ts-api/compare/v1.4.1...v1.4.2) (2023-04-05)
 
 
