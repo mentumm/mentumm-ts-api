@@ -10,7 +10,7 @@ import {
   User,
 } from "../models/users.model";
 import { KnexError } from "../types";
-import { getEmployerByInvite, getEmployers } from "./employers.service";
+import { getEmployerByInvite } from "./employers.service";
 import { Employer } from "../models/employers.model";
 import { mixpanelEvent } from "../helpers/mixpanel";
 import { omit } from "lodash";
@@ -131,7 +131,7 @@ export const createBooking = async (
       .insert(coachBooking)
       .returning("*")
       .catch((err: Error) => {
-        throw new Error("Unable to create new User");
+        throw new Error(`Unable to create new User: ${err.message}`);
       });
 
     const coach: User[] = await db("users").where({
@@ -300,9 +300,17 @@ export const getUpcomingBookings = async (
     .select("user_coaches.*", db.raw("row_to_json(c) as coach"))
     .leftJoin(
       db("users")
-        .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
-        .leftJoin("coach_tags", "coach_tags.coach_id", "=", "users.id")
-        .leftJoin("tags", "coach_tags.tag_id", "=", "tags.id")
+        .select(
+          "users.*",
+          db.raw(
+            "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'expertise'), '[]') as expertise"
+          ),
+          db.raw(
+            "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'style'), '[]') as styles"
+          )
+        )
+        .leftJoin("user_tag", "user_tag.user_id", "=", "users.id")
+        .leftJoin("tags", "user_tag.tag_id", "=", "tags.id")
         .groupBy("users.id")
         .as("c"),
       "c.id",
@@ -342,9 +350,17 @@ export const getPastBookings = async (
     )
     .leftJoin(
       db("users")
-        .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
-        .leftJoin("coach_tags", "coach_tags.coach_id", "=", "users.id")
-        .leftJoin("tags", "coach_tags.tag_id", "=", "tags.id")
+        .select(
+          "users.*",
+          db.raw(
+            "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'expertise'), '[]') as expertise"
+          ),
+          db.raw(
+            "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'style'), '[]') as styles"
+          )
+        )
+        .leftJoin("user_tag", "user_tag.user_id", "=", "users.id")
+        .leftJoin("tags", "user_tag.tag_id", "=", "tags.id")
         .groupBy("users.id")
         .as("c"),
       "c.id",

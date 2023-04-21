@@ -1,8 +1,7 @@
 import { Knex } from "knex";
 import moment from "moment";
 import db from "../database/db";
-import { Coach } from "../models/coaches.model";
-import { CoachTag, CreateTag, Tag, UpdateTag } from "../models/tags.model";
+import { UserTag, CreateTag, Tag } from "../models/tags.model";
 import { User } from "../models/users.model";
 import { KnexError } from "../types";
 
@@ -71,98 +70,101 @@ export const tagDelete = async (id: string): Promise<Tag[] | KnexError> => {
   }
 };
 
-export const createCoachTag = async (
-  coach_id: number,
+export const createUserTag = async (
+  user_id: number,
   tag_id: number
-): Promise<CoachTag[] | KnexError> => {
+): Promise<UserTag[] | KnexError> => {
   try {
-    const newCoachTag: CoachTag[] | KnexError = await db("coach_tags")
+    const newUserTag: UserTag[] | KnexError = await db("user_tag")
       .insert({
-        coach_id,
+        user_id,
         tag_id,
       })
       .returning("*")
       .catch((err: Error) => {
-        return { message: "Unable to create Tag?" };
+        return { message: `Unable to create User Tag: ${err.message}` };
       });
 
-    return newCoachTag;
+    return newUserTag;
   } catch (error) {
     throw new Error("Unable to create Tag");
   }
 };
 
-export const modifyCoachTag = async (
+export const modifyUserTag = async (
   id: number,
-  coach_id: number,
+  user_id: number,
   tag_id: number
-): Promise<CoachTag[] | KnexError> => {
+): Promise<UserTag[] | KnexError> => {
   try {
-    const newCoachTag: CoachTag[] | KnexError = await db("coach_tags")
+    const newUserTag: UserTag[] | KnexError = await db("user_tag")
       .where({ id })
       .update({
-        coach_id: coach_id,
-        tag_id: tag_id,
+        user_id,
+        tag_id,
         updated_at: moment().format(),
       })
       .returning("*")
       .catch((err: Error) => {
-        return { message: "Unable to update CoachTag?" };
+        return { message: `Unable to update user_tag: ${err.message}` };
       });
 
-    return newCoachTag;
+    return newUserTag;
   } catch (error) {
-    throw new Error("Unable to update CoachTag");
+    throw new Error("Unable to update user_tag");
   }
 };
 
-export const coachTagDelete = async (
-  id: string
-): Promise<Tag[] | KnexError> => {
+export const userTagDelete = async (id: string): Promise<Tag[] | KnexError> => {
   try {
-    const deletedTag: Tag[] | KnexError = await db("coach_tags")
+    const deletedTag: Tag[] | KnexError = await db("user_tag")
       .where({ id })
       .del()
       .returning("*")
       .catch((err: Error) => {
         console.log(err);
-        return { message: "Unable to delete CoachTag?" };
+        return { message: "Unable to delete user_tag?" };
       });
 
     return deletedTag;
   } catch (error) {
-    throw new Error("Unable to delete CoachTag");
+    throw new Error("Unable to delete user_tag");
   }
 };
 
-export const createBulkCoachTag = async (
-  coachId: string,
-  tags: string[]
+export const createBulkUserTags = async (
+  user_id: string,
+  tag_ids: number[],
+  clear: boolean
 ): Promise<{ message: string }> => {
   try {
-    const coach: User = await db("users").where({ id: coachId }).first();
+    const user: User = await db("users").where({ id: user_id }).first();
 
-    if (!coach) {
-      throw new Error("Unable to find your Coach");
+    if (!user) {
+      throw new Error("Unable to find your User");
     }
 
-    tags.forEach(async (tag: string) => {
-      const currenTag = await db("tags").where({ name: tag }).first();
+    if (clear) {
+      await db("user_tag").where({ user_id }).delete();
+    }
 
-      if (coach && currenTag) {
-        createCoachTag(Number(coach.id), Number(currenTag.id));
+    tag_ids.forEach(async (id: number) => {
+      const currentTag = await db("tags").where({ id }).first();
+
+      if (user && currentTag) {
+        createUserTag(Number(user.id), Number(currentTag.id));
       }
     });
 
     return { message: "Bulk association of Tags complete!" };
   } catch (error) {
-    throw new Error("Unable to associate Tag/Coach");
+    throw new Error("Unable to associate Tag/User");
   }
 };
 
 export const getTags = async (
   id: number,
-  slug: string,
+  kind: string,
   limit = 100
 ): Promise<Tag[]> => {
   try {
@@ -172,6 +174,11 @@ export const getTags = async (
           builder.where({ id: id });
         } else {
           builder.select("*");
+        }
+      })
+      .where((builder: Knex.QueryBuilder) => {
+        if (kind) {
+          builder.where("kind", kind);
         }
       })
       .returning("*")
@@ -184,18 +191,18 @@ export const getTags = async (
   }
 };
 
-export const getTagCoaches = async (
-  coach_id: number | null,
+export const getUserTags = async (
+  user_id: number | null,
   tag_id: number | null,
   limit: number
-): Promise<CoachTag[]> => {
+): Promise<UserTag[]> => {
   try {
-    const tagCoaches = await db("coach_tags")
+    const tagUsers = await db("user_tag")
       .where((builder: Knex.QueryBuilder) => {
-        if (coach_id) {
-          builder.where({ coach_id: coach_id });
+        if (user_id) {
+          builder.where({ user_id });
         } else if (tag_id) {
-          builder.where({ tag_id: tag_id });
+          builder.where({ tag_id });
         } else {
           builder.select("*");
         }
@@ -203,7 +210,7 @@ export const getTagCoaches = async (
       .returning("*")
       .limit(limit);
 
-    return tagCoaches;
+    return tagUsers;
   } catch (error) {
     throw new Error("Unable to get Tags");
   }

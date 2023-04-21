@@ -1,11 +1,12 @@
 export interface Tag {
   id: string | number;
+  kind: string;
+  color: string;
   name: string;
   description: string;
   slug: string;
   created_at: Date;
   updated_at?: Date;
-  // deleted_at?: Date | null;
 }
 
 export interface CreateTag {
@@ -22,8 +23,8 @@ export interface UpdateTag {
   updated_at: string;
 }
 
-export interface CoachTag {
-  coach_id: number;
+export interface UserTag {
+  user_id: number;
   tag_id: number;
   created_at: Date;
   updated_at?: Date;

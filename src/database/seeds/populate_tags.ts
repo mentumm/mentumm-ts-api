@@ -2,37 +2,8 @@ import { Knex } from "knex";
 
 export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
-  await knex("coach_tags").del();
+  await knex("user_tag").del();
   await knex("tags").del();
-  await knex("coaches").del();
-
-  await knex("coaches").insert([
-    {
-      id: 1,
-      name: "Jim Stevenson",
-      bio: "He really sets the example for what a coach should be.",
-      photo_url: "https://i.pravatar.cc/150?u=jim.stevenson",
-      booking_link: "https://www.google.com/",
-      linkedin_url: "https://www.linkedin.com/",
-      location: "Mesa, AZ",
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-  ]);
-
-  await knex("coaches").insert([
-    {
-      id: 2,
-      name: "Sara Gibbons",
-      bio: "She really sets the example for what a coach should be.",
-      photo_url: "https://i.pravatar.cc/150?u=sara.gibbons",
-      booking_link: "https://www.google.com/",
-      linkedin_url: "https://www.linkedin.com/",
-      location: "Mesa, AZ",
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-  ]);
 
   const tags = [
     "1	Career Planning	career-planning	2022-06-17 23:54:39.1322+00	2022-06-17 23:54:39.1322+00	Career Planning	Professional",
@@ -83,64 +54,86 @@ export async function seed(knex: Knex): Promise<void> {
         description: tag[5],
         category: tag[6],
         icon: "",
+        kind: "expertise",
       },
     ]);
   }
 
-  await knex("coach_tags").insert([
+  await knex("style_types").insert([
     {
-      id: 1,
-      coach_id: 1,
-      tag_id: 1,
+      id: 37,
+      name: "Challenger",
+      slug: "challenger",
+      description: "Motivate + Inspire",
+      color: "#84B0F9",
+      icon: "fa-solid fa-rocket",
+      kind: "style",
       created_at: new Date(),
       updated_at: new Date(),
     },
     {
-      id: 2,
-      coach_id: 1,
-      tag_id: 2,
+      id: 38,
+      name: "Educator",
+      slug: "educator",
+      description: "Teach + Train",
+      color: "#5DBABD",
+      icon: "fa-solid fa-hat-wizard",
+      kind: "style",
       created_at: new Date(),
       updated_at: new Date(),
     },
     {
-      id: 3,
-      coach_id: 1,
-      tag_id: 3,
+      id: 39,
+      name: "Sponsor",
+      slug: "sponsor",
+      description: "Advocate + Connect",
+      color: "#DAC9FF",
+      icon: "fa-solid fa-seedling",
+      kind: "style",
       created_at: new Date(),
       updated_at: new Date(),
     },
     {
-      id: 4,
-      coach_id: 1,
-      tag_id: 4,
+      id: 40,
+      name: "Anchor",
+      slug: "anchor",
+      description: "Listen + Empathize",
+      color: "#8ED6F4",
+      icon: "fa-solid fa-anchor",
+      kind: "style",
       created_at: new Date(),
       updated_at: new Date(),
     },
     {
-      id: 5,
-      coach_id: 2,
-      tag_id: 5,
+      id: 41,
+      name: "Ideator",
+      slug: "ideator",
+      description: "Brainstorm + Strategize",
+      color: "#F99883",
+      icon: "fa-solid fa-lightbulb",
+      kind: "style",
       created_at: new Date(),
       updated_at: new Date(),
     },
     {
-      id: 6,
-      coach_id: 2,
-      tag_id: 6,
+      id: 42,
+      name: "Cheerleader",
+      slug: "cheerleader",
+      description: "Energize + Reinforce",
+      color: "#FF8888",
+      icon: "fa-solid fa-fire-flame-curved",
+      kind: "style",
       created_at: new Date(),
       updated_at: new Date(),
     },
     {
-      id: 7,
-      coach_id: 2,
-      tag_id: 8,
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-    {
-      id: 8,
-      coach_id: 2,
-      tag_id: 10,
+      id: 43,
+      name: "Protector",
+      slug: "protector",
+      description: "Support + Protect",
+      color: "#93E1E5",
+      icon: "fa-solid fa-chess-king",
+      kind: "style",
       created_at: new Date(),
       updated_at: new Date(),
     },

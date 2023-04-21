@@ -2,14 +2,14 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import { publicCorsConfig } from "../util/corsOptions";
 import {
-  bulkTagCoach,
-  deleteCoachTag,
+  bulkUserTags,
+  deleteUserTag,
   deleteTag,
-  editCoachTag,
+  editUserTag,
   editTag,
-  newCoachTag,
+  newUserTag,
   newTag,
-  tagCoaches,
+  userTags,
   tags,
 } from "../controllers/tags.controller";
 import { routeValidation } from "../util/routeValidation";
@@ -28,6 +28,7 @@ tagsRouter.get(
     Joi.object({
       id: Joi.string(),
       slug: Joi.string(),
+      kind: Joi.string(),
       limit: Joi.number(),
     }),
     "query"
@@ -85,23 +86,23 @@ tagsRouter.delete(
 );
 
 tagsRouter.post(
-  "/tag-coach",
+  "/user/tag",
   cors(publicCorsConfig),
   passport.authenticate("jwt", {
     session: false,
   }),
   routeValidation(
     Joi.object({
-      coach_id: Joi.string().required(),
+      user_id: Joi.string().required(),
       tag_id: Joi.string().required(),
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await newCoachTag(req, res)
+  async (req: Request, res: Response) => await newUserTag(req, res)
 );
 
 tagsRouter.put(
-  "/tag-coach",
+  "/user/tag",
   cors(publicCorsConfig),
   passport.authenticate("jwt", {
     session: false,
@@ -109,16 +110,16 @@ tagsRouter.put(
   routeValidation(
     Joi.object({
       id: Joi.string().required(),
-      coach_id: Joi.string().required(),
+      user_id: Joi.string().required(),
       tag_id: Joi.string().required(),
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await editCoachTag(req, res)
+  async (req: Request, res: Response) => await editUserTag(req, res)
 );
 
 tagsRouter.delete(
-  "/tag-coach",
+  "/user/tag",
   cors(publicCorsConfig),
   passport.authenticate("jwt", {
     session: false,
@@ -129,41 +130,41 @@ tagsRouter.delete(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await deleteCoachTag(req, res)
+  async (req: Request, res: Response) => await deleteUserTag(req, res)
 );
 
 tagsRouter.get(
-  "/tag-coaches",
+  "/user/tag",
   cors(publicCorsConfig),
   passport.authenticate("jwt", {
     session: false,
   }),
   routeValidation(
     Joi.object({
-      coach_id: Joi.string(),
+      user_id: Joi.string(),
       tag_id: Joi.string(),
       limit: Joi.number(),
     }),
     "query"
   ),
-  async (req: Request, res: Response) => await tagCoaches(req, res)
+  async (req: Request, res: Response) => await userTags(req, res)
 );
 
 tagsRouter.post(
-  "/bulk-tag-coaches",
+  "/user/tags",
   cors(publicCorsConfig),
   passport.authenticate("jwt", {
     session: false,
   }),
   routeValidation(
     Joi.object({
-      id: Joi.string(),
-      slug: Joi.string(),
-      limit: Joi.number(),
+      user_id: Joi.string(),
+      tag_ids: Joi.array().items(Joi.number()),
+      clear: Joi.boolean().default(false),
     }),
     "query"
   ),
-  async (req: Request, res: Response) => await bulkTagCoach(req, res)
+  async (req: Request, res: Response) => await bulkUserTags(req, res)
 );
 
 export default tagsRouter;
