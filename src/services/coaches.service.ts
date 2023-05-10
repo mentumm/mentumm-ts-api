@@ -33,7 +33,6 @@ export const getCoaches = async (
     .having("users.role", "=", "coach")
     .leftJoin("user_tag", "users.id", "user_tag.user_id")
     .leftJoin("tags", "tags.id", "user_tag.tag_id")
-    .leftJoin("user_style_type", "users.id", "user_style_type.user_id")
     .havingRaw("users.deleted_at is null")
     .groupBy("users.id")
     .orderBy("users.first_name", "asc")
