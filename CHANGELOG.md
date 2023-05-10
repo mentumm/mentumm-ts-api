@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.4.3...v1.5.0) (2023-05-10)
+
+
+### Features
+
+* **tags:** Consolidate Style Types into Tags ([ce728aa](https://github.com/mentumm/mentumm-ts-api/commit/ce728aa43f202f9c70c29e9d37df1fffadecf041))
+
 ## [1.4.3](https://github.com/mentumm/mentumm-ts-api/compare/v1.4.2...v1.4.3) (2023-04-11)
 
 
