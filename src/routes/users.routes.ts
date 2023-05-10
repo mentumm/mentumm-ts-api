@@ -114,9 +114,10 @@ usersRouter.post(
 usersRouter.post(
   "/user/register",
   cors(publicCorsConfig),
-  passport.authenticate("jwt", {
-    session: false,
-  }),
+  // temporarily disabled until register auth is fixed on front end
+  // passport.authenticate("jwt", {
+  //   session: false,
+  // }),
   routeValidation(
     Joi.object<RegisterUser>({
       first_name: Joi.string().required(),
