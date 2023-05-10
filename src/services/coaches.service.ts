@@ -14,10 +14,10 @@ export const getCoaches = async (
     .select(
       "users.*",
       db.raw(
-        "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL), '[]') as skills"
+        "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'expertise'), '[]') as expertise"
       ),
       db.raw(
-        "COALESCE(JSON_AGG(DISTINCT style_types.*) FILTER (WHERE style_types.id IS NOT NULL), '[]') as expertise"
+        "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'style'), '[]') as styles"
       )
     )
     .modify((qb: Knex.QueryBuilder) => {
@@ -31,10 +31,8 @@ export const getCoaches = async (
       }
     })
     .having("users.role", "=", "coach")
-    .leftJoin("coach_tags", "users.id", "coach_tags.coach_id")
-    .leftJoin("tags", "tags.id", "coach_tags.tag_id")
-    .leftJoin("user_style_type", "users.id", "user_style_type.user_id")
-    .leftJoin("style_types", "user_style_type.style_type_id", "style_types.id")
+    .leftJoin("user_tag", "users.id", "user_tag.user_id")
+    .leftJoin("tags", "tags.id", "user_tag.tag_id")
     .havingRaw("users.deleted_at is null")
     .groupBy("users.id")
     .orderBy("users.first_name", "asc")
@@ -151,28 +149,32 @@ export const getCoachByTagSlug = async (
   limit: number
 ): Promise<Coach[]> => {
   try {
-    const coach_tags = await db("coaches")
-      .select("users.*", db.raw("JSON_AGG(tags.*) as skills"))
-      .where({ role: "coach" })
-      .leftJoin(
-        db("coach_tags").select("*").as("ct"),
-        "ct.coach_id",
-        "users.id"
+    const user_tags = await db("users")
+      .select(
+        "users.*",
+        db.raw(
+          "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'expertise'), '[]') as expertise"
+        ),
+        db.raw(
+          "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'style'), '[]') as styles"
+        )
       )
+      .where({ role: "coach" })
+      .leftJoin(db("user_tag").select("*").as("ct"), "ct.user_id", "users.id")
       .leftJoin(db("tags").select("*").as("tags"), "ct.tag_id", "tags.id")
 
       .having("users.deleted_at", "is", null)
       .whereIn(
         "users.id",
-        db("coach_tags")
-          .select("coach_id")
-          .innerJoin("tags", "tags.id", "coach_tags.tag_id")
+        db("user_tag")
+          .select("user_id")
+          .innerJoin("tags", "tags.id", "user_tag.tag_id")
           .where("tags.slug", slug)
       )
       .groupBy("users.id")
       .limit(limit);
 
-    return coach_tags;
+    return user_tags;
   } catch (error) {
     throw new Error("Unable to find Coach / Tags");
   }

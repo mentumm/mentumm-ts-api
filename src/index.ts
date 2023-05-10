@@ -10,7 +10,6 @@ import coachesRouter from "./routes/coaches.routes";
 import tagsRouter from "./routes/tags.routes";
 import actionPlansRouter from "./routes/actionPlans.routes";
 import { tokenRouter } from "./routes/tokens.routes";
-import styleTagsRouter from "./routes/style_types.routes";
 import workshopsRouter from "./routes/workshop.routes";
 
 const app: Express = express();
@@ -47,7 +46,6 @@ app.get("/health", (req: Request, res: Response) => {
 app.use("/v1", actionPlansRouter);
 app.use("/v1", coachesRouter);
 app.use("/v1", employersRouter);
-app.use("/v1", styleTagsRouter);
 app.use("/v1", tagsRouter);
 app.use("/v1", tokenRouter);
 app.use("/v1", usersRouter);

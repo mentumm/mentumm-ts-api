@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { getCoachByTagSlug } from "../services/coaches.service";
 import {
-  coachTagDelete,
-  createBulkCoachTag,
-  createCoachTag,
+  userTagDelete,
+  createBulkUserTags,
+  createUserTag,
   createTag,
-  getTagCoaches,
+  getUserTags,
   getTags,
-  modifyCoachTag,
+  modifyUserTag,
   tagDelete,
   updateTag,
 } from "../services/tags.service";
@@ -54,63 +54,59 @@ export const deleteTag = async (req: Request, res: Response) => {
   }
 };
 
-export const newCoachTag = async (req: Request, res: Response) => {
-  const { coach_id, tag_id } = req.body;
+export const newUserTag = async (req: Request, res: Response) => {
+  const { user_id, tag_id } = req.body;
 
   try {
-    const coachTag = await createCoachTag(Number(coach_id), Number(tag_id));
+    const userTag = await createUserTag(Number(user_id), Number(tag_id));
 
-    return res.json(coachTag);
+    return res.json(userTag);
   } catch (error) {
     return res.status(500).send(error);
   }
 };
 
-export const editCoachTag = async (req: Request, res: Response) => {
-  const { id, coach_id, tag_id } = req.body;
+export const editUserTag = async (req: Request, res: Response) => {
+  const { id, user_id, tag_id } = req.body;
 
   try {
-    const coachTag = await modifyCoachTag(
+    const userTag = await modifyUserTag(
       Number(id),
-      Number(coach_id),
+      Number(user_id),
       Number(tag_id)
     );
 
-    return res.json(coachTag);
+    return res.json(userTag);
   } catch (error) {
     return res.status(500).send(error);
   }
 };
 
-export const deleteCoachTag = async (req: Request, res: Response) => {
+export const deleteUserTag = async (req: Request, res: Response) => {
   const { id } = req.body;
 
   try {
-    const tag = await coachTagDelete(id as string);
+    const tag = await userTagDelete(id as string);
     return res.json(tag);
   } catch (error) {
     return res.status(500).send(error);
   }
 };
 
-export const bulkTagCoach = async (req: Request, res: Response) => {
-  const { coach_id, tags } = req.body;
-
-  if (!coach_id) {
-    return res.status(400).send("Missing required body properties");
-  }
+export const bulkUserTags = async (req: Request, res: Response) => {
+  const { user_id, tag_ids, clear } = req.body;
 
   try {
-    const coachTag = await createBulkCoachTag(coach_id, tags);
+    const userTag = await createBulkUserTags(user_id, tag_ids, clear);
 
-    return res.json(coachTag);
+    return res.json(userTag);
   } catch (error) {
     return res.status(500).send(error);
   }
 };
 
 export const tags = async (req: Request, res: Response) => {
-  const { id, slug, limit } = req.query;
+  const { id, slug, kind, limit } = req.query;
 
   try {
     if (slug) {
@@ -123,7 +119,7 @@ export const tags = async (req: Request, res: Response) => {
     } else {
       const tags = await getTags(
         Number(id),
-        slug as string,
+        kind as string,
         limit ? Number(limit) : 100
       );
 
@@ -134,17 +130,17 @@ export const tags = async (req: Request, res: Response) => {
   }
 };
 
-export const tagCoaches = async (req: Request, res: Response) => {
-  const { coach_id, tag_id, limit } = req.query;
+export const userTags = async (req: Request, res: Response) => {
+  const { user_id, tag_id, limit } = req.query;
 
   try {
-    const tagCoaches = await getTagCoaches(
-      coach_id ? Number(coach_id) : null,
+    const tagUsers = await getUserTags(
+      user_id ? Number(user_id) : null,
       tag_id ? Number(tag_id) : null,
       limit ? Number(limit) : 100
     );
 
-    return res.json(tagCoaches);
+    return res.json(tagUsers);
   } catch (error) {
     return res.status(500).send(error);
   }
