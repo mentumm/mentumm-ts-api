@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.5.0...v1.6.0) (2023-05-12)
+
+
+### Features
+
+* **be:** [MEN-127] New Workshops Page ([9d9b0ef](https://github.com/mentumm/mentumm-ts-api/commit/9d9b0ef1953bc133002177fdd56506996890dc79))
+
 # [1.5.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.4.3...v1.5.0) (2023-05-10)
 
 
