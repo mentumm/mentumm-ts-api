@@ -68,6 +68,16 @@ export interface UpdateUser {
   last_name: string;
   email: string;
   employer_id: number;
+  city?: string;
+  state?: string;
+  bio?: string;
+  photo_url?: string;
+  booking_url?: string;
+  linkedin_url?: string;
+  phone_number?: string;
+  facebook_url?: string;
+  instagram_url?: string;
+  website_url?: string;
 }
 
 export interface CoachBooking {

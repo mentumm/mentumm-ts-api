@@ -225,7 +225,21 @@ export const updateUser = async (
   body: UpdateUser
 ): Promise<User[] | KnexError> => {
   try {
-    const { id, first_name, last_name, email, employer_id } = body;
+    const {
+      id,
+      first_name,
+      last_name,
+      email,
+      employer_id,
+      city,
+      state,
+      bio,
+      phone_number,
+      instagram_url,
+      facebook_url,
+      linkedin_url,
+      website_url,
+    } = body;
 
     const update: User[] | { message: string } = await db("users")
       .where({ id })
@@ -234,6 +248,14 @@ export const updateUser = async (
         last_name,
         email,
         employer_id,
+        city,
+        state,
+        bio,
+        phone_number,
+        instagram_url,
+        facebook_url,
+        linkedin_url,
+        website_url,
         updated_at: moment().toISOString(),
       })
       .returning("*")
