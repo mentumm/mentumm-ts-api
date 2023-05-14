@@ -26,7 +26,7 @@ export interface User {
   facebook_url?: string;
   instagram_url?: string;
   website_url?: string;
-} // hey stout this needs a migration. if anyone see this comment yell at @stout
+}
 
 type UserPrivateFields =
   | "password"
