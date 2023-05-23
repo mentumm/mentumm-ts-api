@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.6.0...v1.7.0) (2023-05-23)
+
+
+### Features
+
+* **coaches:** migration and new fields for coach edit, men-54 ([#98](https://github.com/mentumm/mentumm-ts-api/issues/98)) ([f701f99](https://github.com/mentumm/mentumm-ts-api/commit/f701f99727ab239ca2cfbc9baadd7f9932928763))
+
 # [1.6.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.5.0...v1.6.0) (2023-05-12)
 
 
