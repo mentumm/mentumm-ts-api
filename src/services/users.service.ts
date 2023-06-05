@@ -238,6 +238,8 @@ export const updateUser = async (
       facebook_url,
       linkedin_url,
       website_url,
+      achievements,
+      hobbies,
     } = body;
 
     const update: User[] | { message: string } = await db("users")
@@ -254,6 +256,8 @@ export const updateUser = async (
         facebook_url,
         linkedin_url,
         website_url,
+        achievements,
+        hobbies,
         updated_at: moment().toISOString(),
       })
       .returning("*")
