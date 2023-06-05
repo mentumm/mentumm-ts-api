@@ -39,7 +39,15 @@ export const getUsers = async (
     })
     .returning("*");
 
-  return user;
+  const mappedUsers = user.map((user: User) => {
+    return {
+      ...user,
+      achievements: user.achievements ? JSON.parse(user.achievements) : [],
+      hobbies: user.hobbies ? JSON.parse(user.hobbies) : [],
+    };
+  });
+
+  return mappedUsers;
 };
 
 export const createUser = async (
