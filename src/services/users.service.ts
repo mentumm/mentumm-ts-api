@@ -47,13 +47,14 @@ export const createUser = async (
 ): Promise<User[] | KnexError> => {
   try {
     const { first_name, last_name, email, employer_id, password } = body;
+    const lowercaseEmail = email.toLowerCase();
 
     if (password) {
       const hashPassword = await bcrypt.hash(password, 10);
       const user: CreateUser = {
         first_name,
         last_name,
-        email,
+        email: lowercaseEmail,
         employer_id,
         password: hashPassword,
         role: "user",
@@ -76,7 +77,7 @@ export const createUser = async (
       const user: CreateUser = {
         first_name,
         last_name,
-        email,
+        email: lowercaseEmail,
         employer_id,
         role: "user",
       };
@@ -114,11 +115,12 @@ export const createBooking = async (
       event_type_name,
       event_type_uuid,
     } = body;
+    const lowercaseInviteeEmail = invitee_email?.toLowerCase();
 
     const coachBooking: CoachBooking = {
       user_id,
       coach_id,
-      invitee_email,
+      invitee_email: lowercaseInviteeEmail,
       invitee_full_name,
       invitee_uuid,
       event_end_time,
@@ -165,6 +167,7 @@ export const registerUser = async (
   try {
     let errors = null;
     const { first_name, last_name, email, password, invite_code } = body;
+    const lowercaseEmail = email.toLowerCase();
 
     const employer: Employer = await getEmployerByInvite(invite_code);
 
@@ -180,7 +183,7 @@ export const registerUser = async (
     const user: CreateUser = {
       first_name,
       last_name,
-      email,
+      email: lowercaseEmail,
       employer_id: Number(employer.id),
       password: hashPassword,
       role: "user",
@@ -239,13 +242,14 @@ export const updateUser = async (
       linkedin_url,
       website_url,
     } = body;
+    const lowerCaseEmail = email.toLowerCase();
 
     const update: User[] | { message: string } = await db("users")
       .where({ id })
       .update({
         first_name,
         last_name,
-        email,
+        email: lowerCaseEmail,
         city,
         state,
         bio,

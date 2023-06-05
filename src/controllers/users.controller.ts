@@ -14,12 +14,13 @@ import {
 
 export const users = async (req: Request, res: Response) => {
   const { id, name, email, employer_id, limit } = req.query;
+  const lowercaseEmail = (email as string).toLowerCase();
 
   try {
     const user = await getUsers(
       Number(id),
       name as string,
-      email as string,
+      lowercaseEmail,
       Number(employer_id),
       limit ? Number(limit) : 100
     );
@@ -102,7 +103,7 @@ export const updateUserInfo = async (req: Request, res: Response) => {
 export const userLogin = async (req: Request, res: Response) => {
   const { password, email } = req.body;
   try {
-    const user = await authenticateUser(email, password);
+    const user = await authenticateUser(email.toLowerCase(), password);
 
     return res.json(user);
   } catch (error) {

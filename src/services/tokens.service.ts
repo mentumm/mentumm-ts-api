@@ -10,13 +10,14 @@ export const generateJWT = async (
   res: Response
 ): Promise<Response<string>> => {
   const { email, password, id } = req.body;
+  const lowercaseEmail = email.toLowerCase();
 
   try {
     if (!JWT_SECRET) {
       throw new Error("No JWT Secret found, bailing...");
     }
 
-    const user = (await authenticateUser(email, password)) as User;
+    const user = (await authenticateUser(lowercaseEmail, password)) as User;
 
     if (!user.id) {
       throw new Error("No user found, will not generate JWT");
