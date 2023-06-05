@@ -30,7 +30,7 @@ export const getUsers = async (
       } else if (name) {
         builder.where({ name: name });
       } else if (email) {
-        builder.where({ email: email });
+        builder.where({ email: email.toLowerCase() });
       } else if (employer_id) {
         builder.where({ employer_id: employer_id });
       } else {
@@ -296,7 +296,8 @@ export const deleteUser = async (id: number): Promise<User[] | KnexError> => {
 };
 
 export const authenticateUser = async (email: string, password: string) => {
-  const user: User = await db("users").select().where({ email }).first();
+  const lowerCaseEmail = email.toLowerCase();
+  const user: User = await db("users").select().where({ email: lowerCaseEmail }).first();
 
   if (!user) {
     return { message: "Username or Password does not match" };
