@@ -172,9 +172,7 @@ usersRouter.put(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => {
-    return (await updateUserInfo(req, res))
-  }
+  async (req: Request, res: Response) => await updateUserInfo(req, res)
 );
 
 usersRouter.post(

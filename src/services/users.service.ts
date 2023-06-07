@@ -238,7 +238,7 @@ export const updateUser = async (
   }
 
   try {
-    const update = await db("users")
+    const update: User[] | { message: string } = await db("users")
       .where({ id })
       .update({
         ...updateData,
