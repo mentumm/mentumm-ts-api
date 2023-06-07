@@ -30,7 +30,7 @@ export const getUsers = async (
       } else if (name) {
         builder.where({ name: name });
       } else if (email) {
-        builder.where({ email: email });
+        builder.where({ email: email.toLowerCase() });
       } else if (employer_id) {
         builder.where({ employer_id: employer_id });
       } else {
@@ -48,12 +48,14 @@ export const createUser = async (
   try {
     const { first_name, last_name, email, employer_id, password } = body;
     const lowercaseEmail = email.toLowerCase();
+    const lowercaseEmail = email.toLowerCase();
 
     if (password) {
       const hashPassword = await bcrypt.hash(password, 10);
       const user: CreateUser = {
         first_name,
         last_name,
+        email: lowercaseEmail,
         email: lowercaseEmail,
         employer_id,
         password: hashPassword,
@@ -77,6 +79,7 @@ export const createUser = async (
       const user: CreateUser = {
         first_name,
         last_name,
+        email: lowercaseEmail,
         email: lowercaseEmail,
         employer_id,
         role: "user",
@@ -116,10 +119,12 @@ export const createBooking = async (
       event_type_uuid,
     } = body;
     const lowercaseInviteeEmail = invitee_email?.toLowerCase();
+    const lowercaseInviteeEmail = invitee_email?.toLowerCase();
 
     const coachBooking: CoachBooking = {
       user_id,
       coach_id,
+      invitee_email: lowercaseInviteeEmail,
       invitee_email: lowercaseInviteeEmail,
       invitee_full_name,
       invitee_uuid,
@@ -168,6 +173,7 @@ export const registerUser = async (
     let errors = null;
     const { first_name, last_name, email, password, invite_code } = body;
     const lowercaseEmail = email.toLowerCase();
+    const lowercaseEmail = email.toLowerCase();
 
     const employer: Employer = await getEmployerByInvite(invite_code);
 
@@ -183,6 +189,7 @@ export const registerUser = async (
     const user: CreateUser = {
       first_name,
       last_name,
+      email: lowercaseEmail,
       email: lowercaseEmail,
       employer_id: Number(employer.id),
       password: hashPassword,
@@ -229,8 +236,10 @@ export const updateUser = async (
   const {
     id,
     password,
+    email,
     ...updateData
   } = body;
+  const lowerCaseEmail = email.toLowerCase();
 
   let hashPassword;
   if (password) {
@@ -242,6 +251,7 @@ export const updateUser = async (
       .where({ id })
       .update({
         ...updateData,
+        email: lowerCaseEmail,
         ...(password && { password: hashPassword }),
         updated_at: moment().toISOString(),
       })
@@ -274,7 +284,8 @@ export const deleteUser = async (id: number): Promise<User[] | KnexError> => {
 };
 
 export const authenticateUser = async (email: string, password: string) => {
-  const user: User = await db("users").select().where({ email }).first();
+  const lowerCaseEmail = email.toLowerCase();
+  const user: User = await db("users").select().where({ email: lowerCaseEmail }).first();
 
   if (!user) {
     return { message: "Username or Password does not match" };
