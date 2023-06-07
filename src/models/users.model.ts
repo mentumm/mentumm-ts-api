@@ -43,7 +43,7 @@ type UserPrivateFields =
   | "employer_id";
 
 // eslint-disable-next-line
-export interface UserPublic extends Omit<User, UserPrivateFields> {}
+export interface UserPublic extends Omit<User, UserPrivateFields> { }
 
 export interface CreateUser {
   first_name: string;
@@ -67,6 +67,7 @@ export interface UpdateUser {
   first_name: string;
   last_name: string;
   email: string;
+  password?: string;
   employer_id: number;
   city?: string;
   state?: string;

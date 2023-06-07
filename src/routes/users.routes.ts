@@ -158,6 +158,7 @@ usersRouter.put(
       first_name: Joi.string().required(),
       last_name: Joi.string().required(),
       email: Joi.string().required(),
+      password: Joi.string().allow(""),
       city: Joi.string().allow(""),
       state: Joi.string().allow(""),
       bio: Joi.string(),
@@ -171,7 +172,9 @@ usersRouter.put(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await updateUserInfo(req, res)
+  async (req: Request, res: Response) => {
+    return (await updateUserInfo(req, res))
+  }
 );
 
 usersRouter.post(
