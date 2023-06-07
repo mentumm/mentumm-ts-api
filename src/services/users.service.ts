@@ -250,8 +250,8 @@ export const updateUser = async (
     const update: User[] | { message: string } = await db("users")
       .where({ id })
       .update({
-        ...updateData,
         email: lowerCaseEmail,
+        ...updateData,
         ...(password && { password: hashPassword }),
         updated_at: moment().toISOString(),
       })
