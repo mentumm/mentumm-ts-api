@@ -39,7 +39,15 @@ export const getUsers = async (
     })
     .returning("*");
 
-  return user;
+  const mappedUsers = user.map((user: User) => {
+    return {
+      ...user,
+      achievements: user.achievements ? JSON.parse(user.achievements) : [],
+      hobbies: user.hobbies ? JSON.parse(user.hobbies) : [],
+    };
+  });
+
+  return mappedUsers;
 };
 
 export const createUser = async (
@@ -241,6 +249,8 @@ export const updateUser = async (
       facebook_url,
       linkedin_url,
       website_url,
+      achievements,
+      hobbies,
     } = body;
     const lowerCaseEmail = email.toLowerCase();
 
@@ -258,6 +268,8 @@ export const updateUser = async (
         facebook_url,
         linkedin_url,
         website_url,
+        achievements,
+        hobbies,
         updated_at: moment().toISOString(),
       })
       .returning("*")
