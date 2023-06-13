@@ -158,6 +158,7 @@ usersRouter.put(
       first_name: Joi.string().required(),
       last_name: Joi.string().required(),
       email: Joi.string().required(),
+      password: Joi.string(),
       city: Joi.string().allow(""),
       state: Joi.string().allow(""),
       bio: Joi.string(),

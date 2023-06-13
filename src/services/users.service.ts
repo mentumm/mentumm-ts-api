@@ -233,61 +233,38 @@ export const registerUser = async (
 };
 
 export const updateUser = async (
-  body: UpdateUser
-): Promise<User[] | KnexError> => {
-  try {
-    const {
-      id,
-      first_name,
-      last_name,
-      email,
-      city,
-      state,
-      bio,
-      phone_number,
-      instagram_url,
-      facebook_url,
-      linkedin_url,
-      website_url,
-      achievements,
-      hobbies,
-    } = body;
-    const lowerCaseEmail = email.toLowerCase();
+  body: UpdateUser): Promise<User[] | KnexError> => {
+  const {
+    id,
+    password,
+    email,
+    ...updateData
+  } = body;
+  const lowerCaseEmail = email.toLowerCase();
 
+  let hashPassword;
+  if (password) {
+    hashPassword = await bcrypt.hash(password, 10);
+  }
+
+  try {
     const update: User[] | { message: string } = await db("users")
       .where({ id })
       .update({
-        first_name,
-        last_name,
         email: lowerCaseEmail,
-        city,
-        state,
-        bio,
-        phone_number,
-        instagram_url,
-        facebook_url,
-        linkedin_url,
-        website_url,
-        achievements,
-        hobbies,
+        ...updateData,
+        ...(password && { password: hashPassword }),
         updated_at: moment().toISOString(),
       })
-      .returning("*")
-      .catch((err: Error) => {
-        if (err) {
-          return {
-            message: "User email is already being used",
-          };
-        } else {
-          throw new Error("Unable to edit User");
-        }
-      });
+      .returning("*");
 
     return update;
   } catch (error) {
     throw new Error("Unable to edit User");
   }
 };
+
+
 
 export const deleteUser = async (id: number): Promise<User[] | KnexError> => {
   const user: User[] | KnexError = await db("users")
