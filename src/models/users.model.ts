@@ -26,6 +26,8 @@ export interface User {
   facebook_url?: string;
   instagram_url?: string;
   website_url?: string;
+  achievements: string;
+  hobbies: string;
 }
 
 type UserPrivateFields =
@@ -79,6 +81,8 @@ export interface UpdateUser {
   facebook_url?: string;
   instagram_url?: string;
   website_url?: string;
+  achievements: string;
+  hobbies: string;
 }
 
 export interface CoachBooking {

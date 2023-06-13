@@ -169,6 +169,8 @@ usersRouter.put(
       facebook_url: Joi.string().allow(""),
       instagram_url: Joi.string().allow(""),
       website_url: Joi.string().allow(""),
+      achievements: Joi.string(),
+      hobbies: Joi.string(),
     }),
     "body"
   ),
