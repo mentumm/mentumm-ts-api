@@ -135,6 +135,7 @@ export const userTagDelete = async (id: string): Promise<Tag[] | KnexError> => {
 export const createBulkUserTags = async (
   user_id: string,
   tag_ids: number[],
+  kind: string,
   clear: boolean
 ): Promise<{ message: string }> => {
   try {
@@ -145,7 +146,10 @@ export const createBulkUserTags = async (
     }
 
     if (clear) {
-      await db("user_tag").where({ user_id }).delete();
+      await db("user_tag")
+        .join("tags", "user_tag.tag_id", "tags.id")
+        .where({ "user_tag.user_id": user_id, "tags.kind": kind })
+        .delete()
     }
 
     tag_ids.forEach(async (id: number) => {
