@@ -94,10 +94,10 @@ export const deleteUserTag = async (req: Request, res: Response) => {
 };
 
 export const bulkUserTags = async (req: Request, res: Response) => {
-  const { user_id, tag_ids, clear } = req.body;
+  const { user_id, tag_ids, kind, clear } = req.body;
 
   try {
-    const userTag = await createBulkUserTags(user_id, tag_ids, clear);
+    const userTag = await createBulkUserTags(user_id, tag_ids, kind, clear);
 
     return res.json(userTag);
   } catch (error) {
