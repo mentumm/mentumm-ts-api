@@ -9,6 +9,8 @@ import {
   users,
   upcoming,
   past,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/users.controller";
 import cors from "cors";
 import { publicCorsConfig } from "../util/corsOptions";
@@ -188,6 +190,31 @@ usersRouter.post(
     "body"
   ),
   async (req: Request, res: Response) => await userLogin(req, res)
+);
+
+usersRouter.post(
+  "/user/forgot-password",
+  cors(publicCorsConfig),
+  routeValidation(
+    Joi.object({
+      email: Joi.string().required(),
+    }),
+    "body"
+  ),
+  async (req: Request, res: Response) => await forgotPassword(req, res)
+);
+
+usersRouter.post(
+  "/user/reset-password",
+  cors(publicCorsConfig),
+  routeValidation(
+    Joi.object({
+      token: Joi.string().required(),
+      password: Joi.string().required(),
+    }),
+    "body"
+  ),
+  async (req: Request, res: Response) => await resetPassword(req, res)
 );
 
 export default usersRouter;
