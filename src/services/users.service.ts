@@ -12,8 +12,10 @@ import {
 import { KnexError } from "../types";
 import { getEmployerByInvite } from "./employers.service";
 import { Employer } from "../models/employers.model";
+import { emailService, EmailTemplate } from "../helpers/emailService";
 import { mixpanelEvent } from "../helpers/mixpanel";
 import { omit } from "lodash";
+import { ulid } from "ulid";
 
 export const getUsers = async (
   id: number,
@@ -225,6 +227,10 @@ export const registerUser = async (
         "Employer Name": employer.name,
       });
 
+      emailService.send(EmailTemplate.WELCOME, newUser[0].email, {
+        first_name: newUser[0].first_name,
+      });
+
       return newUser;
     }
   } catch (error) {
@@ -233,13 +239,9 @@ export const registerUser = async (
 };
 
 export const updateUser = async (
-  body: UpdateUser): Promise<User[] | KnexError> => {
-  const {
-    id,
-    password,
-    email,
-    ...updateData
-  } = body;
+  body: UpdateUser
+): Promise<User[] | KnexError> => {
+  const { id, password, email, ...updateData } = body;
   const lowerCaseEmail = email.toLowerCase();
 
   let hashPassword;
@@ -264,8 +266,6 @@ export const updateUser = async (
   }
 };
 
-
-
 export const deleteUser = async (id: number): Promise<User[] | KnexError> => {
   const user: User[] | KnexError = await db("users")
     .update({
@@ -286,7 +286,10 @@ export const deleteUser = async (id: number): Promise<User[] | KnexError> => {
 
 export const authenticateUser = async (email: string, password: string) => {
   const lowerCaseEmail = email.toLowerCase();
-  const user: User = await db("users").select().where({ email: lowerCaseEmail }).first();
+  const user: User = await db("users")
+    .select()
+    .where({ email: lowerCaseEmail })
+    .first();
 
   if (!user) {
     return { message: "Username or Password does not match" };
@@ -395,4 +398,73 @@ export const getPastBookings = async (
     });
 
   return bookings;
+};
+
+export const initiatePasswordReset = async (email: string): Promise<void> => {
+  const user = await db("users")
+    .whereNull("deleted_at")
+    .where({ email })
+    .returning("*")
+    .first();
+
+  if (user) {
+    const token = ulid();
+
+    await db("users")
+      .where({ id: user.id })
+      .update({
+        reset_password_token: token,
+        reset_password_expiration: moment().add("1", "day").toISOString(),
+        updated_at: moment().toISOString(),
+      })
+      .returning("*");
+
+    emailService.send(EmailTemplate.PASSWORD_RESET, user.email, {
+      first_name: user.first_name,
+      password_reset_link: `${process.env.BASE_URL}/reset-password/${token}`,
+    });
+  }
+};
+
+export const resetPasswordFromToken = async (
+  reset_password_token: string,
+  password: string
+): Promise<{ success: boolean; message: string }> => {
+  const user = await db("users")
+    .whereNull("deleted_at")
+    .where({ reset_password_token })
+    .returning("*")
+    .first();
+
+  if (user) {
+    const expiration = moment(user.reset_password_expiration);
+
+    if (!expiration.isValid() || moment().isAfter(expiration)) {
+      return {
+        success: false,
+        message: "Your password reset link has expired.",
+      };
+    }
+
+    await db("users")
+      .where({ id: user.id })
+      .update({
+        password: await bcrypt.hash(password, 10),
+        reset_password_token: null,
+        reset_password_expiration: null,
+        updated_at: moment().toISOString(),
+      })
+      .returning("*");
+
+    emailService.send(EmailTemplate.PASSWORD_CHANGED, user.email, {
+      first_name: user.first_name,
+    });
+
+    return { success: true, message: "Ok." };
+  }
+
+  return {
+    success: false,
+    message: "Your password reset link has is no longer active.",
+  };
 };
