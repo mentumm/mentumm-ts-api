@@ -12,8 +12,10 @@ import {
 import { KnexError } from "../types";
 import { getEmployerByInvite } from "./employers.service";
 import { Employer } from "../models/employers.model";
+import { emailService, EmailTemplate } from "../helpers/emailService";
 import { mixpanelEvent } from "../helpers/mixpanel";
 import { omit } from "lodash";
+import { ulid } from "ulid";
 
 export const getUsers = async (
   id: number,
@@ -30,7 +32,7 @@ export const getUsers = async (
       } else if (name) {
         builder.where({ name: name });
       } else if (email) {
-        builder.where({ email: email });
+        builder.where({ email: email.toLowerCase() });
       } else if (employer_id) {
         builder.where({ employer_id: employer_id });
       } else {
@@ -39,7 +41,15 @@ export const getUsers = async (
     })
     .returning("*");
 
-  return user;
+  const mappedUsers = user.map((user: User) => {
+    return {
+      ...user,
+      achievements: user.achievements ? JSON.parse(user.achievements) : [],
+      hobbies: user.hobbies ? JSON.parse(user.hobbies) : [],
+    };
+  });
+
+  return mappedUsers;
 };
 
 export const createUser = async (
@@ -47,13 +57,14 @@ export const createUser = async (
 ): Promise<User[] | KnexError> => {
   try {
     const { first_name, last_name, email, employer_id, password } = body;
+    const lowercaseEmail = email.toLowerCase();
 
     if (password) {
       const hashPassword = await bcrypt.hash(password, 10);
       const user: CreateUser = {
         first_name,
         last_name,
-        email,
+        email: lowercaseEmail,
         employer_id,
         password: hashPassword,
         role: "user",
@@ -76,7 +87,7 @@ export const createUser = async (
       const user: CreateUser = {
         first_name,
         last_name,
-        email,
+        email: lowercaseEmail,
         employer_id,
         role: "user",
       };
@@ -114,11 +125,12 @@ export const createBooking = async (
       event_type_name,
       event_type_uuid,
     } = body;
+    const lowercaseInviteeEmail = invitee_email?.toLowerCase();
 
     const coachBooking: CoachBooking = {
       user_id,
       coach_id,
-      invitee_email,
+      invitee_email: lowercaseInviteeEmail,
       invitee_full_name,
       invitee_uuid,
       event_end_time,
@@ -165,6 +177,7 @@ export const registerUser = async (
   try {
     let errors = null;
     const { first_name, last_name, email, password, invite_code } = body;
+    const lowercaseEmail = email.toLowerCase();
 
     const employer: Employer = await getEmployerByInvite(invite_code);
 
@@ -180,7 +193,7 @@ export const registerUser = async (
     const user: CreateUser = {
       first_name,
       last_name,
-      email,
+      email: lowercaseEmail,
       employer_id: Number(employer.id),
       password: hashPassword,
       role: "user",
@@ -214,6 +227,10 @@ export const registerUser = async (
         "Employer Name": employer.name,
       });
 
+      emailService.send(EmailTemplate.WELCOME, newUser[0].email, {
+        first_name: newUser[0].first_name,
+      });
+
       return newUser;
     }
   } catch (error) {
@@ -224,48 +241,24 @@ export const registerUser = async (
 export const updateUser = async (
   body: UpdateUser
 ): Promise<User[] | KnexError> => {
-  try {
-    const {
-      id,
-      first_name,
-      last_name,
-      email,
-      city,
-      state,
-      bio,
-      phone_number,
-      instagram_url,
-      facebook_url,
-      linkedin_url,
-      website_url,
-    } = body;
+  const { id, password, email, ...updateData } = body;
+  const lowerCaseEmail = email.toLowerCase();
 
+  let hashPassword;
+  if (password) {
+    hashPassword = await bcrypt.hash(password, 10);
+  }
+
+  try {
     const update: User[] | { message: string } = await db("users")
       .where({ id })
       .update({
-        first_name,
-        last_name,
-        email,
-        city,
-        state,
-        bio,
-        phone_number,
-        instagram_url,
-        facebook_url,
-        linkedin_url,
-        website_url,
+        email: lowerCaseEmail,
+        ...updateData,
+        ...(password && { password: hashPassword }),
         updated_at: moment().toISOString(),
       })
-      .returning("*")
-      .catch((err: Error) => {
-        if (err) {
-          return {
-            message: "User email is already being used",
-          };
-        } else {
-          throw new Error("Unable to edit User");
-        }
-      });
+      .returning("*");
 
     return update;
   } catch (error) {
@@ -292,7 +285,11 @@ export const deleteUser = async (id: number): Promise<User[] | KnexError> => {
 };
 
 export const authenticateUser = async (email: string, password: string) => {
-  const user: User = await db("users").select().where({ email }).first();
+  const lowerCaseEmail = email.toLowerCase();
+  const user: User = await db("users")
+    .select()
+    .where({ email: lowerCaseEmail })
+    .first();
 
   if (!user) {
     return { message: "Username or Password does not match" };
@@ -401,4 +398,82 @@ export const getPastBookings = async (
     });
 
   return bookings;
+};
+
+export const initiatePasswordReset = async (
+  email: string,
+  origin: string
+): Promise<void> => {
+  const user = await db("users")
+    .whereNull("deleted_at")
+    .where({ email: email.toLocaleLowerCase() })
+    .returning("*")
+    .first();
+
+  if (user) {
+    const token = ulid();
+
+    await db("users")
+      .where({ id: user.id })
+      .update({
+        reset_password_token: token,
+        reset_password_expiration: moment().add("1", "day").toISOString(),
+        updated_at: moment().toISOString(),
+      })
+      .returning("*");
+
+    let baseUrl = process.env.BASE_URL;
+
+    if (process.env.NODE_ENV === "staging" && origin.endsWith("onrender.com")) {
+      baseUrl = `${origin}`;
+    }
+
+    emailService.send(EmailTemplate.PASSWORD_RESET, user.email, {
+      first_name: user.first_name,
+      password_reset_link: `${baseUrl}/reset-password/${token}`,
+    });
+  }
+};
+
+export const resetPasswordFromToken = async (
+  reset_password_token: string,
+  password: string
+): Promise<{ success: boolean; message: string }> => {
+  const user = await db("users")
+    .whereNull("deleted_at")
+    .where({ reset_password_token })
+    .returning("*")
+    .first();
+
+  if (user) {
+    const expiration = moment(user.reset_password_expiration);
+
+    if (!expiration.isValid() || moment().isAfter(expiration)) {
+      return {
+        success: false,
+        message: "Your password reset link has expired.",
+      };
+    }
+
+    await db("users")
+      .where({ id: user.id })
+      .update({
+        password: await bcrypt.hash(password, 10),
+        reset_password_token: null,
+        reset_password_expiration: null,
+        updated_at: moment().toISOString(),
+      })
+      .returning("*");
+
+    emailService.send(EmailTemplate.PASSWORD_CHANGED, user.email, {
+      first_name: user.first_name,
+    });
+
+    return { success: true, message: "Ok." };
+  }
+
+  return {
+    success: false,
+    message: "Your password reset link has is no longer active.",
+  };
 };

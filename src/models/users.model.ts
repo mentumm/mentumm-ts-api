@@ -26,6 +26,8 @@ export interface User {
   facebook_url?: string;
   instagram_url?: string;
   website_url?: string;
+  achievements: string;
+  hobbies: string;
 }
 
 type UserPrivateFields =
@@ -43,7 +45,7 @@ type UserPrivateFields =
   | "employer_id";
 
 // eslint-disable-next-line
-export interface UserPublic extends Omit<User, UserPrivateFields> {}
+export interface UserPublic extends Omit<User, UserPrivateFields> { }
 
 export interface CreateUser {
   first_name: string;
@@ -67,6 +69,7 @@ export interface UpdateUser {
   first_name: string;
   last_name: string;
   email: string;
+  password?: string;
   employer_id: number;
   city?: string;
   state?: string;
@@ -78,6 +81,8 @@ export interface UpdateUser {
   facebook_url?: string;
   instagram_url?: string;
   website_url?: string;
+  achievements: string;
+  hobbies: string;
 }
 
 export interface CoachBooking {

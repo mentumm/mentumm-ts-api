@@ -9,6 +9,8 @@ import {
   users,
   upcoming,
   past,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/users.controller";
 import cors from "cors";
 import { publicCorsConfig } from "../util/corsOptions";
@@ -158,6 +160,7 @@ usersRouter.put(
       first_name: Joi.string().required(),
       last_name: Joi.string().required(),
       email: Joi.string().required(),
+      password: Joi.string(),
       city: Joi.string().allow(""),
       state: Joi.string().allow(""),
       bio: Joi.string(),
@@ -168,6 +171,8 @@ usersRouter.put(
       facebook_url: Joi.string().allow(""),
       instagram_url: Joi.string().allow(""),
       website_url: Joi.string().allow(""),
+      achievements: Joi.string(),
+      hobbies: Joi.string(),
     }),
     "body"
   ),
@@ -185,6 +190,31 @@ usersRouter.post(
     "body"
   ),
   async (req: Request, res: Response) => await userLogin(req, res)
+);
+
+usersRouter.post(
+  "/user/forgot-password",
+  cors(publicCorsConfig),
+  routeValidation(
+    Joi.object({
+      email: Joi.string().required(),
+    }),
+    "body"
+  ),
+  async (req: Request, res: Response) => await forgotPassword(req, res)
+);
+
+usersRouter.post(
+  "/user/reset-password",
+  cors(publicCorsConfig),
+  routeValidation(
+    Joi.object({
+      reset_password_token: Joi.string().required(),
+      password: Joi.string().required(),
+    }),
+    "body"
+  ),
+  async (req: Request, res: Response) => await resetPassword(req, res)
 );
 
 export default usersRouter;

@@ -8,6 +8,8 @@ import {
   getUsers,
   getUpcomingBookings,
   getPastBookings,
+  initiatePasswordReset,
+  resetPasswordFromToken,
   registerUser,
   updateUser,
 } from "../services/users.service";
@@ -129,6 +131,28 @@ export const past = async (req: Request, res: Response) => {
     const bookings = await getPastBookings(Number(id));
 
     return res.json(bookings);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+  try {
+    await initiatePasswordReset(email, req?.headers?.origin ?? "");
+
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+  const { reset_password_token, password } = req.body;
+  try {
+    const result = await resetPasswordFromToken(reset_password_token, password);
+
+    return res.json(result);
   } catch (error) {
     return res.status(500).send(error);
   }

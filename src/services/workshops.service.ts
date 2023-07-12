@@ -22,3 +22,42 @@ export const getWorkshopsBySlug = async (
 
   return workshop?.[0];
 };
+
+export const createWorkshop = async (payload: Workshop): Promise<Workshop> => {
+  const workshop = await db(table)
+    .insert({
+      ...payload,
+    })
+    .returning("*")
+    .catch((error) => {
+      throw error;
+    });
+  return workshop[0];
+};
+
+export const updateWorkshop = async (
+  id: number,
+  payload: Workshop
+): Promise<Workshop> => {
+  const workshop = await db(table)
+    .where({ id })
+    .update({
+      ...payload,
+    })
+    .returning("*")
+    .catch((error) => {
+      throw error;
+    });
+  return workshop[0];
+};
+
+export const deleteWorkshop = async (id: number): Promise<Workshop> => {
+  const workshop = await db(table)
+    .where({ id })
+    .del()
+    .returning("*")
+    .catch((error) => {
+      throw error;
+    });
+  return workshop[0];
+};
