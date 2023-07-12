@@ -148,9 +148,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
 };
 
 export const resetPassword = async (req: Request, res: Response) => {
-  const { token, password } = req.body;
+  const { reset_password_token, password } = req.body;
   try {
-    const result = await resetPasswordFromToken(token, password);
+    const result = await resetPasswordFromToken(reset_password_token, password);
 
     return res.json(result);
   } catch (error) {
