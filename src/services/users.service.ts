@@ -421,7 +421,9 @@ export const initiatePasswordReset = async (email: string): Promise<void> => {
 
     emailService.send(EmailTemplate.PASSWORD_RESET, user.email, {
       first_name: user.first_name,
-      password_reset_link: `${process.env.BASE_URL}/reset-password/${token}`,
+      password_reset_link: `${
+        process.env.RENDER_EXTERNAL_URL ?? process.env.BASE_URL
+      }/reset-password/${token}`,
     });
   }
 };
