@@ -13,7 +13,7 @@ class Email {
   }
 
   send(templateId: EmailTemplate, to: string, templateData: object) {
-    this.client.send({
+    return this.client.send({
       personalizations: [
         {
           to: [

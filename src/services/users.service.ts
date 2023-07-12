@@ -425,7 +425,7 @@ export const initiatePasswordReset = async (
     let baseUrl = process.env.BASE_URL;
 
     if (process.env.NODE_ENV === "staging" && origin.endsWith("onrender.com")) {
-      baseUrl = `https://${origin}`;
+      baseUrl = `${origin}`;
     }
 
     emailService.send(EmailTemplate.PASSWORD_RESET, user.email, {
