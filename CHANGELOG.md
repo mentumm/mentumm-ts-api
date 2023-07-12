@@ -1,3 +1,17 @@
+# [1.8.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.7.0...v1.8.0) (2023-07-12)
+
+
+### Bug Fixes
+
+* **reset-password:** Allow reset password links to work on staging ([0b7c706](https://github.com/mentumm/mentumm-ts-api/commit/0b7c70644b5ca187bcb0784b504096397c6fb796))
+* **user-service:** Allow emails in staging to point to correct render url ([6d45073](https://github.com/mentumm/mentumm-ts-api/commit/6d4507393bf286e9784bbfd1e69b585bc8dc7316))
+
+
+### Features
+
+* **profile:** edit and save password, men-71 ([#102](https://github.com/mentumm/mentumm-ts-api/issues/102)) ([2052dbb](https://github.com/mentumm/mentumm-ts-api/commit/2052dbb4f26a7d30d0928f2de5e384698b1c35c1))
+* **users:** [MEN-36] Implement Forgot Password & New User Emails ([#105](https://github.com/mentumm/mentumm-ts-api/issues/105)) ([ff768e0](https://github.com/mentumm/mentumm-ts-api/commit/ff768e053d759bb0031a8284d931f5c70913ca5a))
+
 # [1.7.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.6.0...v1.7.0) (2023-05-23)
 
 
