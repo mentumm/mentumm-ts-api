@@ -400,7 +400,10 @@ export const getPastBookings = async (
   return bookings;
 };
 
-export const initiatePasswordReset = async (email: string): Promise<void> => {
+export const initiatePasswordReset = async (
+  email: string,
+  hostname: string
+): Promise<void> => {
   const user = await db("users")
     .whereNull("deleted_at")
     .where({ email: email.toLocaleLowerCase() })
@@ -419,9 +422,18 @@ export const initiatePasswordReset = async (email: string): Promise<void> => {
       })
       .returning("*");
 
+    let baseUrl = process.env.BASE_URL;
+
+    if (
+      process.env.NODE_ENV === "staging" &&
+      hostname.endsWith("onrender.com")
+    ) {
+      baseUrl = `https://${hostname}`;
+    }
+
     emailService.send(EmailTemplate.PASSWORD_RESET, user.email, {
       first_name: user.first_name,
-      password_reset_link: `${process.env.BASE_URL}/reset-password/${token}`,
+      password_reset_link: `${baseUrl}/reset-password/${token}`,
     });
   }
 };
