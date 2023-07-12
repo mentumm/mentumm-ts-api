@@ -139,7 +139,7 @@ export const past = async (req: Request, res: Response) => {
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
   try {
-    await initiatePasswordReset(email, req.hostname);
+    await initiatePasswordReset(email, req?.headers?.origin ?? "");
 
     return res.json({ success: true });
   } catch (error) {

@@ -402,7 +402,7 @@ export const getPastBookings = async (
 
 export const initiatePasswordReset = async (
   email: string,
-  hostname: string
+  origin: string
 ): Promise<void> => {
   const user = await db("users")
     .whereNull("deleted_at")
@@ -424,11 +424,8 @@ export const initiatePasswordReset = async (
 
     let baseUrl = process.env.BASE_URL;
 
-    if (
-      process.env.NODE_ENV === "staging" &&
-      hostname.endsWith("onrender.com")
-    ) {
-      baseUrl = `https://${hostname}`;
+    if (process.env.NODE_ENV === "staging" && origin.endsWith("onrender.com")) {
+      baseUrl = `https://${origin}`;
     }
 
     emailService.send(EmailTemplate.PASSWORD_RESET, user.email, {
