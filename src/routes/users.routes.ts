@@ -209,7 +209,7 @@ usersRouter.post(
   cors(publicCorsConfig),
   routeValidation(
     Joi.object({
-      token: Joi.string().required(),
+      reset_password_token: Joi.string().required(),
       password: Joi.string().required(),
     }),
     "body"
