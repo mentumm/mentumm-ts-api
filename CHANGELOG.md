@@ -1,3 +1,11 @@
+# [1.9.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.8.0...v1.9.0) (2023-08-07)
+
+
+### Features
+
+* **user:** created migration to split location data to city, state; MEN-169 ([b0925a0](https://github.com/mentumm/mentumm-ts-api/commit/b0925a0443118d4b428d7f125b6e46e6b3206088))
+* **users:** add is_test column to users table to hide test accounts; MEN-165 ([664c978](https://github.com/mentumm/mentumm-ts-api/commit/664c978768770da03363d37aeba5700e2e62edd6))
+
 # [1.8.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.7.0...v1.8.0) (2023-07-12)
 
 
