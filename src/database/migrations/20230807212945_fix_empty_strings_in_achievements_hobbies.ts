@@ -3,21 +3,28 @@ import { User } from "../../models/users.model";
 
 export async function up(knex: Knex): Promise<void> {
   await knex.transaction(async trx => {
-    const users: User[] = await trx('users').select('id', 'achievements', 'hobbies');
+    const users: User[] = await trx('Users').select('id', 'achievements', 'hobbies');
 
     for (const user of users) {
-      const achievementsArray = user.achievements ? JSON.parse(user.achievements) : [];
-      const hobbiesArray = user.hobbies ? JSON.parse(user.hobbies) : [];
+      const updateData: Partial<User> = {};
 
-      const filteredAchievements = achievementsArray.filter((item: string) => item.trim() !== "");
-      const filteredHobbies = hobbiesArray.filter((item: string) => item.trim() !== "");
+      if (user.achievements) {
+        const achievementsArray = JSON.parse(user.achievements);
+        const filteredAchievements = achievementsArray.filter((item: string) => item.trim() !== "");
+        updateData.achievements = JSON.stringify(filteredAchievements);
+      }
 
-      await trx('users')
-        .where('id', user.id)
-        .update({
-          achievements: JSON.stringify(filteredAchievements),
-          hobbies: JSON.stringify(filteredHobbies),
-        });
+      if (user.hobbies) {
+        const hobbiesArray = JSON.parse(user.hobbies);
+        const filteredHobbies = hobbiesArray.filter((item: string) => item.trim() !== "");
+        updateData.hobbies = JSON.stringify(filteredHobbies);
+      }
+
+      if (Object.keys(updateData).length > 0) {  // Checking if there's something to update
+        await trx('Users')
+          .where('id', user.id)
+          .update(updateData);
+      }
     }
   });
 }
