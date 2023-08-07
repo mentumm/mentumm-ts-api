@@ -6,8 +6,8 @@ export async function up(knex: Knex): Promise<void> {
     const users: User[] = await trx('users').select('id', 'achievements', 'hobbies');
 
     for (const user of users) {
-      const achievementsArray = JSON.parse(user.achievements);
-      const hobbiesArray = JSON.parse(user.hobbies);
+      const achievementsArray = user.achievements ? JSON.parse(user.achievements) : [];
+      const hobbiesArray = user.hobbies ? JSON.parse(user.hobbies) : [];
 
       const filteredAchievements = achievementsArray.filter((item: string) => item.trim() !== "");
       const filteredHobbies = hobbiesArray.filter((item: string) => item.trim() !== "");
