@@ -3,7 +3,7 @@ import { User } from "../../models/users.model";
 
 export async function up(knex: Knex): Promise<void> {
   await knex.transaction(async trx => {
-    const users: User[] = await trx('Users').select('id', 'achievements', 'hobbies');
+    const users: User[] = await trx('users').select('id', 'achievements', 'hobbies');
 
     for (const user of users) {
       const updateData: Partial<User> = {};
