@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.9.0...v1.9.1) (2023-08-11)
+
+
+### Bug Fixes
+
+* **database:** remove empty strings achievements hobbies; MEN-179 ([#111](https://github.com/mentumm/mentumm-ts-api/issues/111)) ([8f30df2](https://github.com/mentumm/mentumm-ts-api/commit/8f30df2550216a9edfbcc1b2dd71146feba78af8))
+
 # [1.9.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.8.0...v1.9.0) (2023-08-07)
 
 
