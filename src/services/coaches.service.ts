@@ -26,6 +26,7 @@ export const getCoaches = async (
       }
       if (search) {
         qb.whereRaw(`users.first_name ILIKE '%${search}%'`);
+        qb.andWhere({ is_test: false });
         qb.orWhereRaw(`users.last_name ILIKE '%${search}%'`);
         qb.orderBy("users.first_name");
       }
