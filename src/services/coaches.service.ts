@@ -48,9 +48,9 @@ export const getCoaches = async (
 export const createCoach = async (
   body: RegisterCoach
 ): Promise<Coach[] | KnexError> => {
+  const { first_name, last_name, email, password } = body;
   try {
     let errors = null;
-    const { first_name, last_name, email, password } = body;
     const lowercaseEmail = email.toLowerCase();
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -67,7 +67,6 @@ export const createCoach = async (
       .returning("*")
       .catch((err: Error) => {
         if (err) {
-          console.log(err);
           errors = { message: "There was an error registering your Coach account. Please try again." };
           return [];
         } else {

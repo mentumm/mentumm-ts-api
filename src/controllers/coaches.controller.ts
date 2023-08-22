@@ -32,6 +32,10 @@ export const newCoach = async (
   const body: RegisterCoach = req.body;
 
   try {
+    if (body.invite_code !== 'Coach10Register23') {
+      throw new Error("Invalid invite code.");
+    }
+
     const coach = await createCoach(body);
 
     return res.json(coach);
