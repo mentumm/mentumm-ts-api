@@ -1,7 +1,10 @@
 import { Knex } from "knex";
 import moment from "moment";
 import db from "../database/db";
-import { Coach, CoachRating } from "../models/coaches.model";
+import bcrypt from "bcrypt";
+import { mixpanelEvent } from "../helpers/mixpanel";
+import { emailService, EmailTemplate } from "../helpers/emailService";
+import { Coach, CoachRating, RegisterCoach } from "../models/coaches.model";
 import { User } from "../models/users.model";
 import { KnexError } from "../types";
 
@@ -43,42 +46,54 @@ export const getCoaches = async (
 };
 
 export const createCoach = async (
-  body: Partial<User>
-): Promise<User[] | KnexError> => {
+  body: RegisterCoach
+): Promise<Coach[] | KnexError> => {
   try {
-    const {
+    let errors = null;
+    const { first_name, last_name, email, password } = body;
+    const lowercaseEmail = email.toLowerCase();
+
+    const hashPassword = await bcrypt.hash(password, 10);
+    const coach: Partial<Coach> = {
       first_name,
       last_name,
-      bio,
-      photo_url,
-      booking_url,
-      linkedin_url,
-      location,
-    } = body;
-    const coach: Partial<User> = {
-      first_name,
-      last_name,
-      bio,
-      photo_url,
-      booking_url,
-      linkedin_url,
-      location,
+      email: lowercaseEmail,
+      password: hashPassword,
+      role: 'coach',
     };
 
-    const newCoach: User[] | KnexError = await db("users")
+    const newCoach: Coach[] = await db("users")
       .insert(coach)
       .returning("*")
       .catch((err: Error) => {
         if (err) {
-          return { message: "Coach name is already being used" };
+          console.log(err);
+          errors = { message: "There was an error registering your Coach account. Please try again." };
+          return [];
         } else {
-          throw new Error("Unable to create new Coach");
+          throw new Error("Unable to create new User");
         }
       });
 
-    return newCoach;
+    if (errors) {
+      return errors;
+    } else {
+
+      mixpanelEvent("New Coach Registered", {
+        distinct_id: newCoach[0].id,
+        "Coach ID": newCoach[0].id,
+        "Coach First Name": newCoach[0].first_name,
+        "Coach Last Name": newCoach[0].last_name,
+      });
+
+      emailService.send(EmailTemplate.WELCOME, newCoach[0].email, {
+        first_name: newCoach[0].first_name,
+      });
+
+      return newCoach;
+    }
   } catch (error) {
-    throw new Error("Unable to create new Coach");
+    throw new Error("Unable to register new Coach");
   }
 };
 

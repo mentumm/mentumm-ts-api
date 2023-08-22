@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { User } from "../models/users.model";
 import {
   createCoach,
   createCoachRating,
@@ -7,6 +6,7 @@ import {
   getCoaches,
   updateCoach,
 } from "../services/coaches.service";
+import { RegisterCoach } from "../models/coaches.model";
 
 export const coaches = async (req: Request, res: Response) => {
   const { id, limit, search } = req.query;
@@ -29,7 +29,7 @@ export const newCoach = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const body: Partial<User> = req.body;
+  const body: RegisterCoach = req.body;
 
   try {
     const coach = await createCoach(body);
