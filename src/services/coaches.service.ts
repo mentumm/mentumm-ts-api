@@ -67,7 +67,8 @@ export const createCoach = async (
       .returning("*")
       .catch((err: Error) => {
         if (err) {
-          errors = { message: "There was an error registering your Coach account. Please try again." };
+          console.log(err);
+          errors = { message: "User email address is already being used" };
           return [];
         } else {
           throw new Error("Unable to create new User");
