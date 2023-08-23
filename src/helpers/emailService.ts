@@ -32,6 +32,7 @@ class Email {
 
 export enum EmailTemplate {
   WELCOME = "d-3a0e8c10a97a40e0b3e6940d38b060f4",
+  COACH_WELCOME = "d-94fc6a9f20ef493faee21544b64283ad",
   PASSWORD_RESET = "d-c0bc253d671849a58c84395f44659aea",
   PASSWORD_CHANGED = "d-4392fa991e1f44a583dd0b9cfb101615",
 }

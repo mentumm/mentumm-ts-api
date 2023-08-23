@@ -86,7 +86,7 @@ export const createCoach = async (
         "Coach Last Name": newCoach[0].last_name,
       });
 
-      emailService.send(EmailTemplate.WELCOME, newCoach[0].email, {
+      emailService.send(EmailTemplate.COACH_WELCOME, newCoach[0].email, {
         first_name: newCoach[0].first_name,
       });
 
