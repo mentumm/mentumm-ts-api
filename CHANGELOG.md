@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.10.0...v1.10.1) (2023-08-30)
+
+
+### Bug Fixes
+
+* **node:** adjusted node version in package.json to comply with Render ([#119](https://github.com/mentumm/mentumm-ts-api/issues/119)) ([67dadb9](https://github.com/mentumm/mentumm-ts-api/commit/67dadb9e75f83293f018d7bb74e6ff827a4b3d7d))
+
 # [1.10.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.9.1...v1.10.0) (2023-08-30)
 
 
