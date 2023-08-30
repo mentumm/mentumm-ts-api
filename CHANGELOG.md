@@ -1,3 +1,15 @@
+# [1.10.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.9.1...v1.10.0) (2023-08-30)
+
+
+### Bug Fixes
+
+* **search:** query builder order of operations for coach search; MEN-182 ([#116](https://github.com/mentumm/mentumm-ts-api/issues/116)) ([201a5e9](https://github.com/mentumm/mentumm-ts-api/commit/201a5e91f29e28412fb8c123fdfc8ae05fac094e))
+
+
+### Features
+
+* **coach:** coach registration; Men-184 ([#117](https://github.com/mentumm/mentumm-ts-api/issues/117)) ([265da9b](https://github.com/mentumm/mentumm-ts-api/commit/265da9b99eaa2a759ec35c40f06e609e46288613))
+
 ## [1.9.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.9.0...v1.9.1) (2023-08-11)
 
 
