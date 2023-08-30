@@ -109,4 +109,25 @@ coachesRouter.post(
   async (req: Request, res: Response) => await addCoachRating(req, res)
 );
 
+coachesRouter.post(
+  "/coach/register",
+  cors(publicCorsConfig),
+  // passport.authenticate("jwt", {
+  //   session: false,
+  // }),
+  routeValidation(
+    Joi.object({
+      first_name: Joi.string().required(),
+      last_name: Joi.string().required(),
+      email: Joi.string().required(),
+      password: Joi.string().required(),
+      invite_code: Joi.string().required(),
+    }),
+    "body"
+  ),
+  async (req: Request, res: Response) => {
+    return await newCoach(req, res)
+  }
+);
+
 export default coachesRouter;

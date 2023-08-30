@@ -1,6 +1,9 @@
 export interface Coach {
   id: string | number;
-  name: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
   bio: string | null;
   photo_url: string | null;
   booking_link: string;
@@ -9,15 +12,15 @@ export interface Coach {
   created_at: Date;
   updated_at: Date;
   deleted_at?: Date | null;
+  role?: string;
 }
 
-export interface CreateCoach {
-  name: string;
-  bio?: string | null;
-  photo_url?: string | null;
-  booking_link: string;
-  linkedin_url?: string | null;
-  location?: string | null;
+export interface RegisterCoach {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  invite_code: string;
 }
 
 export interface UpdateCoach {
