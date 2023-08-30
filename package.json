@@ -12,7 +12,7 @@
     "db:rollback": "yarn knex migrate:rollback src/database/knexfile.ts"
   },
   "engines": {
-    "node": ">=16.14.2"
+    "node": ">=18.0.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.1",
