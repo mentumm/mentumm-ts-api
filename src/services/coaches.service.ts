@@ -13,26 +13,19 @@ export const getCoaches = async (
   limit: number,
   search?: string
 ): Promise<Coach[] | KnexError> => {
+  const searchCondition = (qb: Knex.QueryBuilder) =>
+    qb.whereRaw(`users.first_name ILIKE '%${search}%'`)
+      .orWhereRaw(`users.last_name ILIKE '%${search}%'`);
+
   const coaches = await db("users")
-    .select(
-      "users.*",
-      db.raw(
-        "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'expertise'), '[]') as expertise"
-      ),
-      db.raw(
-        "COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'style'), '[]') as styles"
-      )
+    .select("users.*",
+      db.raw("COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'expertise'), '[]') as expertise"),
+      db.raw("COALESCE(JSON_AGG(DISTINCT tags.*) FILTER (WHERE tags.id IS NOT NULL AND tags.kind = 'style'), '[]') as styles")
     )
-    .modify((qb: Knex.QueryBuilder) => {
-      if (id) {
-        qb.where("users.id", id);
-      }
-      if (search) {
-        qb.whereRaw(`users.first_name ILIKE '%${search}%'`);
-        qb.orWhereRaw(`users.last_name ILIKE '%${search}%'`);
-        qb.andWhere({ is_test: false });
-        qb.orderBy("users.first_name");
-      }
+    .modify(qb => {
+      if (id) qb.where("users.id", id);
+      if (search) qb.where(searchCondition);
+      qb.andWhere('users.is_test', false);
     })
     .having("users.role", "=", "coach")
     .leftJoin("user_tag", "users.id", "user_tag.user_id")
