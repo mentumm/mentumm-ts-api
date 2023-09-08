@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/mentumm/mentumm-ts-api/compare/v1.10.1...v1.10.2) (2023-09-08)
+
+
+### Bug Fixes
+
+* **search:** ensure no coach test accounts appear on search; MEN-199 ([#121](https://github.com/mentumm/mentumm-ts-api/issues/121)) ([9939352](https://github.com/mentumm/mentumm-ts-api/commit/99393528defe6dc140f4f0f362aa80bdf77d7cbe))
+
 ## [1.10.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.10.0...v1.10.1) (2023-08-30)
 
 
