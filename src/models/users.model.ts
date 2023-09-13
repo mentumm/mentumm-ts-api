@@ -28,6 +28,7 @@ export interface User {
   website_url?: string;
   achievements: string;
   hobbies: string;
+  is_test?: boolean;
 }
 
 type UserPrivateFields =
@@ -54,6 +55,7 @@ export interface CreateUser {
   employer_id: number;
   password?: string;
   role: "coach" | "user";
+  is_test?: boolean;
 }
 
 export interface RegisterUser {

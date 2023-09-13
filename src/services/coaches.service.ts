@@ -41,7 +41,7 @@ export const getCoaches = async (
 export const createCoach = async (
   body: RegisterCoach
 ): Promise<Coach[] | KnexError> => {
-  const { first_name, last_name, email, password } = body;
+  const { first_name, last_name, email, password, is_test } = body;
   try {
     let errors = null;
     const lowercaseEmail = email.toLowerCase();
@@ -53,6 +53,7 @@ export const createCoach = async (
       email: lowercaseEmail,
       password: hashPassword,
       role: 'coach',
+      is_test: is_test || false,
     };
 
     const newCoach: Coach[] = await db("users")
@@ -103,6 +104,7 @@ export const updateCoach = async (
       booking_url,
       linkedin_url,
       location,
+      is_test,
     } = body;
 
     const update: User[] | KnexError = await db("users")
@@ -116,6 +118,7 @@ export const updateCoach = async (
         linkedin_url,
         location,
         updated_at: moment().toISOString(),
+        is_test: is_test || false,
       })
       .returning("*")
       .catch((err: Error) => {

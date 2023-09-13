@@ -13,6 +13,7 @@ export interface Coach {
   updated_at: Date;
   deleted_at?: Date | null;
   role?: string;
+  is_test?: boolean;
 }
 
 export interface RegisterCoach {
@@ -21,6 +22,7 @@ export interface RegisterCoach {
   email: string;
   password: string;
   invite_code: string;
+  is_test?: boolean;
 }
 
 export interface UpdateCoach {
