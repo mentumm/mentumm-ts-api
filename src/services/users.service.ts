@@ -113,7 +113,6 @@ export const createUser = async (
 export const createBooking = async (
   body: CoachBooking
 ): Promise<CoachBooking[] | KnexError> => {
-  console.log({ body });
   try {
     const {
       user_id,
@@ -139,13 +138,11 @@ export const createBooking = async (
       event_type_name,
       event_type_uuid,
     };
-    console.log({ coachBooking });
 
     const booking: CoachBooking[] = await db("user_coaches")
       .insert(coachBooking)
       .returning("*")
       .catch((err: Error) => {
-        console.log({ err });
         throw new Error(`Unable to create new User: ${err.message}`);
       });
 
