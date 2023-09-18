@@ -56,7 +56,7 @@ export const createUser = async (
   body: CreateUser
 ): Promise<User[] | KnexError> => {
   try {
-    const { first_name, last_name, email, employer_id, password } = body;
+    const { first_name, last_name, email, employer_id, password, is_test } = body;
     const lowercaseEmail = email.toLowerCase();
 
     if (password) {
@@ -68,6 +68,7 @@ export const createUser = async (
         employer_id,
         password: hashPassword,
         role: "user",
+        is_test: is_test || false,
       };
 
       const newUser: User[] | { message: string } = await db("users")
@@ -90,6 +91,7 @@ export const createUser = async (
         email: lowercaseEmail,
         employer_id,
         role: "user",
+        is_test: is_test || false,
       };
 
       const newUser: User[] | { message: string } = await db("users")
