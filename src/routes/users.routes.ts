@@ -107,6 +107,7 @@ usersRouter.post(
       email: Joi.string().required(),
       employer_id: Joi.string().required(),
       password: Joi.string().required(),
+      is_test: Joi.bool(),
     }),
     "body"
   ),
@@ -173,6 +174,7 @@ usersRouter.put(
       website_url: Joi.string().allow(""),
       achievements: Joi.string(),
       hobbies: Joi.string(),
+      is_test: Joi.bool(),
     }),
     "body"
   ),
