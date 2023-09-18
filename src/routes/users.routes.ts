@@ -107,6 +107,7 @@ usersRouter.post(
       email: Joi.string().required(),
       employer_id: Joi.string().required(),
       password: Joi.string().required(),
+      is_test: Joi.bool(),
     }),
     "body"
   ),
