@@ -43,6 +43,7 @@ coachesRouter.post(
       first_name: Joi.string().required(),
       last_name: Joi.string().required(),
       booking_url: Joi.string().required(),
+      is_test: Joi.bool(),
     }),
     "body"
   ),
