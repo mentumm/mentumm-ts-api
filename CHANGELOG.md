@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.10.2...v1.11.0) (2023-09-18)
+
+
+### Features
+
+* **coach/user:** modify create+update for coach+user for retool upgrade; MEN-205 ([#123](https://github.com/mentumm/mentumm-ts-api/issues/123)) ([83b15d0](https://github.com/mentumm/mentumm-ts-api/commit/83b15d00e0f3d7e3a6984e18b62520333d898df2))
+
 ## [1.10.2](https://github.com/mentumm/mentumm-ts-api/compare/v1.10.1...v1.10.2) (2023-09-08)
 
 
