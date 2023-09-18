@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.11.0...v1.11.1) (2023-09-18)
+
+
+### Bug Fixes
+
+* **Users/Coaches:** added route validation for test accounts; MEN-209 ([#126](https://github.com/mentumm/mentumm-ts-api/issues/126)) ([88b343b](https://github.com/mentumm/mentumm-ts-api/commit/88b343bff5d6cc428ce0a67a20d2529792ef8bf2))
+
 # [1.11.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.10.2...v1.11.0) (2023-09-18)
 
 
