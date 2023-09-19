@@ -148,25 +148,6 @@ export const createBooking = async (
         throw new Error(`Unable to create new User: ${err.message}`);
       });
 
-    const coach: User[] = await db("users").where({
-      id: booking[0].coach_id,
-      role: "coach",
-    });
-
-    mixpanelEvent("Coach Booked", {
-      distinct_id: booking[0].user_id,
-      "User ID": booking[0].user_id,
-      "Coach ID": booking[0].coach_id,
-      "Coach Name": `${coach[0].first_name} ${coach[0].last_name}`,
-      "Booking Email": booking[0].invitee_email,
-      Name: booking[0].invitee_full_name,
-      "Invitee UUID": booking[0].invitee_uuid,
-      "Event End Time": booking[0].event_end_time,
-      "Event Start Time": booking[0].event_start_time,
-      "Event Type Name": booking[0].event_type_name,
-      "Event Type UUID": booking[0].event_type_uuid,
-    });
-
     return booking;
   } catch (error) {
     throw new Error("Unable to create new User");

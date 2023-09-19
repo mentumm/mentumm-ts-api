@@ -124,6 +124,7 @@ coachesRouter.post(
       email: Joi.string().required(),
       password: Joi.string().required(),
       invite_code: Joi.string().required(),
+      is_test: Joi.bool(),
     }),
     "body"
   ),
