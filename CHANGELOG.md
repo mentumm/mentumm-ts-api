@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.11.1...v1.12.0) (2023-09-19)
+
+
+### Features
+
+* **booking:** remove dupe event ([#124](https://github.com/mentumm/mentumm-ts-api/issues/124)) ([d646a65](https://github.com/mentumm/mentumm-ts-api/commit/d646a654b4ed9cfcbc5d8abe901222831a11f09b))
+
 ## [1.11.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.11.0...v1.11.1) (2023-09-18)
 
 
