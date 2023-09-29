@@ -1,3 +1,122 @@
+## [1.12.3](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.2...v1.12.3) (2023-09-29)
+
+
+### Bug Fixes
+
+* **release token:** updated token with hopefully the correct permissions ([#136](https://github.com/mentumm/mentumm-ts-api/issues/136)) ([d872062](https://github.com/mentumm/mentumm-ts-api/commit/d8720627cf05acefa9df5e0f1c6352dd4a3c6638))
+
+## [1.12.2](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.1...v1.12.2) (2023-09-29)
+
+
+### Bug Fixes
+
+* **release:** modified release file again for most up to date versions ([#134](https://github.com/mentumm/mentumm-ts-api/issues/134)) ([c255c7f](https://github.com/mentumm/mentumm-ts-api/commit/c255c7f974da56717898bd9a762da8ae3823b4de))
+
+## [1.12.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.0...v1.12.1) (2023-09-29)
+
+
+### Bug Fixes
+
+* **release:** typo, [#132](https://github.com/mentumm/mentumm-ts-api/issues/132) ([d19d993](https://github.com/mentumm/mentumm-ts-api/commit/d19d993f32aa7082b437f23172d3d8b909403ce9))
+* **release:** updated release file to properly back merge from main to develop ([03e6233](https://github.com/mentumm/mentumm-ts-api/commit/03e6233c2f8d4907e142ba6d311c9b5a54f0bf3e))
+
+# [1.12.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.11.1...v1.12.0) (2023-09-19)
+
+
+### Features
+
+* **booking:** remove dupe event ([#124](https://github.com/mentumm/mentumm-ts-api/issues/124)) ([d646a65](https://github.com/mentumm/mentumm-ts-api/commit/d646a654b4ed9cfcbc5d8abe901222831a11f09b))
+
+## [1.11.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.11.0...v1.11.1) (2023-09-18)
+
+
+### Bug Fixes
+
+* **Users/Coaches:** added route validation for test accounts; MEN-209 ([#126](https://github.com/mentumm/mentumm-ts-api/issues/126)) ([88b343b](https://github.com/mentumm/mentumm-ts-api/commit/88b343bff5d6cc428ce0a67a20d2529792ef8bf2))
+
+# [1.11.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.10.2...v1.11.0) (2023-09-18)
+
+
+### Features
+
+* **coach/user:** modify create+update for coach+user for retool upgrade; MEN-205 ([#123](https://github.com/mentumm/mentumm-ts-api/issues/123)) ([83b15d0](https://github.com/mentumm/mentumm-ts-api/commit/83b15d00e0f3d7e3a6984e18b62520333d898df2))
+
+## [1.10.2](https://github.com/mentumm/mentumm-ts-api/compare/v1.10.1...v1.10.2) (2023-09-08)
+
+
+### Bug Fixes
+
+* **search:** ensure no coach test accounts appear on search; MEN-199 ([#121](https://github.com/mentumm/mentumm-ts-api/issues/121)) ([9939352](https://github.com/mentumm/mentumm-ts-api/commit/99393528defe6dc140f4f0f362aa80bdf77d7cbe))
+
+## [1.10.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.10.0...v1.10.1) (2023-08-30)
+
+
+### Bug Fixes
+
+* **node:** adjusted node version in package.json to comply with Render ([#119](https://github.com/mentumm/mentumm-ts-api/issues/119)) ([67dadb9](https://github.com/mentumm/mentumm-ts-api/commit/67dadb9e75f83293f018d7bb74e6ff827a4b3d7d))
+
+# [1.10.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.9.1...v1.10.0) (2023-08-30)
+
+
+### Bug Fixes
+
+* **search:** query builder order of operations for coach search; MEN-182 ([#116](https://github.com/mentumm/mentumm-ts-api/issues/116)) ([201a5e9](https://github.com/mentumm/mentumm-ts-api/commit/201a5e91f29e28412fb8c123fdfc8ae05fac094e))
+
+
+### Features
+
+* **coach:** coach registration; Men-184 ([#117](https://github.com/mentumm/mentumm-ts-api/issues/117)) ([265da9b](https://github.com/mentumm/mentumm-ts-api/commit/265da9b99eaa2a759ec35c40f06e609e46288613))
+
+## [1.9.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.9.0...v1.9.1) (2023-08-11)
+
+
+### Bug Fixes
+
+* **database:** remove empty strings achievements hobbies; MEN-179 ([#111](https://github.com/mentumm/mentumm-ts-api/issues/111)) ([8f30df2](https://github.com/mentumm/mentumm-ts-api/commit/8f30df2550216a9edfbcc1b2dd71146feba78af8))
+
+# [1.9.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.8.0...v1.9.0) (2023-08-07)
+
+
+### Features
+
+* **user:** created migration to split location data to city, state; MEN-169 ([b0925a0](https://github.com/mentumm/mentumm-ts-api/commit/b0925a0443118d4b428d7f125b6e46e6b3206088))
+* **users:** add is_test column to users table to hide test accounts; MEN-165 ([664c978](https://github.com/mentumm/mentumm-ts-api/commit/664c978768770da03363d37aeba5700e2e62edd6))
+
+# [1.8.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.7.0...v1.8.0) (2023-07-12)
+
+
+### Bug Fixes
+
+* **reset-password:** Allow reset password links to work on staging ([0b7c706](https://github.com/mentumm/mentumm-ts-api/commit/0b7c70644b5ca187bcb0784b504096397c6fb796))
+* **user-service:** Allow emails in staging to point to correct render url ([6d45073](https://github.com/mentumm/mentumm-ts-api/commit/6d4507393bf286e9784bbfd1e69b585bc8dc7316))
+
+
+### Features
+
+* **profile:** edit and save password, men-71 ([#102](https://github.com/mentumm/mentumm-ts-api/issues/102)) ([2052dbb](https://github.com/mentumm/mentumm-ts-api/commit/2052dbb4f26a7d30d0928f2de5e384698b1c35c1))
+* **users:** [MEN-36] Implement Forgot Password & New User Emails ([#105](https://github.com/mentumm/mentumm-ts-api/issues/105)) ([ff768e0](https://github.com/mentumm/mentumm-ts-api/commit/ff768e053d759bb0031a8284d931f5c70913ca5a))
+
+# [1.7.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.6.0...v1.7.0) (2023-05-23)
+
+
+### Features
+
+* **coaches:** migration and new fields for coach edit, men-54 ([#98](https://github.com/mentumm/mentumm-ts-api/issues/98)) ([f701f99](https://github.com/mentumm/mentumm-ts-api/commit/f701f99727ab239ca2cfbc9baadd7f9932928763))
+
+# [1.6.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.5.0...v1.6.0) (2023-05-12)
+
+
+### Features
+
+* **be:** [MEN-127] New Workshops Page ([9d9b0ef](https://github.com/mentumm/mentumm-ts-api/commit/9d9b0ef1953bc133002177fdd56506996890dc79))
+
+# [1.5.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.4.3...v1.5.0) (2023-05-10)
+
+
+### Features
+
+* **tags:** Consolidate Style Types into Tags ([ce728aa](https://github.com/mentumm/mentumm-ts-api/commit/ce728aa43f202f9c70c29e9d37df1fffadecf041))
+
 ## [1.4.3](https://github.com/mentumm/mentumm-ts-api/compare/v1.4.2...v1.4.3) (2023-04-11)
 
 
