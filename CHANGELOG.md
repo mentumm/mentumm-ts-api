@@ -1,3 +1,10 @@
+## [1.12.3](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.2...v1.12.3) (2023-09-29)
+
+
+### Bug Fixes
+
+* **release token:** updated token with hopefully the correct permissions ([#136](https://github.com/mentumm/mentumm-ts-api/issues/136)) ([d872062](https://github.com/mentumm/mentumm-ts-api/commit/d8720627cf05acefa9df5e0f1c6352dd4a3c6638))
+
 ## [1.12.2](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.1...v1.12.2) (2023-09-29)
 
 
