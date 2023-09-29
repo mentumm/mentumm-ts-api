@@ -1,3 +1,11 @@
+## [1.12.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.0...v1.12.1) (2023-09-29)
+
+
+### Bug Fixes
+
+* **release:** typo, [#132](https://github.com/mentumm/mentumm-ts-api/issues/132) ([d19d993](https://github.com/mentumm/mentumm-ts-api/commit/d19d993f32aa7082b437f23172d3d8b909403ce9))
+* **release:** updated release file to properly back merge from main to develop ([03e6233](https://github.com/mentumm/mentumm-ts-api/commit/03e6233c2f8d4907e142ba6d311c9b5a54f0bf3e))
+
 # [1.12.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.11.1...v1.12.0) (2023-09-19)
 
 
