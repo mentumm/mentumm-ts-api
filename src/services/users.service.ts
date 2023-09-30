@@ -22,23 +22,25 @@ export const getUsers = async (
   name: string,
   email: string,
   employer_id: number,
-  limit: number
+  limit = 100
 ): Promise<User[] | KnexError> => {
   const user = await db("users")
     .whereNull("deleted_at")
     .where((builder: Knex.QueryBuilder) => {
       if (id) {
         builder.where({ id: id });
-      } else if (name) {
-        builder.where({ name: name });
-      } else if (email) {
+      }
+      if (name) {
+        builder.where("first_name", "ilike", `%${name}%`);
+      }
+      if (email) {
         builder.where({ email: email.toLowerCase() });
-      } else if (employer_id) {
+      }
+      if (employer_id) {
         builder.where({ employer_id: employer_id });
-      } else {
-        builder.select("*").limit(limit);
       }
     })
+    .limit(limit)
     .returning("*");
 
   const mappedUsers = user.map((user: User) => {
@@ -56,7 +58,8 @@ export const createUser = async (
   body: CreateUser
 ): Promise<User[] | KnexError> => {
   try {
-    const { first_name, last_name, email, employer_id, password, is_test } = body;
+    const { first_name, last_name, email, employer_id, password, is_test } =
+      body;
     const lowercaseEmail = email.toLowerCase();
 
     if (password) {
