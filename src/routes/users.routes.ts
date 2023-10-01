@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import {
   bookCoach,
   deactivateUser,
@@ -37,7 +37,13 @@ usersRouter.get(
     }),
     "query"
   ),
-  async (req: Request, res: Response) => await users(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await users(req, res);
+    } catch (error) {
+      next(error)
+    }
+  }
 );
 
 usersRouter.get(
@@ -52,7 +58,13 @@ usersRouter.get(
     }),
     "query"
   ),
-  async (req: Request, res: Response) => await upcoming(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await upcoming(req, res);
+    } catch (error) {
+      next(error)
+    }
+  }
 );
 
 usersRouter.get(
@@ -67,7 +79,13 @@ usersRouter.get(
     }),
     "query"
   ),
-  async (req: Request, res: Response) => await past(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await past(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 usersRouter.post(
@@ -90,7 +108,13 @@ usersRouter.post(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await bookCoach(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await bookCoach(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 // this route is only used from ReTool
@@ -111,7 +135,13 @@ usersRouter.post(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await newUser(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await newUser(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 usersRouter.post(
@@ -131,7 +161,13 @@ usersRouter.post(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await registerNewUser(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await registerNewUser(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 usersRouter.delete(
@@ -146,7 +182,13 @@ usersRouter.delete(
     }),
     "query"
   ),
-  async (req: Request, res: Response) => await deactivateUser(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await deactivateUser(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 usersRouter.put(
@@ -178,7 +220,13 @@ usersRouter.put(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await updateUserInfo(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await updateUserInfo(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 usersRouter.post(
@@ -203,7 +251,13 @@ usersRouter.post(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await forgotPassword(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await forgotPassword(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 usersRouter.post(
@@ -216,7 +270,24 @@ usersRouter.post(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await resetPassword(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await resetPassword(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
+
+usersRouter.use((err: any, req: Request, res: Response, next: NextFunction): void => {
+  console.error(err.stack);
+
+  res.status(err.status || 500).send({
+    error: {
+      message: err.message || 'An error occured when hitting this route',
+      data: err.data || {}
+    }
+  });
+});
 
 export default usersRouter;
