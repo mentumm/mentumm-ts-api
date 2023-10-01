@@ -1,3 +1,10 @@
+## [1.12.5](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.4...v1.12.5) (2023-10-01)
+
+
+### Bug Fixes
+
+* **tsconfig/knex:** fixing broken knexfile imports, tsconfig ([#142](https://github.com/mentumm/mentumm-ts-api/issues/142)) ([9a85e4b](https://github.com/mentumm/mentumm-ts-api/commit/9a85e4bf0506f406959674be1eb82ddc38ef0dc8))
+
 ## [1.12.4](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.3...v1.12.4) (2023-10-01)
 
 
