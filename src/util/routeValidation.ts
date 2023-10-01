@@ -5,6 +5,7 @@ export const routeValidation = (
   return (req: any, res: any, next: any) => {
     const { error } = schema.validate(req[property]);
     if (error) {
+      console.error(error);
       return res.status(500).send(error.message);
     }
     next();
