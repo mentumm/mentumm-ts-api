@@ -22,7 +22,7 @@ export const getUsers = async (
   name: string,
   email: string,
   employer_id: number,
-  limit = 100
+  limit: number,
 ): Promise<User[] | KnexError> => {
   const user = await db("users")
     .whereNull("deleted_at")
