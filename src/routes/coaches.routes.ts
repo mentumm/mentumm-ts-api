@@ -160,7 +160,7 @@ coachesRouter.post(
   ),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await newCoach(req, res)
+      await newCoach(req, res);
     } catch (error) {
       next(error);
     }

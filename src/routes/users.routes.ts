@@ -60,7 +60,7 @@ usersRouter.get(
   ),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await upcoming(req, res)
+      await upcoming(req, res);
     } catch (error) {
       next(error)
     }
@@ -81,7 +81,7 @@ usersRouter.get(
   ),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await past(req, res)
+      await past(req, res);
     } catch (error) {
       next(error);
     }
@@ -137,7 +137,7 @@ usersRouter.post(
   ),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await newUser(req, res)
+      await newUser(req, res);
     } catch (error) {
       next(error);
     }
@@ -163,7 +163,7 @@ usersRouter.post(
   ),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await registerNewUser(req, res)
+      await registerNewUser(req, res);
     } catch (error) {
       next(error);
     }
@@ -184,7 +184,7 @@ usersRouter.delete(
   ),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await deactivateUser(req, res)
+      await deactivateUser(req, res);
     } catch (error) {
       next(error);
     }
@@ -222,7 +222,7 @@ usersRouter.put(
   ),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await updateUserInfo(req, res)
+      await updateUserInfo(req, res);
     } catch (error) {
       next(error);
     }
