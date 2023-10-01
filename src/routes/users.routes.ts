@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import express, { Request, Response, NextFunction } from "express";
 import {
   bookCoach,
@@ -279,6 +280,7 @@ usersRouter.post(
   }
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 usersRouter.use((err: any, req: Request, res: Response, next: NextFunction): void => {
   console.error(err.stack);
 
