@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import * as Joi from "joi";
 import passport from "passport";
@@ -29,7 +29,13 @@ coachesRouter.get(
     }),
     "query"
   ),
-  async (req: Request, res: Response) => await coaches(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await coaches(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 coachesRouter.post(
@@ -47,7 +53,13 @@ coachesRouter.post(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await newCoach(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await newCoach(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 coachesRouter.delete(
@@ -62,7 +74,13 @@ coachesRouter.delete(
     }),
     "query"
   ),
-  async (req: Request, res: Response) => await deactivateCoach(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await deactivateCoach(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 coachesRouter.put(
@@ -85,7 +103,13 @@ coachesRouter.put(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await updateCoachInfo(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await updateCoachInfo(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 coachesRouter.post(
@@ -108,7 +132,13 @@ coachesRouter.post(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => await addCoachRating(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await addCoachRating(req, res);
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 coachesRouter.post(
@@ -128,9 +158,24 @@ coachesRouter.post(
     }),
     "body"
   ),
-  async (req: Request, res: Response) => {
-    return await newCoach(req, res)
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await newCoach(req, res);
+    } catch (error) {
+      next(error);
+    }
   }
 );
+
+coachesRouter.use((err: any, req: Request, res: Response, next: NextFunction): void => {
+  console.error(err.stack);
+
+  res.status(err.status || 500).send({
+    error: {
+      message: err.message || 'An error occured when hitting this route',
+      data: err.data || {}
+    }
+  });
+});
 
 export default coachesRouter;
