@@ -28,6 +28,7 @@ export const users = async (req: Request, res: Response) => {
 
     return res.json(user);
   } catch (error) {
+    console.error(error);
     return res.status(500).send(error);
   }
 };
