@@ -1,6 +1,6 @@
-// was unable to read .env since this was nested ?_?, unsure why that is
-const path = require("path");
-require("dotenv").config({ path: path.resolve(__dirname, "../../.env") });
+import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 import { Knex } from "knex";
 

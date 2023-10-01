@@ -167,6 +167,7 @@ coachesRouter.post(
   }
 );
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
 coachesRouter.use((err: any, req: Request, res: Response, next: NextFunction): void => {
   console.error(err.stack);
 
