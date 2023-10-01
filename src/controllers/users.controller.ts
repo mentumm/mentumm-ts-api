@@ -23,7 +23,7 @@ export const users = async (req: Request, res: Response) => {
       name as string,
       email as string,
       Number(employer_id),
-      Number(limit)
+      limit ? Number(limit) : 100
     );
 
     return res.json(user);
