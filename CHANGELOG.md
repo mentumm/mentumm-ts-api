@@ -1,3 +1,10 @@
+## [1.12.4](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.3...v1.12.4) (2023-10-01)
+
+
+### Bug Fixes
+
+* **coaches/users:** Add error handling for users and coaches route ([#140](https://github.com/mentumm/mentumm-ts-api/issues/140)) ([d113f71](https://github.com/mentumm/mentumm-ts-api/commit/d113f710153f330bbb00a58bebb2c929be44c399))
+
 ## [1.12.3](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.2...v1.12.3) (2023-09-29)
 
 
