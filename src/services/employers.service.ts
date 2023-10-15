@@ -40,13 +40,17 @@ export const getEmployers = async (
 
 export const getEmployerByInvite = async (
   invitation_code: string
-): Promise<Employer> => {
+): Promise<Employer | null> => {
+
   const employer = await db("employers")
     .whereNull("deleted_at")
-    .where({ invitation_code: invitation_code })
+    .andWhere(builder => {
+      builder.where({ invitation_code: invitation_code })
+        .orWhere({ client_admin_invitation_code: invitation_code });
+    })
     .returning("*");
 
-  return employer[0];
+  return employer.length > 0 ? employer[0] : null;
 };
 
 export const createEmployer = async (
