@@ -40,7 +40,7 @@ export const getEmployers = async (
 
 export const getEmployerByInvite = async (
   invitation_code: string
-): Promise<Employer | null> => {
+): Promise<Employer> => {
 
   const employer = await db("employers")
     .whereNull("deleted_at")
@@ -50,7 +50,7 @@ export const getEmployerByInvite = async (
     })
     .returning("*");
 
-  return employer.length > 0 ? employer[0] : null;
+  return employer[0];
 };
 
 export const createEmployer = async (
