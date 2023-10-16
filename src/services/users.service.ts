@@ -165,14 +165,10 @@ export const registerUser = async (
     const { first_name, last_name, email, password, invite_code } = body;
     const lowercaseEmail = email.toLowerCase();
 
-    const employer: Employer = await getEmployerByInvite(invite_code);
+    const { employer, role } = await getEmployerByInvite(invite_code);
 
     if (!employer) {
       return { message: "Invitation Code not found!" };
-    }
-
-    if (employer.invitation_code !== invite_code) {
-      return { message: "Invalid Invite Code!" };
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -182,7 +178,7 @@ export const registerUser = async (
       email: lowercaseEmail,
       employer_id: Number(employer.id),
       password: hashPassword,
-      role: "user",
+      role,
     };
 
     const newUser: User[] = await db("users")

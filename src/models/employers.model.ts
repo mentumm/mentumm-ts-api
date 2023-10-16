@@ -3,6 +3,7 @@ export interface Employer {
   name: string;
   max_employees: number;
   invitation_code: string;
+  client_admin_invitation_code?: string;
   created_at: Date;
   updated_at?: Date;
   deleted_at?: Date | null;
@@ -12,6 +13,7 @@ export interface CreateEmployer {
   name: string;
   max_employees: number;
   invitation_code: string;
+  client_admin_invitation_code?: string;
 }
 
 export interface UpdateEmployer {

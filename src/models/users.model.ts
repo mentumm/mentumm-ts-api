@@ -54,7 +54,7 @@ export interface CreateUser {
   email: string;
   employer_id: number;
   password?: string;
-  role: "coach" | "user" | "admin"
+  role: "coach" | "user" | "client_admin"
   is_test?: boolean;
 }
 
