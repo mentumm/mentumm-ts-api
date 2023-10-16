@@ -161,13 +161,12 @@ export const registerUser = async (
   body: RegisterUser
 ): Promise<User[] | KnexError> => {
   try {
-    let errors = null;
     const { first_name, last_name, email, password, invite_code } = body;
     const lowercaseEmail = email.toLowerCase();
 
-    const { employer, role } = await getEmployerByInvite(invite_code);
+    const { employer: employerData, role } = await getEmployerByInvite(invite_code);
 
-    if (!employer) {
+    if (!employerData) {
       return { message: "Invitation Code not found!" };
     }
 
@@ -176,46 +175,38 @@ export const registerUser = async (
       first_name,
       last_name,
       email: lowercaseEmail,
-      employer_id: Number(employer.id),
+      employer_id: Number(employerData.id),
       password: hashPassword,
       role,
     };
 
-    const newUser: User[] = await db("users")
+    const [newUser]: User[] = await db("users")
       .insert(user)
-      .returning("*")
-      .catch((err: Error) => {
-        if (err) {
-          errors = { message: "User email address is already being used" };
-          return [];
-        } else {
-          throw new Error("Unable to create new User");
-        }
-      });
+      .returning("*");
 
-    if (errors) {
-      return errors;
-    } else {
-      const employer: Employer = await db("employers")
-        .where({ id: newUser[0].employer_id })
-        .first();
-
-      mixpanelEvent("New User Registered", {
-        distinct_id: newUser[0].id,
-        "User ID": newUser[0].id,
-        "User First Name": newUser[0].first_name,
-        "User Last Name": newUser[0].last_name,
-        "Employer ID": newUser[0].employer_id,
-        "Employer Name": employer.name,
-      });
-
-      emailService.send(EmailTemplate.WELCOME, newUser[0].email, {
-        first_name: newUser[0].first_name,
-      });
-
-      return newUser;
+    if (!newUser) {
+      throw new Error("Unable to create new User");
     }
-  } catch (error) {
+
+    mixpanelEvent("New User Registered", {
+      distinct_id: newUser.id,
+      "User ID": newUser.id,
+      "User First Name": newUser.first_name,
+      "User Last Name": newUser.last_name,
+      "Employer ID": newUser.employer_id,
+      "Employer Name": employerData.name,
+    });
+
+    emailService.send(EmailTemplate.WELCOME, newUser.email, {
+      first_name: newUser.first_name,
+    });
+
+    return [newUser];
+
+  } catch (error: any) {
+    if (error.message && error.message.includes("duplicate key value")) {
+      return { message: "User email address is already being used" };
+    }
     throw new Error("Unable to register new User");
   }
 };
