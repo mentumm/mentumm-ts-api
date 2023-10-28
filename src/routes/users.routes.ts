@@ -106,6 +106,8 @@ usersRouter.post(
       event_start_time: Joi.date(),
       event_type_name: Joi.string(),
       event_type_uuid: Joi.string(),
+      assignedTo: Joi.string(),
+      inviteeAnswer: Joi.string(),
     }),
     "body"
   ),
