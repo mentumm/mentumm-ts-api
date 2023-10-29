@@ -107,7 +107,7 @@ usersRouter.post(
       event_type_name: Joi.string(),
       event_type_uuid: Joi.string(),
       assignedTo: Joi.string(),
-      inviteeAnswer: Joi.string(),
+      inviteeAnswer: Joi.string().allow(null, undefined, '').optional(),
     }),
     "body"
   ),
