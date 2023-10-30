@@ -1,3 +1,17 @@
+# [1.13.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.6...v1.13.0) (2023-10-30)
+
+
+### Bug Fixes
+
+* **booking:** fixed validation error; MEN-217 ([#148](https://github.com/mentumm/mentumm-ts-api/issues/148)) ([74a6858](https://github.com/mentumm/mentumm-ts-api/commit/74a68583259269613485f5d08fbfe7a97a434b14))
+* **booking:** test fix; MEN-217 ([#147](https://github.com/mentumm/mentumm-ts-api/issues/147)) ([a2a4228](https://github.com/mentumm/mentumm-ts-api/commit/a2a4228e4a637ace7c2d90497441ae2211fe57ec))
+* **booking:** validation fix; MEN-217 ([#149](https://github.com/mentumm/mentumm-ts-api/issues/149)) ([2e6bb4b](https://github.com/mentumm/mentumm-ts-api/commit/2e6bb4b6263757cf0f81ee7dccfde885daed8766))
+
+
+### Features
+
+* **booking-confirmation:** move mixpanel event from FE to BE; MEN-217 ([#146](https://github.com/mentumm/mentumm-ts-api/issues/146)) ([715e9bf](https://github.com/mentumm/mentumm-ts-api/commit/715e9bfabd842d91fd143986375789ba7d792303))
+
 ## [1.12.6](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.5...v1.12.6) (2023-10-01)
 
 
