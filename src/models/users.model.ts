@@ -97,4 +97,6 @@ export interface CoachBooking {
   invitee_uuid?: string;
   invitee_full_name?: string;
   invitee_email?: string;
+  assignedTo?: string;
+  inviteeAnswer?: string;
 }
