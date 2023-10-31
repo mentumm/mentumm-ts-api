@@ -1,3 +1,10 @@
+## [1.12.6](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.5...v1.12.6) (2023-10-31)
+
+
+### Bug Fixes
+
+* **users controller:** adding more verbose error handling to resolve /users get issue ([#144](https://github.com/mentumm/mentumm-ts-api/issues/144)) ([f245736](https://github.com/mentumm/mentumm-ts-api/commit/f245736732dbf2671469f1dc1ae241f3169b9a22))
+
 ## [1.12.5](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.4...v1.12.5) (2023-10-01)
 
 
