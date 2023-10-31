@@ -129,6 +129,8 @@ export const createBooking = async (
       event_start_time,
       event_type_name,
       event_type_uuid,
+      assignedTo,
+      inviteeAnswer,
     } = body;
     const lowercaseInviteeEmail = invitee_email?.toLowerCase();
 
@@ -148,12 +150,27 @@ export const createBooking = async (
       .insert(coachBooking)
       .returning("*")
       .catch((err: Error) => {
-        throw new Error(`Unable to create new User: ${err.message}`);
+        throw new Error(`Unable to create new Booking Event: ${err.message}`);
       });
+
+    if (booking) {
+      mixpanelEvent("Coaching Session Booked", {
+        "Coach": assignedTo,
+        "User Name": invitee_full_name,
+        "User Email": invitee_email,
+        "Event Type": event_type_name,
+        "Event Start Time": event_start_time,
+        "Event End Time": event_end_time,
+        "Invitee UUID": invitee_uuid,
+        "Invitee Booking Comments": inviteeAnswer,
+        "UTM Source": coach_id,
+        "Event UUID": event_type_uuid,
+      });
+    }
 
     return booking;
   } catch (error) {
-    throw new Error("Unable to create new User");
+    throw new Error("Unable to confirm Coaching Session");
   }
 };
 
