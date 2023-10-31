@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/mentumm/mentumm-ts-api/compare/v1.13.0...v1.13.1) (2023-10-31)
+
+
+### Bug Fixes
+
+* **packages:** prod release is failing so did yarn install and pushing changes ([#152](https://github.com/mentumm/mentumm-ts-api/issues/152)) ([210df5a](https://github.com/mentumm/mentumm-ts-api/commit/210df5a1a5b2b55bc4264184001d50f5513371c6))
+
 # [1.13.0](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.6...v1.13.0) (2023-10-30)
 
 
