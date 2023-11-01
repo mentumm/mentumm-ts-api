@@ -1,3 +1,15 @@
+## [1.12.6](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.5...v1.12.6) (2023-11-01)
+
+
+### Bug Fixes
+
+* **App:** mixpanel updates for workflow ([#168](https://github.com/mentumm/mentumm-ts-api/issues/168)) ([b70a91d](https://github.com/mentumm/mentumm-ts-api/commit/b70a91d39bf293409358489e820065be1181b7c4))
+* **App:** reintroducing the migration step to see if build fails on render ([#169](https://github.com/mentumm/mentumm-ts-api/issues/169)) ([c80ab87](https://github.com/mentumm/mentumm-ts-api/commit/c80ab87f604476ea23ef63666cf5bbd27ac7b1b5))
+* **App:** removing problematic migration step in start script([#170](https://github.com/mentumm/mentumm-ts-api/issues/170)) ([b84cb86](https://github.com/mentumm/mentumm-ts-api/commit/b84cb868164a4101a4e7da00f2ffe461a572923c))
+* **package.json:** removing the migration step in build as per render technician request ([#167](https://github.com/mentumm/mentumm-ts-api/issues/167)) ([9a5c1f3](https://github.com/mentumm/mentumm-ts-api/commit/9a5c1f30bcf251e6a59bfe1baf11ffae056625b0))
+* **release:** updated github secret for release ([#166](https://github.com/mentumm/mentumm-ts-api/issues/166)) ([cfcde7d](https://github.com/mentumm/mentumm-ts-api/commit/cfcde7d823900eaf9b3864698cec5f14f913d1ea))
+* **users controller:** adding more verbose error handling to resolve /users get issue ([#144](https://github.com/mentumm/mentumm-ts-api/issues/144)) ([f245736](https://github.com/mentumm/mentumm-ts-api/commit/f245736732dbf2671469f1dc1ae241f3169b9a22))
+
 ## [1.12.6](https://github.com/mentumm/mentumm-ts-api/compare/v1.12.5...v1.12.6) (2023-10-31)
 
 
