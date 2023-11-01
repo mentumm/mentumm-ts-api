@@ -155,6 +155,7 @@ export const createBooking = async (
 
     if (booking) {
       mixpanelEvent("Coaching Session Booked", {
+        distinct_id: user_id,
         "Coach": assignedTo,
         "User Name": invitee_full_name,
         "User Email": invitee_email,
