@@ -156,15 +156,17 @@ export const createBooking = async (
     if (booking) {
       mixpanelEvent("Coaching Session Booked", {
         distinct_id: user_id,
-        "Coach": assignedTo,
-        "User Name": invitee_full_name,
-        "User Email": invitee_email,
-        "Event Type": event_type_name,
+        "Date Booked": new Date(),
         "Event Start Time": event_start_time,
         "Event End Time": event_end_time,
+        "Coach id": coach_id,
+        "Coach": assignedTo,
+        "User id": user_id,
+        "User": invitee_full_name,
+        "User Email": invitee_email,
+        "Event Type": event_type_name,
         "Invitee UUID": invitee_uuid,
         "Invitee Booking Comments": inviteeAnswer,
-        "UTM Source": coach_id,
         "Event UUID": event_type_uuid,
       });
     }
