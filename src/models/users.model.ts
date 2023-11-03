@@ -90,6 +90,7 @@ export interface UpdateUser {
 export interface CoachBooking {
   user_id: number;
   coach_id: number;
+  employer_id: string;
   event_type_uuid?: string;
   event_type_name?: string;
   event_start_time?: string;
