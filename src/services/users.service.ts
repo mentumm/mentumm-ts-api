@@ -11,8 +11,6 @@ import {
 } from "../models/users.model";
 import { KnexError } from "../types";
 import { getEmployerByInvite } from "./employers.service";
-import { getEmployers } from "./employers.service";
-import { getCoaches } from "./coaches.service";
 import { Employer } from "../models/employers.model";
 import { emailService, EmailTemplate } from "../helpers/emailService";
 import { mixpanelEvent } from "../helpers/mixpanel";
@@ -138,9 +136,8 @@ export const createBooking = async (
     } = body;
     const lowercaseInviteeEmail = invitee_email?.toLowerCase();
 
-    const coachBooking: CoachBooking = {
+    const coachBooking: Omit<CoachBooking, 'employer_id'> = {
       user_id,
-      employer_id,
       coach_id,
       invitee_email: lowercaseInviteeEmail,
       invitee_full_name,
