@@ -246,8 +246,7 @@ export const registerUser = async (
       mixpanelEvent("New User Registered", {
         distinct_id: newUser[0].id,
         "User ID": newUser[0].id,
-        "User First Name": newUser[0].first_name,
-        "User Last Name": newUser[0].last_name,
+        "User": `${newUser[0].first_name} ${newUser[0].last_name}`,
         "Employer ID": newUser[0].employer_id,
         "Employer Name": employer.name,
       });
