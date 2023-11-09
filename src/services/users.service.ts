@@ -16,6 +16,7 @@ import { emailService, EmailTemplate } from "../helpers/emailService";
 import { mixpanelEvent } from "../helpers/mixpanel";
 import { omit } from "lodash";
 import { ulid } from "ulid";
+import { Coach } from "../models/coaches.model";
 
 export const getUsers = async (
   id: number,
@@ -121,6 +122,7 @@ export const createBooking = async (
   try {
     const {
       user_id,
+      employer_id,
       coach_id,
       invitee_email,
       invitee_full_name,
@@ -134,7 +136,7 @@ export const createBooking = async (
     } = body;
     const lowercaseInviteeEmail = invitee_email?.toLowerCase();
 
-    const coachBooking: CoachBooking = {
+    const coachBooking: Omit<CoachBooking, 'employer_id'> = {
       user_id,
       coach_id,
       invitee_email: lowercaseInviteeEmail,
@@ -146,6 +148,22 @@ export const createBooking = async (
       event_type_uuid,
     };
 
+    const coachData: Coach[] = await db("users")
+      .where({ id: coach_id })
+      .catch((err: Error) => {
+        throw new Error(`Unable to retrieve Coach: ${err.message}`)
+      });
+
+    const coachEmail = coachData[0].email;
+
+    const employerData = await db("employers")
+      .where({ id: employer_id })
+      .catch((err: Error) => {
+        throw new Error(`Unable to retrieve Employer: ${err.message}`)
+      });
+
+    const employerName = employerData[0].name;
+
     const booking: CoachBooking[] = await db("user_coaches")
       .insert(coachBooking)
       .returning("*")
@@ -153,27 +171,28 @@ export const createBooking = async (
         throw new Error(`Unable to create new Booking Event: ${err.message}`);
       });
 
-    if (booking) {
-      mixpanelEvent("Coaching Session Booked", {
-        distinct_id: user_id,
-        "Date Booked": new Date(),
-        "Event Start Time": event_start_time,
-        "Event End Time": event_end_time,
-        "Coach id": coach_id,
-        "Coach": assignedTo,
-        "User id": user_id,
-        "User": invitee_full_name,
-        "User Email": invitee_email,
-        "Event Type": event_type_name,
-        "Invitee UUID": invitee_uuid,
-        "Invitee Booking Comments": inviteeAnswer,
-        "Event UUID": event_type_uuid,
-      });
-    }
+    mixpanelEvent("Coaching Session Booked", {
+      distinct_id: user_id,
+      "Date Booked": new Date(),
+      "Event Start Time": event_start_time,
+      "Event End Time": event_end_time,
+      "Coach ID": coach_id,
+      "Coach Email": coachEmail,
+      "Coach": assignedTo,
+      "User ID": user_id,
+      "User": invitee_full_name,
+      "User Email": invitee_email,
+      "Employer ID": employer_id,
+      "Employer": employerName,
+      "Event Type": event_type_name,
+      "Invitee UUID": invitee_uuid,
+      "Invitee Booking Comments": inviteeAnswer,
+      "Event UUID": event_type_uuid,
+    });
 
     return booking;
-  } catch (error) {
-    throw new Error("Unable to confirm Coaching Session");
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -227,8 +246,7 @@ export const registerUser = async (
       mixpanelEvent("New User Registered", {
         distinct_id: newUser[0].id,
         "User ID": newUser[0].id,
-        "User First Name": newUser[0].first_name,
-        "User Last Name": newUser[0].last_name,
+        "User": `${newUser[0].first_name} ${newUser[0].last_name}`,
         "Employer ID": newUser[0].employer_id,
         "Employer Name": employer.name,
       });
