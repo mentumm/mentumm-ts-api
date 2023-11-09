@@ -76,8 +76,7 @@ export const createCoach = async (
       mixpanelEvent("New Coach Registered", {
         distinct_id: newCoach[0].id,
         "Coach ID": newCoach[0].id,
-        "Coach First Name": newCoach[0].first_name,
-        "Coach Last Name": newCoach[0].last_name,
+        "Coach": `${newCoach[0].first_name} ${newCoach[0].last_name}`,
       });
 
       emailService.send(EmailTemplate.COACH_WELCOME, newCoach[0].email, {
