@@ -18,7 +18,6 @@ import { omit } from "lodash";
 import { ulid } from "ulid";
 import { Coach } from "../models/coaches.model";
 import AWS from "aws-sdk";
-import * as fs from "fs";
 
 const spacesEndpoint = new AWS.Endpoint(
   process.env.DIGITALOCEAN_SPACES_ENDPOINT ||
@@ -30,13 +29,14 @@ const s3 = new AWS.S3({
   secretAccessKey: process.env.DIGITALOCEAN_SPACES_SECRET,
 });
 
-export const uploadFileToSpaces = async (file: Express.Multer.File) => {
-  const fileContent = fs.readFileSync(file.path);
-
+export const uploadFileToSpaces = async (
+  file: Express.Multer.File,
+  userId: number
+) => {
   const uploadParams = {
     Bucket: process.env.DIGITALOCEAN_SPACES_BUCKET || "mentummportal",
-    Key: `users/avatars/${file.originalname}`,
-    Body: fileContent,
+    Key: `users/avatars/${userId}/${file.originalname}`,
+    Body: file.buffer,
     ACL: "public-read",
   };
   try {
@@ -296,11 +296,12 @@ export const updateUser = async (
   body: UpdateUser,
   file?: Express.Multer.File
 ): Promise<User[] | KnexError> => {
+  console.log({ body, file });
   const { id, password, email, ...updateData } = body;
   const lowerCaseEmail = email.toLowerCase();
 
   if (file) {
-    const result = await uploadFileToSpaces(file);
+    const result = await uploadFileToSpaces(file, +id);
     updateData.photo_url = result?.Location;
   }
 

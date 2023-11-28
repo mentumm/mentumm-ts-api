@@ -23,7 +23,7 @@ import multer from "multer";
 
 const usersRouter = express.Router();
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ storage: multer.memoryStorage() });
 
 usersRouter.get(
   "/users",
@@ -215,7 +215,7 @@ usersRouter.put(
       city: Joi.string().allow(""),
       state: Joi.string().allow(""),
       bio: Joi.string(),
-      photo_url: Joi.string(),
+      photo_url: Joi.string().allow(""),
       booking_url: Joi.string(),
       linkedin_url: Joi.string().allow(""),
       phone_number: Joi.string().allow(""),
