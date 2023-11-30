@@ -1,20 +1,31 @@
 import AWS from "aws-sdk";
 
-const spacesEndpoint = new AWS.Endpoint("nyc3.digitaloceanspaces.com");
+const spacesEndpoint = new AWS.Endpoint(
+  process.env.DIGITALOCEAN_SPACES_ENDPOINT ||
+    "https://sfo3.digitaloceanspaces.com"
+);
+
 const s3 = new AWS.S3({
   endpoint: spacesEndpoint,
-  accessKeyId: "YOUR_ACCESS_KEY",
-  secretAccessKey: "YOUR_SECRET_KEY",
+  accessKeyId: process.env.DIGITALOCEAN_SPACES_KEY,
+  secretAccessKey: process.env.DIGITALOCEAN_SPACES_SECRET,
 });
 
-// Function to upload file
-export const uploadToSpaces = async (file: Express.Multer.File) => {
+export const uploadFileToSpaces = async (
+  file: Express.Multer.File,
+  userId: number
+) => {
   const uploadParams = {
-    Bucket: "YOUR_BUCKET_NAME",
-    Key: "YOUR_DESIRED_KEY", // file name, you can use user id or something unique
-    Body: file.stream, // or file.buffer if you're using memory storage
-    ACL: "public-read", // if you want the file to be publicly accessible
+    Bucket: process.env.DIGITALOCEAN_SPACES_BUCKET || "mentummportal",
+    Key: `users/avatars/${userId}/${file.originalname}`,
+    Body: file.buffer,
+    ACL: "public-read",
   };
-
-  return s3.upload(uploadParams).promise();
+  try {
+    const result = s3.upload(uploadParams).promise();
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
