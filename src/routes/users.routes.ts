@@ -19,8 +19,11 @@ import { routeValidation } from "../util/routeValidation";
 import * as Joi from "joi";
 import { CreateUser, RegisterUser, User } from "../models/users.model";
 import passport from "passport";
+import multer from "multer";
 
 const usersRouter = express.Router();
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 usersRouter.get(
   "/users",
@@ -42,7 +45,7 @@ usersRouter.get(
     try {
       await users(req, res);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 );
@@ -63,7 +66,7 @@ usersRouter.get(
     try {
       await upcoming(req, res);
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 );
@@ -108,7 +111,7 @@ usersRouter.post(
       event_type_uuid: Joi.string(),
       assignedTo: Joi.string(),
       employer_id: Joi.string(),
-      inviteeAnswer: Joi.string().allow(null, '').optional(),
+      inviteeAnswer: Joi.string().allow(null, "").optional(),
     }),
     "body"
   ),
@@ -201,6 +204,7 @@ usersRouter.put(
   passport.authenticate("jwt", {
     session: false,
   }),
+  upload.single("avatar"),
   routeValidation(
     Joi.object<User>({
       id: Joi.string().required(),
@@ -211,7 +215,7 @@ usersRouter.put(
       city: Joi.string().allow(""),
       state: Joi.string().allow(""),
       bio: Joi.string(),
-      photo_url: Joi.string(),
+      photo_url: Joi.string().allow(""),
       booking_url: Joi.string(),
       linkedin_url: Joi.string().allow(""),
       phone_number: Joi.string().allow(""),
@@ -284,15 +288,17 @@ usersRouter.post(
 );
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-usersRouter.use((err: any, req: Request, res: Response, next: NextFunction): void => {
-  console.error(err.stack);
+usersRouter.use(
+  (err: any, req: Request, res: Response, next: NextFunction): void => {
+    console.error(err.stack);
 
-  res.status(err.status || 500).send({
-    error: {
-      message: err.message || 'An error occured when hitting this route',
-      data: err.data || {}
-    }
-  });
-});
+    res.status(err.status || 500).send({
+      error: {
+        message: err.message || "An error occured when hitting this route",
+        data: err.data || {},
+      },
+    });
+  }
+);
 
 export default usersRouter;

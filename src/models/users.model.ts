@@ -29,6 +29,7 @@ export interface User {
   achievements: string;
   hobbies: string;
   is_test?: boolean;
+  profile_image?: unknown;
 }
 
 type UserPrivateFields =
@@ -46,7 +47,7 @@ type UserPrivateFields =
   | "employer_id";
 
 // eslint-disable-next-line
-export interface UserPublic extends Omit<User, UserPrivateFields> { }
+export interface UserPublic extends Omit<User, UserPrivateFields> {}
 
 export interface CreateUser {
   first_name: string;
