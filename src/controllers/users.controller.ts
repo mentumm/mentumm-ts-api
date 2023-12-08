@@ -94,8 +94,7 @@ export const deactivateUser = async (req: Request, res: Response) => {
 
 export const updateUserInfo = async (req: Request, res: Response) => {
   try {
-    const updatedUser = await updateUser(req.body);
-
+    const updatedUser = await updateUser(req.body, req.file);
     return res.json(updatedUser);
   } catch (error) {
     return res.status(500).send(error);

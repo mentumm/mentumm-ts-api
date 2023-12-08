@@ -17,13 +17,14 @@ import { mixpanelEvent } from "../helpers/mixpanel";
 import { omit } from "lodash";
 import { ulid } from "ulid";
 import { Coach } from "../models/coaches.model";
+import { uploadFileToSpaces } from "./storage.service";
 
 export const getUsers = async (
   id: number,
   name: string,
   email: string,
   employer_id: number,
-  limit: number,
+  limit: number
 ): Promise<User[] | KnexError> => {
   const user = await db("users")
     .whereNull("deleted_at")
@@ -136,7 +137,7 @@ export const createBooking = async (
     } = body;
     const lowercaseInviteeEmail = invitee_email?.toLowerCase();
 
-    const coachBooking: Omit<CoachBooking, 'employer_id'> = {
+    const coachBooking: Omit<CoachBooking, "employer_id"> = {
       user_id,
       coach_id,
       invitee_email: lowercaseInviteeEmail,
@@ -151,7 +152,7 @@ export const createBooking = async (
     const coachData: Coach[] = await db("users")
       .where({ id: coach_id })
       .catch((err: Error) => {
-        throw new Error(`Unable to retrieve Coach: ${err.message}`)
+        throw new Error(`Unable to retrieve Coach: ${err.message}`);
       });
 
     const coachEmail = coachData[0].email;
@@ -159,7 +160,7 @@ export const createBooking = async (
     const employerData = await db("employers")
       .where({ id: employer_id })
       .catch((err: Error) => {
-        throw new Error(`Unable to retrieve Employer: ${err.message}`)
+        throw new Error(`Unable to retrieve Employer: ${err.message}`);
       });
 
     const employerName = employerData[0].name;
@@ -178,12 +179,12 @@ export const createBooking = async (
       "Event End Time": event_end_time,
       "Coach ID": coach_id,
       "Coach Email": coachEmail,
-      "Coach": assignedTo,
+      Coach: assignedTo,
       "User ID": user_id,
-      "User": invitee_full_name,
+      User: invitee_full_name,
       "User Email": invitee_email,
       "Employer ID": employer_id,
-      "Employer": employerName,
+      Employer: employerName,
       "Event Type": event_type_name,
       "Invitee UUID": invitee_uuid,
       "Invitee Booking Comments": inviteeAnswer,
@@ -246,7 +247,7 @@ export const registerUser = async (
       mixpanelEvent("New User Registered", {
         distinct_id: newUser[0].id,
         "User ID": newUser[0].id,
-        "User": `${newUser[0].first_name} ${newUser[0].last_name}`,
+        User: `${newUser[0].first_name} ${newUser[0].last_name}`,
         "Employer ID": newUser[0].employer_id,
         "Employer Name": employer.name,
       });
@@ -263,10 +264,17 @@ export const registerUser = async (
 };
 
 export const updateUser = async (
-  body: UpdateUser
+  body: UpdateUser,
+  file?: Express.Multer.File
 ): Promise<User[] | KnexError> => {
+  console.log({ body, file });
   const { id, password, email, ...updateData } = body;
   const lowerCaseEmail = email.toLowerCase();
+
+  if (file) {
+    const result = await uploadFileToSpaces(file, +id);
+    updateData.photo_url = result?.Location;
+  }
 
   let hashPassword;
   if (password) {
